@@ -4,3 +4,5 @@
 /editors/zed/grammars/
 /editors/zed/extension.wasm
 /editors/zed/target/
+# An Obsidian vault opened on cases/: personal settings, the plugin is editors/obsidian.
+/cases/.obsidian/

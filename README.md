@@ -141,6 +141,14 @@ The loop reports `cases/errors-schema-label/broken.kanonarch` only: it holds lab
 refuses as the parser does. Then commit and push, set `rev` to that commit, and rebuild the extension from Zed's
 extensions page.
 
+Obsidian reads `.kan` documents through the plugin in `editors/obsidian`: it opens them as Markdown and follows a
+`[[link]]` from the document's folder, with or without `.kan`. To install it in a vault, link the folder into the
+vault's plugins and turn on community plugins:
+
+```
+$ ln -s ../../../editors/obsidian cases/.obsidian/plugins/kanon
+```
+
 ## Cases
 
 `cases/` holds real use cases, one folder each: a schema, documents, and `expected.txt`, the exact output of the
