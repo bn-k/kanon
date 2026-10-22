@@ -114,6 +114,13 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   as an argument (2026-10-22).
 - **A `.kan` document is Markdown in the editor**: the language "Kanon" uses the Markdown grammar that ships with
   Zed, and its queries (2026-10-22).
+- **A document is read laid out in Zed's Markdown preview**, as in Obsidian's reading view, and edited in its
+  source: a double-click in the preview opens the source at that place. An extension cannot draw a view, so this
+  is a change to Zed itself, kept in our fork (`bn-k/zed`, branch `karim/kanon-preview`) and meant for upstream: the
+  preview takes any language built on the `markdown` grammar, reads `[[…]]` and `![[…]]`, and opens
+  `[[agents/sophie-bernard]]` as `agents/sophie-bernard.kan`. A paragraph of `key: value` lines keeps one line per
+  key. Editing inside the laid-out view, as Obsidian's live preview does, would need lines of different heights in
+  Zed's editor, and waits (2026-10-22).
 
 ## Open questions
 
