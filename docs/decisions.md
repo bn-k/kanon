@@ -116,7 +116,9 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   Zed, and its queries (2026-10-22).
 - **A document is read and edited laid out in Zed's Markdown preview**, as in Obsidian's live preview: a click on
   a block turns it into an editor of its source, written through to the file at every keystroke, and escape or a
-  click elsewhere lays it out again. An extension cannot draw a view, so this is a change to Zed itself, kept in
+  click elsewhere lays it out again. A header above the document switches between source and preview, and its
+  buttons format the selection or the block being edited: headings, bold, italic, lists, tasks, quotes and
+  `[[…]]` links. An extension cannot draw a view, so this is a change to Zed itself, kept in
   our fork (`bn-k/zed`, branch `karim/kanon-preview`) and meant for upstream: the preview takes any language built
   on the `markdown` grammar, reads `[[…]]` and `![[…]]`, and opens `[[agents/sophie-bernard]]` as
   `agents/sophie-bernard.kan`. A paragraph of `key: value` lines keeps one line per key (2026-10-22).
