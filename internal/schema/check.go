@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/bn-k/kanon/internal/diag"
 	"github.com/bn-k/kanon/internal/names"
@@ -18,7 +19,12 @@ import (
 
 // Load reads, parses and checks the .kanonarch file at path. A file that doesn't parse isn't checked.
 func Load(path string) (*File, diag.List) {
-	src, err := os.ReadFile(path)
+	return LoadFrom(path, os.ReadFile)
+}
+
+// LoadFrom is Load that reads the file with read: an editor gives the text of its open files.
+func LoadFrom(path string, read func(string) ([]byte, error)) (*File, diag.List) {
+	src, err := read(path)
 	if err != nil {
 		var pe *fs.PathError
 		if errors.As(err, &pe) {
@@ -42,8 +48,9 @@ var Builtins = []string{"today", "none", "yes", "no", "sum", "round", "min", "ma
 var Annotations = []string{"heading", "body", "sections"}
 
 // Check resolves the types of f and validates its names, annotations, patterns and expressions. It sets
-// Type.Native, Kind, Schema and Enum, and Schema.Patterns.
+// Type.Native, Kind, Schema and Enum, Schema.Patterns and File.Refs.
 func Check(f *File) diag.List {
+	f.Refs = nil
 	c := &checker{f: f, deps: map[*Field][]*Field{}, calls: map[*Fn][]*Fn{}}
 	c.decls()
 	for _, u := range f.Units {
@@ -79,6 +86,17 @@ type checker struct {
 func (c *checker) errorf(pos diag.Pos, format string, args ...any) {
 	c.diags.Errorf(pos, format, args...)
 }
+
+// ref records that name, written at pos, stands for what is declared at decl; a builtin, declared nowhere, is
+// left out.
+func (c *checker) ref(pos diag.Pos, name string, decl diag.Pos) {
+	if decl != (diag.Pos{}) {
+		c.f.Refs = append(c.f.Refs, Ref{Pos: pos, Len: utf8.RuneCountInString(name), Decl: decl})
+	}
+}
+
+// decl records the declaration of name at pos.
+func (c *checker) decl(pos diag.Pos, name string) { c.ref(pos, name, pos) }
 
 // suggest adds "did you mean" to msg when a candidate is near name.
 func suggest(msg, name string, candidates []string) string {
@@ -171,6 +189,7 @@ func pascal(s string) string {
 }
 
 func (c *checker) unit(u *Unit) {
+	c.decl(u.Pos, u.Name)
 	switch {
 	case !value.UnitName.MatchString(u.Name):
 		if fix := strings.ReplaceAll(names.Slugify(u.Name), "-", ""); value.UnitName.MatchString(fix) {
@@ -186,9 +205,11 @@ func (c *checker) unit(u *Unit) {
 }
 
 func (c *checker) enum(e *Enum) {
+	c.decl(e.Pos, e.Name)
 	c.typeName(e.Pos, e.Name)
 	seen := map[string]bool{}
 	for _, v := range e.Values {
+		c.decl(v.Pos, v.Name)
 		c.name(v.Pos, v.Name)
 		if seen[v.Name] {
 			c.errorf(v.Pos, "`%s` is already a value of `%s`", v.Name, e.Name)
@@ -198,10 +219,12 @@ func (c *checker) enum(e *Enum) {
 }
 
 func (c *checker) schema(s *Schema) {
+	c.decl(s.Pos, s.Name)
 	c.typeName(s.Pos, s.Name)
 	byName := map[string]bool{}
 	annotated := map[string]*Field{}
 	for _, f := range s.Fields {
+		c.decl(f.Pos, f.Name)
 		c.name(f.Pos, f.Name)
 		switch {
 		case f.Name == "id":
@@ -219,7 +242,7 @@ func (c *checker) schema(s *Schema) {
 	c.patterns(s)
 	vars := []*bind{{name: "id", t: nativeType(value.Text)}}
 	for _, f := range s.Fields {
-		vars = append(vars, &bind{name: f.Name, t: typeOf(f.Type), field: f})
+		vars = append(vars, &bind{name: f.Name, t: typeOf(f.Type), field: f, decl: f.Pos})
 	}
 	sc := c.global.with(vars...)
 	for _, f := range s.Fields {
@@ -254,11 +277,13 @@ func (c *checker) find(t *Type) {
 	}
 	if s := c.f.Schema(t.Name); s != nil {
 		t.Schema = s
+		c.ref(t.Pos, t.Name, s.Pos)
 		return
 	}
 	for _, e := range c.f.Enums {
 		if e.Name == t.Name {
 			t.Enum = e
+			c.ref(t.Pos, t.Name, e.Pos)
 			return
 		}
 	}
@@ -295,6 +320,7 @@ func (c *checker) inverse(s *Schema, f *Field) {
 		c.errorf(f.InversePos, "%s", msg)
 		return
 	}
+	c.ref(f.InversePos, f.Inverse, target.Pos)
 	if tt := target.Type; !tt.Link || tt.Name != s.Name {
 		c.errorf(f.InversePos, "`%s.%s` is `%s`; an inverse needs a link to `%s` there: -> %[4]s, -> %[4]s? or [-> %[4]s]",
 			t.Name, f.Inverse, tt, s.Name)
@@ -353,7 +379,11 @@ func (c *checker) patterns(s *Schema) {
 		placeholders := pt.Fields()
 		for _, name := range placeholders {
 			pos := readsPos(r, placeholderIndex(r.Text, name))
-			switch f := s.Field(name); {
+			f := s.Field(name)
+			if f != nil {
+				c.ref(diag.Pos{File: pos.File, Line: pos.Line, Col: pos.Col + 1}, name, f.Pos) // after the {
+			}
+			switch {
 			case f == nil:
 				c.errorf(pos, "%s", suggest(fmt.Sprintf("unknown field `%s`", name), name, s.FieldNames()))
 			case f.Computed():
@@ -403,6 +433,7 @@ func readsPos(r *Reads, i int) diag.Pos {
 }
 
 func (c *checker) fn(fn *Fn) {
+	c.decl(fn.Pos, fn.Name)
 	c.name(fn.Pos, fn.Name)
 	c.caller = fn
 	defer func() { c.caller = nil }()
@@ -410,6 +441,7 @@ func (c *checker) fn(fn *Fn) {
 	var vars []*bind
 	defaulted := false
 	for _, p := range fn.Params {
+		c.decl(p.Pos, p.Name)
 		c.name(p.Pos, p.Name)
 		if slices.Contains(params, p.Name) {
 			c.errorf(p.Pos, "`%s` is already a parameter of `%s`", p.Name, fn.Name)
@@ -424,7 +456,7 @@ func (c *checker) fn(fn *Fn) {
 			c.errorf(p.Pos, "`%s` needs a default value, as it follows a parameter that has one", p.Name)
 		}
 		params = append(params, p.Name)
-		vars = append(vars, &bind{name: p.Name, t: typeOf(p.Type)})
+		vars = append(vars, &bind{name: p.Name, t: typeOf(p.Type), decl: p.Pos})
 	}
 	// A rule gives Bool, or none when what it reads is missing: then it holds.
 	want, written := opt(nativeType(value.Bool), true), "Bool"
@@ -441,7 +473,7 @@ func (c *checker) fn(fn *Fn) {
 		}
 	}
 	for _, r := range fn.Reads {
-		c.fnReads(r, params)
+		c.fnReads(r, fn.Params)
 	}
 	if m := mismatch(want, c.expr(fn.Body, c.global.with(vars...))); m != "" {
 		c.errorf(fn.Pos, "`%s` returns `%s`, but its expression gives %s", fn.Name, written, m)
@@ -449,7 +481,11 @@ func (c *checker) fn(fn *Fn) {
 }
 
 // fnReads checks that each {…} placeholder of a function's reads text starts with a parameter: {v.nom}.
-func (c *checker) fnReads(r *Reads, params []string) {
+func (c *checker) fnReads(r *Reads, ps []*Param) {
+	var params []string
+	for _, p := range ps {
+		params = append(params, p.Name)
+	}
 	text := []rune(r.Text)
 	for i := 0; i < len(text); i++ {
 		if text[i] != '{' {
@@ -460,13 +496,17 @@ func (c *checker) fnReads(r *Reads, params []string) {
 			c.errorf(readsPos(r, i), "missing `}` after `{`")
 			return
 		}
-		inner := strings.TrimSpace(string(text[i+1 : i+j]))
+		raw := string(text[i+1 : i+j])
+		inner := strings.TrimSpace(raw)
 		head, _, _ := strings.Cut(inner, ".")
-		switch {
+		switch k := slices.Index(params, head); {
 		case inner == "":
 			c.errorf(readsPos(r, i), "empty placeholder `{}`")
-		case !slices.Contains(params, head):
+		case k < 0:
 			c.errorf(readsPos(r, i), "%s", suggest(fmt.Sprintf("unknown parameter `%s`", head), head, params))
+		default:
+			lead := utf8.RuneCountInString(raw) - utf8.RuneCountInString(strings.TrimLeft(raw, " \t"))
+			c.ref(readsPos(r, i+1+lead), head, ps[k].Pos)
 		}
 		i += j
 	}

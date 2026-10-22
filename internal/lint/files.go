@@ -100,6 +100,16 @@ func (l *linter) file(name, path string, pos diag.Pos, k value.Kind) bool {
 	return true
 }
 
+// fileRef checks a link to a file, as file does, written at pos and width runes wide; a link to a file that can be
+// read leads to it.
+func (l *linter) fileRef(name, path string, pos diag.Pos, width int, k value.Kind) bool {
+	if !l.file(name, path, pos, k) {
+		return false
+	}
+	l.span(pos, width, diag.Pos{File: path})
+	return true
+}
+
 // sniff returns what the file at path holds, reading it once.
 func (l *linter) sniff(path string) (string, error) {
 	if s, ok := l.sniffed[path]; ok {

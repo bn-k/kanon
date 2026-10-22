@@ -2,6 +2,7 @@
 package lint
 
 import (
+	"cmp"
 	"fmt"
 	"maps"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"slices"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/bn-k/kanon/internal/diag"
 	"github.com/bn-k/kanon/internal/doc"
@@ -23,6 +25,13 @@ import (
 type Result struct {
 	Files []string // every file read, the schema first
 	Diags diag.List
+	Refs  []schema.Ref // the names of the schema and of the documents, and what they stand for, for an editor
+}
+
+// Options change how a lint run sees the world.
+type Options struct {
+	Today    time.Time                    // the date of today for the rules
+	ReadFile func(string) ([]byte, error) // reads the schema and the documents; os.ReadFile when nil
 }
 
 // Run checks the document at docPath, and every document it links to or holds in folders, against the schema at
@@ -40,17 +49,29 @@ func Load(schemaPath, docPath string) (*model.Doc, Result) {
 
 // LoadOn is Load on the date of today.
 func LoadOn(schemaPath, docPath string, today time.Time) (*model.Doc, Result) {
+	return LoadWith(schemaPath, docPath, Options{Today: today})
+}
+
+// LoadWith is Load with options: an editor gives the text of its open files, which may not be saved.
+func LoadWith(schemaPath, docPath string, opts Options) (*model.Doc, Result) {
 	l := &linter{
 		schemaPath: filepath.Clean(schemaPath),
+		read:       opts.ReadFile,
 		docs:       map[string]*file{},
 		schemas:    map[string]*schema.File{},
 		sniffed:    map[string]sniffed{},
 		placed:     map[slot]link{},
 	}
+	if l.read == nil {
+		l.read = os.ReadFile
+	}
 	l.files = append(l.files, l.schemaPath)
-	s, ds := schema.Load(l.schemaPath)
+	s, ds := schema.LoadFrom(l.schemaPath, l.read)
 	l.diags = append(l.diags, ds...)
 	var d *model.Doc
+	if s != nil {
+		l.refs = append(l.refs, s.Refs...)
+	}
 	if s != nil && ds.Count(diag.Error) == 0 {
 		l.schema = s
 		l.schemas[l.schemaPath] = s
@@ -63,12 +84,12 @@ func LoadOn(schemaPath, docPath string, today time.Time) (*model.Doc, Result) {
 			if l.diags.Count(diag.Error) > 0 {
 				d = nil
 			} else {
-				l.diags = append(l.diags, eval.Eval(d, today)...)
+				l.diags = append(l.diags, eval.Eval(d, opts.Today)...)
 			}
 		}
 	}
 	l.diags.Sort()
-	return d, Result{l.files, l.diags}
+	return d, Result{l.files, l.diags, l.refs}
 }
 
 // model is the model of the document f: its root object, and the documents its links lead to.
@@ -119,8 +140,10 @@ func (l *linter) back(src *model.Object, mf *model.Field, o *model.Object, k lin
 type linter struct {
 	schema     *schema.File
 	schemaPath string
+	read       func(string) ([]byte, error)
 	units      value.Units
 	diags      diag.List
+	refs       []schema.Ref
 	files      []string
 	docs       map[string]*file        // by path
 	schemas    map[string]*schema.File // the schema files links point to, by path
@@ -149,6 +172,7 @@ type object struct {
 	schema *schema.Schema
 	file   *file
 	id     string
+	idPos  diag.Pos            // where its id is written; zero for a whole file, whose id is its name
 	pos    diag.Pos            // where it starts: its heading, row or item; Line 0 for a whole file
 	level  int                 // the level of its heading, 1 for a whole file; its fields go one level below
 	parent *object             // the object that holds it; {field} looks there when its own schema has no such field
@@ -156,11 +180,12 @@ type object struct {
 	m      *model.Object       // what is read of it
 }
 
-// link is a [[path#id]] waiting to be resolved; want is the schema its field expects, or nil in prose. The target
-// it resolves to goes into into.Links[at], when into is not nil.
+// link is a [[path#id]] waiting to be resolved, written at pos and width runes wide; want is the schema its field
+// expects, or nil in prose. The target it resolves to goes into into.Links[at], when into is not nil.
 type link struct {
 	target string
 	pos    diag.Pos
+	width  int
 	from   *file
 	want   *schema.Schema
 	into   *model.Field
@@ -177,7 +202,7 @@ func (l *linter) load(path string, in *schema.Field, parent *object) *file {
 	f := &file{path: path, ids: map[string]*object{}}
 	l.docs[path] = f
 	l.files = append(l.files, path)
-	src, err := os.ReadFile(path)
+	src, err := l.read(path)
 	if err != nil {
 		l.diags.Errorf(diag.Pos{File: path}, "cannot read the file: %v", unwrap(err))
 		return f
@@ -208,7 +233,10 @@ func (l *linter) docType(f *file, in *schema.Field) *schema.Schema {
 		named = true
 		if s = l.schema.Schema(k.Value); s == nil {
 			l.diags.Errorf(k.ValuePos, "%s", unknown("schema", k.Value, "", l.schema.SchemaNames()))
-		} else if want != nil && s != want {
+			continue
+		}
+		l.ref(k.ValuePos, k.Value, s.Pos)
+		if want != nil && s != want {
 			l.diags.Errorf(k.ValuePos, "this folder holds `%s` entries, not `%s`", want.Name, s.Name)
 			s = want // check it as what its folder holds
 		}
@@ -232,16 +260,28 @@ func (l *linter) example() string {
 	return l.schema.Schemas[len(l.schema.Schemas)-1].Name
 }
 
-// queue keeps a link of prose for resolveLinks.
-func (l *linter) queue(target string, pos diag.Pos, from *file) {
-	l.links = append(l.links, link{target: target, pos: pos, from: from})
+// queue keeps a link of prose, width runes wide, for resolveLinks.
+func (l *linter) queue(target string, pos diag.Pos, width int, from *file) {
+	l.links = append(l.links, link{target: target, pos: pos, width: width, from: from})
 }
 
-// queueField keeps a link the field f of o holds for resolveLinks, with a place for its target in o's model.
+// queueField keeps a link the field f of o holds, written [[target]], for resolveLinks, with a place for its target
+// in o's model.
 func (l *linter) queueField(target string, pos diag.Pos, f *schema.Field, o *object) {
 	mf := o.put(f, pos)
 	mf.Links = append(mf.Links, nil)
-	l.links = append(l.links, link{target, pos, o.file, f.Type.Schema, mf, len(mf.Links) - 1})
+	width := utf8.RuneCountInString(target) + len("[[]]")
+	l.links = append(l.links, link{target, pos, width, o.file, f.Type.Schema, mf, len(mf.Links) - 1})
+}
+
+// ref records that name, written at pos, stands for what is declared at decl.
+func (l *linter) ref(pos diag.Pos, name string, decl diag.Pos) {
+	l.span(pos, utf8.RuneCountInString(name), decl)
+}
+
+// span records that the width runes written at pos stand for what is declared at decl.
+func (l *linter) span(pos diag.Pos, width int, decl diag.Pos) {
+	l.refs = append(l.refs, schema.Ref{Pos: pos, Len: width, Decl: decl})
 }
 
 // resolveLinks checks every link; resolving one may load documents that hold more.
@@ -260,7 +300,7 @@ func (l *linter) resolve(k link) {
 			l.diags.Errorf(k.pos, "this field holds %s; [[%s]] is a file", names.Article(k.want.Name), k.target)
 			return
 		}
-		l.file(path, filepath.Join(filepath.Dir(k.from.path), filepath.FromSlash(path)), k.pos, value.File)
+		l.fileRef(path, filepath.Join(filepath.Dir(k.from.path), filepath.FromSlash(path)), k.pos, k.width, value.File)
 		return
 	}
 	if hasID && !names.IsSlug(id) {
@@ -295,6 +335,7 @@ func (l *linter) resolve(k link) {
 			return
 		}
 	}
+	l.span(k.pos, k.width, cmp.Or(o.idPos, diag.Pos{File: f.path}))
 	if k.want != nil && o.schema != k.want {
 		l.diags.Errorf(k.pos, "this field holds %s; [[%s]] is %s", names.Article(k.want.Name), k.target, names.Article(o.schema.Name))
 		return
@@ -315,12 +356,24 @@ func (l *linter) resolveDecl(path, id string, k link) {
 	s, ok := l.schemas[path]
 	if !ok {
 		var ds diag.List
-		s, ds = schema.Load(path)
+		s, ds = schema.LoadFrom(path, l.read)
 		l.schemas[path] = s
 		l.files = append(l.files, path)
 		l.diags = append(l.diags, ds...)
+		if s != nil {
+			l.refs = append(l.refs, s.Refs...)
+		}
 	}
-	if s != nil && id != "" && !s.Declares(id) {
+	if s == nil {
+		return
+	}
+	decl, found := s.Decl(id)
+	switch {
+	case id == "":
+		l.span(k.pos, k.width, diag.Pos{File: path})
+	case found:
+		l.span(k.pos, k.width, decl)
+	default:
 		l.diags.Errorf(k.pos, "%s", unknown("declaration", id, path, s.DeclNames()))
 	}
 }

@@ -2,9 +2,12 @@ package schema
 
 import (
 	"errors"
+	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/bn-k/kanon/internal/diag"
@@ -277,6 +280,58 @@ func TestLoadCases(t *testing.T) {
 				t.Errorf("no schemas read")
 			}
 		})
+	}
+}
+
+func TestCheckRefs(t *testing.T) {
+	src := `unit pincee
+enum Etat { neuf, use }
+schema Ligne reads "{qte} de {nom}" { qte: Quantity  nom: Text  etat: Etat = neuf  doc: Doc? <- lignes }
+schema Doc { titre: Text  lignes: [-> Ligne]  n: Quantity = sum(lignes, l => l.qte) + 2 pincee }
+fn f(d: Doc, k: Int = 1) -> Doc reads "{ d.titre }" = d with { titre: "x" }
+rule r(d: Doc) = f(d).titre == "x" and today == today`
+	f, diags := check(t, src)
+	if len(diags) > 0 {
+		t.Fatalf("Check: %q", diags)
+	}
+	lines := strings.Split(src, "\n")
+	text := func(p diag.Pos, n int) string {
+		line := []rune(lines[p.Line-1])
+		return string(line[p.Col-1 : min(p.Col-1+n, len(line))])
+	}
+	got := map[string]int{}
+	for _, r := range f.Refs {
+		name := text(r.Pos, r.Len)
+		if decl := text(r.Decl, r.Len); decl != name {
+			t.Errorf("%v: %q stands for %q, at %v", r.Pos, name, decl, r.Decl)
+		}
+		got[fmt.Sprintf("%s@%d", name, r.Decl.Line)]++
+	}
+	want := map[string]int{
+		"pincee@1": 2, "Etat@2": 2, "neuf@2": 2, "use@2": 1,
+		"Ligne@3": 2, "qte@3": 3, "nom@3": 2, "etat@3": 1, "doc@3": 1,
+		"Doc@4": 5, "titre@4": 3, "lignes@4": 3, "n@4": 1, "l@4": 2,
+		"f@5": 2, "d@5": 3, "k@5": 1, "r@6": 1, "d@6": 2,
+	}
+	if !maps.Equal(got, want) {
+		t.Errorf("got %v, want %v", got, want)
+	}
+
+	// Checking again records the refs once.
+	n := len(f.Refs)
+	Check(f)
+	if len(f.Refs) != n {
+		t.Errorf("checked twice: %d refs, want %d", len(f.Refs), n)
+	}
+
+	for name, want := range map[string]diag.Pos{"pincee": {Line: 1, Col: 6}, "Etat": {Line: 2, Col: 6}, "Doc": {Line: 4, Col: 8}, "r": {Line: 6, Col: 6}} {
+		want.File = "t.kanonarch"
+		if got, ok := f.Decl(name); !ok || got != want {
+			t.Errorf("Decl(%q) = %v, %v, want %v", name, got, ok, want)
+		}
+	}
+	if _, ok := f.Decl("nope"); ok {
+		t.Errorf("Decl(nope) found")
 	}
 }
 

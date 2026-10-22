@@ -23,7 +23,8 @@ type bind struct {
 	t       *Type
 	fn      *Fn
 	builtin bool
-	field   *Field // when the name is a field of the schema being checked
+	field   *Field   // when the name is a field of the schema being checked
+	decl    diag.Pos // where the name is declared; zero for a builtin and for id
 }
 
 func (s *scope) with(vars ...*bind) *scope { return &scope{parent: s, vars: vars} }
@@ -65,11 +66,11 @@ func (c *checker) globalScope() *scope {
 	}
 	for _, e := range c.f.Enums {
 		for _, v := range e.Values {
-			sc.vars = append(sc.vars, &bind{name: v.Name, t: &Type{Name: e.Name, Enum: e, value: v.Name}})
+			sc.vars = append(sc.vars, &bind{name: v.Name, t: &Type{Name: e.Name, Enum: e, value: v.Name}, decl: v.Pos})
 		}
 	}
 	for _, fn := range c.f.Fns {
-		sc.vars = append(sc.vars, &bind{name: fn.Name, fn: fn})
+		sc.vars = append(sc.vars, &bind{name: fn.Name, fn: fn, decl: fn.Pos})
 	}
 	return sc
 }
@@ -116,6 +117,9 @@ func (c *checker) ident(e *Ident, sc *scope) *Type {
 	case b == nil:
 		c.errorf(e.Pos, "%s", suggest(fmt.Sprintf("unknown name `%s`", e.Name), e.Name, sc.all()))
 		return nil
+	}
+	c.ref(e.Pos, e.Name, b.decl)
+	switch {
 	case b.fn != nil || b.builtin:
 		c.errorf(e.Pos, "`%s` is a function: call it, as in %[1]s(…)", e.Name)
 		return nil
@@ -229,6 +233,7 @@ func (c *checker) member(e *Member, t *Type) *Type {
 	var ft *Type
 	switch {
 	case f != nil:
+		c.ref(e.Pos, e.Name, f.Pos)
 		ft = typeOf(f.Type)
 	case e.Name == "id" && t.Schema != nil:
 		ft = nativeType(value.Text)
@@ -263,8 +268,10 @@ func (c *checker) call(e *Call, sc *scope) *Type {
 		case b.builtin:
 			return c.builtin(fn, e, sc)
 		case b.fn != nil:
+			c.ref(fn.Pos, fn.Name, b.decl)
 			return c.callFn(fn, b.fn, e, sc)
 		default:
+			c.ref(fn.Pos, fn.Name, b.decl)
 			c.errorf(fn.Pos, "`%s` is not a function", fn.Name)
 		}
 		c.args(e.Args, sc)
@@ -327,7 +334,8 @@ func (c *checker) callFn(id *Ident, fn *Fn, e *Call, sc *scope) *Type {
 func (c *checker) lambda(l *Lambda, sc *scope, t *Type) *Type {
 	var vars []*bind
 	for _, p := range l.Params {
-		vars = append(vars, &bind{name: p.Name, t: t})
+		c.decl(p.Pos, p.Name)
+		vars = append(vars, &bind{name: p.Name, t: t, decl: p.Pos})
 	}
 	return c.expr(l.Body, sc.with(vars...))
 }
@@ -511,6 +519,7 @@ func (c *checker) with(e *With, sc *scope) *Type {
 			c.errorf(wf.Pos, "%s", suggest(fmt.Sprintf("`%s` has no field `%s`", x.Name, wf.Name), wf.Name, x.Schema.FieldNames()))
 			continue
 		}
+		c.ref(wf.Pos, wf.Name, f.Pos)
 		if m := mismatch(typeOf(f.Type), t); m != "" {
 			c.errorf(wf.Pos, "`%s` is `%s`, but the value given is %s", wf.Name, f.Type, m)
 		}
@@ -595,6 +604,9 @@ func (c *checker) quantity(q *Quantity) *Type {
 		return nativeType(value.Money)
 	}
 	declared := c.f.UnitNames()
+	if i := slices.Index(declared, u); i >= 0 {
+		c.ref(q.UnitPos, u, c.f.Units[i].Pos)
+	}
 	if !slices.Contains(value.BuiltinUnits, u) && !slices.Contains(declared, u) {
 		units := append(slices.Sorted(maps.Keys(value.DurationUnits)), value.NewUnits(declared).Names()...)
 		if s := names.Closest(u, units); s != "" {

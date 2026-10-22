@@ -12,6 +12,7 @@ import (
 
 	"github.com/bn-k/kanon/internal/diag"
 	"github.com/bn-k/kanon/internal/lint"
+	"github.com/bn-k/kanon/internal/lsp"
 	"github.com/bn-k/kanon/internal/sqlexport"
 	"github.com/bn-k/kanon/internal/sqlimport"
 )
@@ -20,7 +21,11 @@ const usage = `usage: kan lint [-today YYYY-MM-DD] <schema.kanonarch> <document.
        kan eval [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>
        kan import <database.sqlite|dump.sql> <out-dir>
        kan sql <schema.kanonarch> <document.kan> [-o out.sql|out.sqlite|out.db]
-       kan sql -q <query|@query.sql> [-format table|csv] <schema.kanonarch> <document.kan>`
+       kan sql -q <query|@query.sql> [-format table|csv] <schema.kanonarch> <document.kan>
+       kan lsp`
+
+// stdin is what kan lsp reads the editor's messages from.
+var stdin io.Reader = os.Stdin
 
 // Run runs kan with args, without the program name, and returns its exit code: 0 when the documents are valid, or
 // the import or the SQL is written; 1 when they have errors, or the import or the SQL fails; 2 when kan is misused.
@@ -35,10 +40,25 @@ func Run(args []string, stdout, stderr io.Writer) int {
 			return runImport(args[1:], stdout, stderr)
 		case "sql":
 			return runSQL(args[1:], stdout, stderr)
+		case "lsp":
+			return runLSP(args[1:], stdout, stderr)
 		}
 	}
 	fmt.Fprintln(stderr, usage)
 	return 2
+}
+
+// runLSP serves an editor on stdin and stdout, until it exits.
+func runLSP(args []string, stdout, stderr io.Writer) int {
+	if len(args) > 0 {
+		fmt.Fprintf(stderr, "kan: lsp takes no argument, got %s\n%s\n", strings.Join(args, " "), usage)
+		return 2
+	}
+	if err := lsp.Serve(stdin, stdout); err != nil {
+		fmt.Fprintf(stderr, "kan: %v\n", err)
+		return 1
+	}
+	return 0
 }
 
 func runLint(args []string, stdout, stderr io.Writer) int {

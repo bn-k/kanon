@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/bn-k/kanon/internal/diag"
 	"github.com/bn-k/kanon/internal/doc"
@@ -135,6 +136,7 @@ func (l *linter) heading(c *doc.Section, o *object) {
 	h := c.Heading
 	slug := names.Slugify(h.Text)
 	if f := o.schema.Field(slug); f != nil {
+		l.ref(h.TextPos, h.Text, f.Pos)
 		l.field(c, f, o)
 		return
 	}
@@ -328,7 +330,7 @@ func (l *linter) spreadsheet(target string, pos diag.Pos, in *schema.Field, pare
 		return
 	}
 	path := filepath.Join(filepath.Dir(parent.file.path), filepath.FromSlash(name))
-	if !l.file(name, path, pos, value.File) {
+	if !l.fileRef(name, path, pos, utf8.RuneCountInString(target)+len("[[]]"), value.File) {
 		return
 	}
 	s, ds := sheet.Read(path, sheetName)
@@ -385,7 +387,11 @@ func (l *linter) grid(g grid, in *schema.Field, parent *object, level int) {
 	seen := map[string]bool{}
 	unread := false // a header cell can't be read: it may stand for any column, so none is reported missing
 	for i, h := range g.header {
-		switch f := s.Field(h.Text); {
+		f := s.Field(h.Text)
+		if f != nil && !g.broken[h.Pos] {
+			l.ref(h.Pos, h.Text, f.Pos)
+		}
+		switch {
 		case g.broken[h.Pos]:
 			unread = true
 		case h.Text == "":
@@ -501,11 +507,21 @@ func (l *linter) items(list *doc.List, in *schema.Field, parent *object, level i
 		for _, f := range s.Fields {
 			if v, ok := vals[f.Name]; ok {
 				l.mark(o, f, pos)
-				l.value(f, v, pos, o)
+				l.value(f, v, within(it.Lines, v), o)
 			}
 		}
 		l.require(o)
 	}
+}
+
+// within returns where v is written on one of lines, or where the first starts when v isn't on a single line.
+func within(lines []doc.Line, v string) diag.Pos {
+	for _, line := range lines {
+		if i := strings.Index(line.Text, v); i >= 0 {
+			return diag.Pos{File: line.Pos.File, Line: line.Pos.Line, Col: line.Pos.Col + utf8.RuneCountInString(line.Text[:i])}
+		}
+	}
+	return lines[0].Pos
 }
 
 // match reads text through the first of the schema's patterns that fits.
@@ -581,6 +597,9 @@ func (l *linter) prose(blocks []doc.Block, o *object) {
 // keyLine binds a key: value line to the field of o it names.
 func (l *linter) keyLine(k *doc.KeyLine, o *object) {
 	f := o.schema.Field(k.Key)
+	if f != nil {
+		l.ref(k.Pos, k.Key, f.Pos)
+	}
 	switch {
 	case f == nil:
 		msg, meant := unknownField(k.Key, o.schema)
@@ -666,10 +685,12 @@ func (l *linter) value(f *schema.Field, s string, pos diag.Pos, o *object) {
 	t := f.Type
 	switch {
 	case t.Enum != nil:
-		if t.Enum.Value(s) == nil {
+		v := t.Enum.Value(s)
+		if v == nil {
 			l.diags.Errorf(pos, "%s", enumError(t.Enum, s))
 			return
 		}
+		l.ref(pos, s, v.Pos)
 		mf := o.put(f, pos)
 		mf.Values = append(mf.Values, value.Value{Kind: value.Text, Raw: s})
 	case t.Link:
@@ -715,7 +736,7 @@ func (l *linter) fileValue(f *schema.Field, s string, pos diag.Pos, o *object) {
 		l.diags.Errorf(pos, "this field holds %s: link to a file, with its extension, as in [[%s]]", names.Article(t.Name), fileExamples[t.Kind])
 	default:
 		path := filepath.Join(filepath.Dir(o.file.path), filepath.FromSlash(target))
-		l.file(target, path, pos, t.Kind)
+		l.fileRef(target, path, pos, utf8.RuneCountInString(s), t.Kind)
 		mf := o.put(f, pos)
 		if t.Kind != value.Code {
 			mf.Files = append(mf.Files, path)
@@ -820,7 +841,7 @@ func (l *linter) link(rs []rune, i int, at func(int) diag.Pos, o *object) (int, 
 			l.diags.Errorf(at(i), "unclosed link; close it with ]]")
 			return 0, false
 		}
-		l.queue(string(rs[i+2:end]), at(start), o.file)
+		l.queue(string(rs[i+2:end]), at(start), end+2-start, o.file)
 		return end + 1, true
 	}
 	text := index(rs, i+1, "]")
@@ -833,16 +854,16 @@ func (l *linter) link(rs []rune, i int, at func(int) diag.Pos, o *object) (int, 
 	}
 	l.scan(string(rs[i+1:text]), at(i+1), o)
 	target, _, _ := strings.Cut(strings.TrimSpace(string(rs[text+2:end])), " ") // drop a title: (path "Title")
-	l.target(target, at(start), image, o)
+	l.target(target, at(start), end+1-start, image, o)
 	return end, true
 }
 
 // scheme starts the address of a link to another site: https:, mailto:…
 var scheme = regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9+.-]*:`)
 
-// target checks the target of a Markdown link: a file next to the document, or a document. Links to another site
-// and to a place in the page are not checked.
-func (l *linter) target(target string, pos diag.Pos, image bool, o *object) {
+// target checks the target of a Markdown link, written at pos and width runes wide: a file next to the document, or
+// a document. Links to another site and to a place in the page are not checked.
+func (l *linter) target(target string, pos diag.Pos, width int, image bool, o *object) {
 	path, id, hasID := strings.Cut(target, "#")
 	path, _, _ = strings.Cut(path, "?")
 	switch {
@@ -852,11 +873,11 @@ func (l *linter) target(target string, pos diag.Pos, image bool, o *object) {
 		if image {
 			k = value.Image
 		}
-		l.file(path, filepath.Join(filepath.Dir(o.file.path), filepath.FromSlash(path)), pos, k)
+		l.fileRef(path, filepath.Join(filepath.Dir(o.file.path), filepath.FromSlash(path)), pos, width, k)
 	case hasID:
-		l.queue(strings.TrimSuffix(path, ".kan")+"#"+id, pos, o.file)
+		l.queue(strings.TrimSuffix(path, ".kan")+"#"+id, pos, width, o.file)
 	default:
-		l.queue(strings.TrimSuffix(path, ".kan"), pos, o.file)
+		l.queue(strings.TrimSuffix(path, ".kan"), pos, width, o.file)
 	}
 }
 
@@ -873,7 +894,8 @@ func (l *linter) insert(name string, pos diag.Pos, o *object) {
 	root, _, _ := strings.Cut(name, ".")
 	var all []string
 	for p := o; p != nil; p = p.parent {
-		if p.schema.Field(root) != nil {
+		if f := p.schema.Field(root); f != nil {
+			l.ref(pos, root, f.Pos)
 			return
 		}
 		all = append(all, p.schema.FieldNames()...)
@@ -946,7 +968,9 @@ func (l *linter) register(o *object, id string, idPos, pos diag.Pos, how string)
 		l.diags.Errorf(idPos, "the id `%s` is already used%s", id, where(prev.pos, idPos))
 	default:
 		o.id, o.m.ID = id, id
+		o.idPos = idPos
 		o.file.ids[id] = o
+		l.ref(idPos, id, idPos)
 	}
 }
 

@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -39,6 +40,7 @@ func TestUsage(t *testing.T) {
 		{[]string{"sql", shop, catalog, "-q"}, "kan: -q takes a query: -q 'SELECT …' or -q @query.sql\n" + usage + "\n"},
 		{[]string{"sql", "-q", "  ", shop, catalog}, "kan: -q takes a query: -q 'SELECT …' or -q @query.sql\n" + usage + "\n"},
 		{[]string{"sql", "-q", "SELECT 1", shop, catalog, "-format"}, "kan: -format takes table or csv\n" + usage + "\n"},
+		{[]string{"lsp", "-stdio"}, "kan: lsp takes no argument, got -stdio\n" + usage + "\n"},
 		{[]string{"sql", "-q", "SELECT 1", "-format", "json", shop, catalog},
 			"kan: -format is table or csv, not json\n" + usage + "\n"},
 		{[]string{"sql", shop, catalog, "-format", "csv"}, "kan: -format goes with -q\n" + usage + "\n"},
@@ -342,6 +344,26 @@ func TestToday(t *testing.T) {
 		}
 		if stdout.String() != tt.want || stderr.Len() > 0 {
 			t.Errorf("Run %s: stderr %q\nstdout\n got %q\nwant %q", tt.args, stderr.String(), stdout.String(), tt.want)
+		}
+	}
+}
+
+func TestLSP(t *testing.T) {
+	defer func(in io.Reader) { stdin = in }(stdin)
+	tests := []struct {
+		in        string
+		code      int
+		out, errs string
+	}{
+		{"", 0, "", ""},
+		{"Content-Length: 2\r\n\r\n{}", 0, "", ""},
+		{"Content-Length: x\r\n\r\n", 1, "", "kan: a message with a bad Content-Length: \"x\"\n"},
+	}
+	for _, tt := range tests {
+		stdin = strings.NewReader(tt.in)
+		var stdout, stderr bytes.Buffer
+		if code := Run([]string{"lsp"}, &stdout, &stderr); code != tt.code || stdout.String() != tt.out || stderr.String() != tt.errs {
+			t.Errorf("kan lsp < %q = %d, stdout %q, stderr %q", tt.in, code, stdout.String(), stderr.String())
 		}
 	}
 }

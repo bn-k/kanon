@@ -16,6 +16,17 @@ type File struct {
 	Enums   []*Enum
 	Schemas []*Schema
 	Fns     []*Fn
+
+	Refs []Ref // set by Check: every name and what it stands for, declarations included
+}
+
+// Ref is a name written at Pos, Len runes long, that stands for what is declared at Decl: a type, a field, a
+// parameter, a function, an enum value or a unit. A declaration is a Ref to itself, so that the references to a
+// name are the Refs with its Decl. A Decl with a zero Line stands for a whole file.
+type Ref struct {
+	Pos  diag.Pos
+	Len  int
+	Decl diag.Pos
 }
 
 // Unit is a unit a Quantity may carry, beyond the built-in ones: unit pincee.
@@ -242,6 +253,29 @@ func (f *File) DeclNames() []string {
 		ns = append(ns, fn.Name)
 	}
 	return ns
+}
+
+// Decl returns where name is declared in f, as Declares finds it.
+func (f *File) Decl(name string) (diag.Pos, bool) {
+	for _, u := range f.Units {
+		if u.Name == name {
+			return u.Pos, true
+		}
+	}
+	for _, e := range f.Enums {
+		if e.Name == name {
+			return e.Pos, true
+		}
+	}
+	if s := f.Schema(name); s != nil {
+		return s.Pos, true
+	}
+	for _, fn := range f.Fns {
+		if fn.Name == name {
+			return fn.Pos, true
+		}
+	}
+	return diag.Pos{}, false
 }
 
 // Field returns the field called name, or nil.
