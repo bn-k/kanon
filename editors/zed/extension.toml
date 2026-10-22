@@ -2,7 +2,9 @@ id = "kanon"
 name = "Kanon"
 version = "0.1.0"
 schema_version = 1
-description = "Kanon documents (.kan) and schemas (.kanonarch)"
+authors = ["Karim Benhammou <karim@benhammou.me>"]
+repository = "https://github.com/bn-k/kanon"
+description = "Kanon documents (.kan) and schemas (.kanonarch): highlighting, diagnostics and navigation"
 
 # Zed clones the grammar from this repository at this commit, even for a dev extension: a change to the grammar
 # is seen once it is pushed and rev names the new commit. While the repository is private, Zed's git needs
@@ -11,3 +13,9 @@ description = "Kanon documents (.kan) and schemas (.kanonarch)"
 repository = "https://github.com/bn-k/kanon"
 rev = "98fb0c0a50e01a85c26bcec0185e624bc17050f6"
 path = "editors/tree-sitter-kanonarch"
+
+# kan lsp checks documents and schemas as they are typed, and answers go to definition, references, hover and
+# symbols. The extension runs the kan on the PATH, or the one named by lsp.kan.binary.path in Zed's settings.
+[language_servers.kan]
+name = "kan"
+languages = ["Kanon", "Kanonarch"]

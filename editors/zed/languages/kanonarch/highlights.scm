@@ -84,9 +84,6 @@
   function: (identifier) @function.builtin)
   (#any-of? @function.builtin "sum" "count" "round" "abs" "min" "max"))
 
-((identifier) @boolean
-  (#any-of? @boolean "yes" "no"))
-
 ((identifier) @constant.builtin
   (#any-of? @constant.builtin "today" "none"))
 

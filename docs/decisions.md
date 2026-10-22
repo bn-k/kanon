@@ -100,6 +100,20 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 - **The grammar's `repository` is the GitHub repository**, `https://github.com/bn-k/kanon`: Zed fetches the
   commit `rev` from there, so a grammar change is seen once it is pushed. While the repository is private, the
   machine that runs Zed needs git credentials for GitHub (2026-10-22).
+- **Navigation and live diagnostics come from a language server, `kan lsp`**, in `internal/lsp`: the editor gets
+  what `kan lint` knows, through one protocol any editor speaks. The extension only starts it; it runs the `kan` on
+  the `PATH`, or the one named by `lsp.kan.binary.path` in Zed's settings (2026-10-22).
+- **Every name the checker resolves is recorded as a reference** to its declaration, and every declaration as a
+  reference to itself: definition, references, highlights and hover all read that one list (2026-10-22).
+- **The server lints again 300 ms after the last edit**, from the open text and the files on disk, and before it
+  answers any request (2026-10-22).
+- **A document's schema is found, not given**: the nearest folder, the document's own or above, that holds
+  `.kanonarch` files; there, the file that declares the document's `type`, or the first. A document without a
+  `type` is checked through the document that owns its folder (`clio/` belongs to `clio.kan`). An open schema checks
+  the documents of its folder whose schema it is. This holds for the editor only; `kan lint` still takes the schema
+  as an argument (2026-10-22).
+- **A `.kan` document is Markdown in the editor**: the language "Kanon" uses the Markdown grammar that ships with
+  Zed, and its queries (2026-10-22).
 
 ## Open questions
 
@@ -109,8 +123,9 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   says to give the section another title.
 - **A single sub-object as a file**: `clio/carte-grise.kan` would be named after a field, not an id. Allowed, or
   arrays only?
-- **Where schemas live**: for now the schema is given on the command line. A same-folder convention, an explicit
-  `use`, or a project file?
+- **Where schemas live**: the command line takes the schema as an argument; the language server finds it in the
+  nearest folder that holds one (see Editors). Should `kan lint` find it the same way, or is an explicit `use` or a
+  project file better?
 - **`reads` patterns** both parse and render a line (`250 g de farine`). How far can they go before they become a
   grammar of their own?
 - **Severity**: an oil change that's due is a warning, an illegal deposit is an error. `rule … warn`?

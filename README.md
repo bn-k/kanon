@@ -108,9 +108,25 @@ QUICK-Stop              28
 ## Editors
 
 `editors/zed` is an extension for the Zed editor: it colours `.kanonarch` schemas, outlines their declarations
-and fields, and indents them. Its grammar is `editors/tree-sitter-kanonarch`, a tree-sitter grammar that follows
-the Go parser of `internal/schema`. To install it, open the command palette in Zed, run `zed: install dev
-extension` and choose the folder `editors/zed`.
+and fields, and indents them; `.kan` documents are read as Markdown. Its grammar is
+`editors/tree-sitter-kanonarch`, a tree-sitter grammar that follows the Go parser of `internal/schema`. To install
+it, open the command palette in Zed, run `zed: install dev extension` and choose the folder `editors/zed`.
+
+`kan lsp` is the language server the extension runs: install `kan` on the `PATH` first
+(`go install ./cmd/kan`), or name it in Zed's settings under `lsp.kan.binary.path`. It checks the open documents
+and schemas as they are typed, with the diagnostics of `kan lint`, and answers:
+
+- go to definition and declaration: from the `type` of a document, a field, a heading, an enum value or an insert
+  `{field}` to where the schema declares it; from a link `[[…]]` or `[…](…)` to its file, or to the object of its
+  `#id`; in a schema, from a type, a field, a function or a rule to its declaration;
+- find references and highlights: every place that names the same declaration, in the schema and the documents;
+- hover: the line that declares it, and where;
+- symbols: the outline of a file, and a search over the declarations of every open file.
+
+A document finds its schema in the nearest folder, its own or above, that holds `.kanonarch` files: the one that
+declares the `type` of its front matter, or the first. A document without a `type` is checked as part of the
+document that owns its folder (`clio/entretiens/…` through `clio.kan`). An open schema also checks the documents of
+its folder whose schema it is.
 
 Zed builds the grammar from the repository named in `editors/zed/extension.toml`, at the commit `rev`, never
 from the working tree. After a change to the grammar:
@@ -255,6 +271,7 @@ Go, standard library only, except the pure Go SQLite driver `modernc.org/sqlite`
 | `internal/eval` | `kan eval`: computed fields and rules, evaluated over the model; a computed field is a field of the model whose schema field has an expression |
 | `internal/sqlimport` | `kan import`: a SQLite database or dump read into a schema and a tree of documents |
 | `internal/sqlexport` | `kan sql`: the tables of a schema and the rows of a document, as a script, a database, or the rows of a query |
+| `internal/lsp` | `kan lsp`: the language server of editors, with diagnostics, definition, references, hover and symbols |
 | `internal/schema` | lexer, parser and checker of `.kanonarch` files |
 | `internal/doc` | parser of `.kan` files: front matter, sections, key lines, lists, tables, paragraphs |
 | `internal/sheet` | CSV files and xlsx sheets, read as rows of cells in the canonical format |
