@@ -122,7 +122,8 @@ $ for f in $(find ../../cases -name '*.kanonarch'); do tree-sitter parse -q "$f"
 ```
 
 The loop reports `cases/errors-schema-label/broken.kanonarch` only: it holds labels on purpose, which the grammar
-refuses as the parser does. Then commit, set `rev` to that commit, and rebuild the extension from Zed's extensions page.
+refuses as the parser does. Then commit and push, set `rev` to that commit, and rebuild the extension from Zed's
+extensions page.
 
 ## Cases
 

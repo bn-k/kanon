@@ -97,8 +97,9 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 - **The generated `src/parser.c` is committed**: Zed compiles it itself, from the commit named by `rev` (2026-10-22).
 - **The language of schemas is named "Kanonarch"** in the editor, after its extension; "Kanon" is the language of
   documents (2026-10-22).
-- **The grammar's `repository` is the SSH address the repository is cloned from**, as long as there is no public
-  one; it becomes the public URL then (2026-10-22).
+- **The grammar's `repository` is the GitHub repository**, `https://github.com/bn-k/kanon`: Zed fetches the
+  commit `rev` from there, so a grammar change is seen once it is pushed. While the repository is private, the
+  machine that runs Zed needs git credentials for GitHub (2026-10-22).
 
 ## Open questions
 

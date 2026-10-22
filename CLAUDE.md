@@ -19,8 +19,8 @@ The repository is private for now, on GitHub at `bn-k/kanon`: nothing goes publi
 - Everything is English, except the content of a case.
 - `editors/tree-sitter-kanonarch` follows `internal/schema`: a change to the syntax of schemas goes to both, with a
   test in `test/corpus/`. `tree-sitter generate` and `tree-sitter test` stay clean, and no case schema but
-  `cases/errors-schema/broken.kanonarch` parses with an error. Zed builds the grammar from the commit named by
-  `rev` in `editors/zed/extension.toml`: commit the grammar first, then update `rev`.
+  `cases/errors-schema-label/broken.kanonarch` parses with an error. Zed fetches the grammar from GitHub at the
+  commit named by `rev` in `editors/zed/extension.toml`: commit and push the grammar first, then update `rev`.
 
 ## Messages
 
