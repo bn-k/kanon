@@ -1,0 +1,11 @@
+# Product 47
+
+product-name: Zaanse koeken
+supplier: [[../suppliers/22]]
+category: [[../categories/3]]
+quantity-per-unit: 10 - 4 oz boxes
+unit-price: 9.5
+units-in-stock: 36
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

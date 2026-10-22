@@ -1,0 +1,21 @@
+# Order 10426
+
+customer: [[../customers/galed]]
+employee: [[../employees/4]]
+order-date: 1997-01-27
+required-date: 1997-02-24
+shipped-date: 1997-02-06
+ship-via: [[../shippers/1]]
+freight: 18.69
+ship-name: Galería del gastronómo
+ship-address: Rambla de Cataluña, 23
+ship-city: Barcelona
+ship-postal-code: 8022
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 56 | [[../products/56]] | 30.4 | 5 | 0 |
+| 64 | [[../products/64]] | 26.6 | 7 | 0 |

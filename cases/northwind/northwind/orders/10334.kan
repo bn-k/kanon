@@ -1,0 +1,21 @@
+# Order 10334
+
+customer: [[../customers/victe]]
+employee: [[../employees/8]]
+order-date: 1996-10-21
+required-date: 1996-11-18
+shipped-date: 1996-10-28
+ship-via: [[../shippers/2]]
+freight: 8.56
+ship-name: Victuailles en stock
+ship-address: 2, rue du Commerce
+ship-city: Lyon
+ship-postal-code: 69004
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 52 | [[../products/52]] | 5.6 | 8 | 0 |
+| 68 | [[../products/68]] | 10 | 10 | 0 |

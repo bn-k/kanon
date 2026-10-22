@@ -1,0 +1,23 @@
+# Order 10342
+
+customer: [[../customers/frank]]
+employee: [[../employees/4]]
+order-date: 1996-10-30
+required-date: 1996-11-13
+shipped-date: 1996-11-04
+ship-via: [[../shippers/2]]
+freight: 54.83
+ship-name: Frankenversand
+ship-address: Berliner Platz 43
+ship-city: München
+ship-postal-code: 80805
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 2 | [[../products/2]] | 15.2 | 24 | 0.2 |
+| 31 | [[../products/31]] | 10 | 56 | 0.2 |
+| 36 | [[../products/36]] | 15.2 | 40 | 0.2 |
+| 55 | [[../products/55]] | 19.2 | 40 | 0.2 |

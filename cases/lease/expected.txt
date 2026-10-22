@@ -1,0 +1,4 @@
+$ kan lint schema.kanonarch bail.kan
+ok  schema.kanonarch
+ok  bail.kan
+ok  etat-des-lieux-entree.kan

@@ -1,0 +1,22 @@
+# Order 10302
+
+customer: [[../customers/suprd]]
+employee: [[../employees/4]]
+order-date: 1996-09-10
+required-date: 1996-10-08
+shipped-date: 1996-10-09
+ship-via: [[../shippers/2]]
+freight: 6.27
+ship-name: Suprêmes délices
+ship-address: Boulevard Tirou, 255
+ship-city: Charleroi
+ship-postal-code: B-6000
+ship-country: Belgium
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 17 | [[../products/17]] | 31.2 | 40 | 0 |
+| 28 | [[../products/28]] | 36.4 | 28 | 0 |
+| 43 | [[../products/43]] | 36.8 | 12 | 0 |

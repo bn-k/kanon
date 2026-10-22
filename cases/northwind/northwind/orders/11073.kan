@@ -1,0 +1,20 @@
+# Order 11073
+
+customer: [[../customers/peric]]
+employee: [[../employees/2]]
+order-date: 1998-05-05
+required-date: 1998-06-02
+ship-via: [[../shippers/2]]
+freight: 24.95
+ship-name: Pericles Comidas clásicas
+ship-address: Calle Dr. Jorge Cash 321
+ship-city: México D.F.
+ship-postal-code: 5033
+ship-country: Mexico
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 11 | [[../products/11]] | 21 | 10 | 0 |
+| 24 | [[../products/24]] | 4.5 | 20 | 0 |

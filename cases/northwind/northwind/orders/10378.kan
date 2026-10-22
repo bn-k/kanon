@@ -1,0 +1,20 @@
+# Order 10378
+
+customer: [[../customers/folko]]
+employee: [[../employees/5]]
+order-date: 1996-12-10
+required-date: 1997-01-07
+shipped-date: 1996-12-19
+ship-via: [[../shippers/3]]
+freight: 5.44
+ship-name: Folk och fä HB
+ship-address: Åkergatan 24
+ship-city: Bräcke
+ship-postal-code: S-844 67
+ship-country: Sweden
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 71 | [[../products/71]] | 17.2 | 6 | 0 |

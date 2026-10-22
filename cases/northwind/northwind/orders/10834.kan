@@ -1,0 +1,22 @@
+# Order 10834
+
+customer: [[../customers/tradh]]
+employee: [[../employees/1]]
+order-date: 1998-01-15
+required-date: 1998-02-12
+shipped-date: 1998-01-19
+ship-via: [[../shippers/3]]
+freight: 29.78
+ship-name: Tradiçao Hipermercados
+ship-address: Av. Inês de Castro, 414
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05634-030
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 29 | [[../products/29]] | 123.79 | 8 | 0.05 |
+| 30 | [[../products/30]] | 25.89 | 20 | 0.05 |

@@ -1,0 +1,22 @@
+# Order 10269
+
+customer: [[../customers/whitc]]
+employee: [[../employees/5]]
+order-date: 1996-07-31
+required-date: 1996-08-14
+shipped-date: 1996-08-09
+ship-via: [[../shippers/1]]
+freight: 4.56
+ship-name: White Clover Markets
+ship-address: 1029 - 12th Ave. S.
+ship-city: Seattle
+ship-region: WA
+ship-postal-code: 98124
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 33 | [[../products/33]] | 2 | 60 | 0.05 |
+| 72 | [[../products/72]] | 27.8 | 20 | 0.05 |

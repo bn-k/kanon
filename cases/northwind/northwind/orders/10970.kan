@@ -1,0 +1,20 @@
+# Order 10970
+
+customer: [[../customers/bolid]]
+employee: [[../employees/9]]
+order-date: 1998-03-24
+required-date: 1998-04-07
+shipped-date: 1998-04-24
+ship-via: [[../shippers/1]]
+freight: 16.16
+ship-name: Bólido Comidas preparadas
+ship-address: C/ Araquil, 67
+ship-city: Madrid
+ship-postal-code: 28023
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 52 | [[../products/52]] | 7 | 40 | 0.2 |

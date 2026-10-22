@@ -1,0 +1,21 @@
+# Order 10818
+
+customer: [[../customers/magaa]]
+employee: [[../employees/7]]
+order-date: 1998-01-07
+required-date: 1998-02-04
+shipped-date: 1998-01-12
+ship-via: [[../shippers/3]]
+freight: 65.48
+ship-name: Magazzini Alimentari Riuniti
+ship-address: Via Ludovico il Moro 22
+ship-city: Bergamo
+ship-postal-code: 24100
+ship-country: Italy
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 32 | [[../products/32]] | 32 | 20 | 0 |
+| 41 | [[../products/41]] | 9.65 | 20 | 0 |

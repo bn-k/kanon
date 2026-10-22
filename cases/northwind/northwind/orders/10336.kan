@@ -1,0 +1,20 @@
+# Order 10336
+
+customer: [[../customers/prini]]
+employee: [[../employees/7]]
+order-date: 1996-10-23
+required-date: 1996-11-20
+shipped-date: 1996-10-25
+ship-via: [[../shippers/2]]
+freight: 15.51
+ship-name: Princesa Isabel Vinhos
+ship-address: Estrada da saúde n. 58
+ship-city: Lisboa
+ship-postal-code: 1756
+ship-country: Portugal
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 4 | [[../products/4]] | 17.6 | 18 | 0.1 |

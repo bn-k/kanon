@@ -1,0 +1,22 @@
+# Order 10326
+
+customer: [[../customers/bolid]]
+employee: [[../employees/4]]
+order-date: 1996-10-10
+required-date: 1996-11-07
+shipped-date: 1996-10-14
+ship-via: [[../shippers/2]]
+freight: 77.92
+ship-name: Bólido Comidas preparadas
+ship-address: C/ Araquil, 67
+ship-city: Madrid
+ship-postal-code: 28023
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 4 | [[../products/4]] | 17.6 | 24 | 0 |
+| 57 | [[../products/57]] | 15.6 | 16 | 0 |
+| 75 | [[../products/75]] | 6.2 | 50 | 0 |

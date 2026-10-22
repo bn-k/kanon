@@ -1,0 +1,20 @@
+# Order 10887
+
+customer: [[../customers/galed]]
+employee: [[../employees/8]]
+order-date: 1998-02-13
+required-date: 1998-03-13
+shipped-date: 1998-02-16
+ship-via: [[../shippers/3]]
+freight: 1.25
+ship-name: Galería del gastronómo
+ship-address: Rambla de Cataluña, 23
+ship-city: Barcelona
+ship-postal-code: 8022
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 25 | [[../products/25]] | 14 | 5 | 0 |

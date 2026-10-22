@@ -1,0 +1,21 @@
+# Order 10967
+
+customer: [[../customers/tomsp]]
+employee: [[../employees/2]]
+order-date: 1998-03-23
+required-date: 1998-04-20
+shipped-date: 1998-04-02
+ship-via: [[../shippers/2]]
+freight: 62.22
+ship-name: Toms Spezialitäten
+ship-address: Luisenstr. 48
+ship-city: Münster
+ship-postal-code: 44087
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 19 | [[../products/19]] | 9.2 | 12 | 0 |
+| 49 | [[../products/49]] | 20 | 40 | 0 |

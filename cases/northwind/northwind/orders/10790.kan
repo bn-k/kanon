@@ -1,0 +1,22 @@
+# Order 10790
+
+customer: [[../customers/gourl]]
+employee: [[../employees/6]]
+order-date: 1997-12-22
+required-date: 1998-01-19
+shipped-date: 1997-12-26
+ship-via: [[../shippers/1]]
+freight: 28.23
+ship-name: Gourmet Lanchonetes
+ship-address: Av. Brasil, 442
+ship-city: Campinas
+ship-region: SP
+ship-postal-code: 04876-786
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 7 | [[../products/7]] | 30 | 3 | 0.15 |
+| 56 | [[../products/56]] | 38 | 20 | 0.15 |

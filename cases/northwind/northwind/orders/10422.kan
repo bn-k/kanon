@@ -1,0 +1,20 @@
+# Order 10422
+
+customer: [[../customers/frans]]
+employee: [[../employees/2]]
+order-date: 1997-01-22
+required-date: 1997-02-19
+shipped-date: 1997-01-31
+ship-via: [[../shippers/1]]
+freight: 3.02
+ship-name: Franchi S.p.A.
+ship-address: Via Monte Bianco 34
+ship-city: Torino
+ship-postal-code: 10100
+ship-country: Italy
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 26 | [[../products/26]] | 24.9 | 2 | 0 |

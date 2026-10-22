@@ -1,0 +1,21 @@
+# Order 10560
+
+customer: [[../customers/frank]]
+employee: [[../employees/8]]
+order-date: 1997-06-06
+required-date: 1997-07-04
+shipped-date: 1997-06-09
+ship-via: [[../shippers/1]]
+freight: 36.65
+ship-name: Frankenversand
+ship-address: Berliner Platz 43
+ship-city: München
+ship-postal-code: 80805
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 30 | [[../products/30]] | 25.89 | 20 | 0 |
+| 62 | [[../products/62]] | 49.3 | 15 | 0.25 |

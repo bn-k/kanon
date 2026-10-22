@@ -1,0 +1,11 @@
+# Product 17
+
+product-name: Alice Mutton
+supplier: [[../suppliers/7]]
+category: [[../categories/6]]
+quantity-per-unit: 20 - 1 kg tins
+unit-price: 39
+units-in-stock: 0
+units-on-order: 0
+reorder-level: 0
+discontinued: 1

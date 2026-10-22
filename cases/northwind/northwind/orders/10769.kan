@@ -1,0 +1,23 @@
+# Order 10769
+
+customer: [[../customers/vaffe]]
+employee: [[../employees/3]]
+order-date: 1997-12-08
+required-date: 1998-01-05
+shipped-date: 1997-12-12
+ship-via: [[../shippers/1]]
+freight: 65.06
+ship-name: Vaffeljernet
+ship-address: Smagsloget 45
+ship-city: Århus
+ship-postal-code: 8200
+ship-country: Denmark
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 41 | [[../products/41]] | 9.65 | 30 | 0.05 |
+| 52 | [[../products/52]] | 7 | 15 | 0.05 |
+| 61 | [[../products/61]] | 28.5 | 20 | 0 |
+| 62 | [[../products/62]] | 49.3 | 15 | 0 |

@@ -1,0 +1,20 @@
+# Order 10891
+
+customer: [[../customers/lehms]]
+employee: [[../employees/7]]
+order-date: 1998-02-17
+required-date: 1998-03-17
+shipped-date: 1998-02-19
+ship-via: [[../shippers/2]]
+freight: 20.37
+ship-name: Lehmanns Marktstand
+ship-address: Magazinweg 7
+ship-city: Frankfurt a.M.
+ship-postal-code: 60528
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 30 | [[../products/30]] | 25.89 | 15 | 0.05 |

@@ -1,0 +1,11 @@
+# Product 77
+
+product-name: Original Frankfurter grüne Soße
+supplier: [[../suppliers/12]]
+category: [[../categories/2]]
+quantity-per-unit: 12 boxes
+unit-price: 13
+units-in-stock: 32
+units-on-order: 0
+reorder-level: 15
+discontinued: 0

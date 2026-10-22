@@ -1,0 +1,22 @@
+# Order 10846
+
+customer: [[../customers/suprd]]
+employee: [[../employees/2]]
+order-date: 1998-01-22
+required-date: 1998-03-05
+shipped-date: 1998-01-23
+ship-via: [[../shippers/3]]
+freight: 56.46
+ship-name: Suprêmes délices
+ship-address: Boulevard Tirou, 255
+ship-city: Charleroi
+ship-postal-code: B-6000
+ship-country: Belgium
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 4 | [[../products/4]] | 22 | 21 | 0 |
+| 70 | [[../products/70]] | 15 | 30 | 0 |
+| 74 | [[../products/74]] | 10 | 20 | 0 |

@@ -1,0 +1,11 @@
+# Product 30
+
+product-name: Nord-Ost Matjeshering
+supplier: [[../suppliers/13]]
+category: [[../categories/8]]
+quantity-per-unit: 10 - 200 g glasses
+unit-price: 25.89
+units-in-stock: 10
+units-on-order: 0
+reorder-level: 15
+discontinued: 0

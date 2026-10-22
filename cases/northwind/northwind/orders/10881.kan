@@ -1,0 +1,20 @@
+# Order 10881
+
+customer: [[../customers/cactu]]
+employee: [[../employees/4]]
+order-date: 1998-02-11
+required-date: 1998-03-11
+shipped-date: 1998-02-18
+ship-via: [[../shippers/1]]
+freight: 2.84
+ship-name: Cactus Comidas para llevar
+ship-address: Cerrito 333
+ship-city: Buenos Aires
+ship-postal-code: 1010
+ship-country: Argentina
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 73 | [[../products/73]] | 15 | 10 | 0 |

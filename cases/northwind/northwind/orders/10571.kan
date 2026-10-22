@@ -1,0 +1,21 @@
+# Order 10571
+
+customer: [[../customers/ernsh]]
+employee: [[../employees/8]]
+order-date: 1997-06-17
+required-date: 1997-07-29
+shipped-date: 1997-07-04
+ship-via: [[../shippers/3]]
+freight: 26.06
+ship-name: Ernst Handel
+ship-address: Kirchgasse 6
+ship-city: Graz
+ship-postal-code: 8010
+ship-country: Austria
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 14 | [[../products/14]] | 23.25 | 11 | 0.15 |
+| 42 | [[../products/42]] | 14 | 28 | 0.15 |

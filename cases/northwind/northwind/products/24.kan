@@ -1,0 +1,11 @@
+# Product 24
+
+product-name: Guaraná Fantástica
+supplier: [[../suppliers/10]]
+category: [[../categories/1]]
+quantity-per-unit: 12 - 355 ml cans
+unit-price: 4.5
+units-in-stock: 20
+units-on-order: 0
+reorder-level: 0
+discontinued: 1

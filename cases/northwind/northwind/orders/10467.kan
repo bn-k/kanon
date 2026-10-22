@@ -1,0 +1,21 @@
+# Order 10467
+
+customer: [[../customers/magaa]]
+employee: [[../employees/8]]
+order-date: 1997-03-06
+required-date: 1997-04-03
+shipped-date: 1997-03-11
+ship-via: [[../shippers/2]]
+freight: 4.93
+ship-name: Magazzini Alimentari Riuniti
+ship-address: Via Ludovico il Moro 22
+ship-city: Bergamo
+ship-postal-code: 24100
+ship-country: Italy
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 24 | [[../products/24]] | 3.6 | 28 | 0 |
+| 25 | [[../products/25]] | 11.2 | 12 | 0 |

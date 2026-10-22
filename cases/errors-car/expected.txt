@@ -1,0 +1,10 @@
+$ kan lint ../car/schema.kanonarch clio.kan
+clio.kan:9:14: error: unknown unit "kms"; did you mean km?
+clio/entretiens/2023-04-05-controle-technique.kan:2:7: error: this folder holds `Entretien` entries, not `Vehicule`
+clio/entretiens/2025-06-10-vidange.kan:5:12: error: "vidage" is not an `Operation`; did you mean vidange?
+clio/entretiens/2025-06-10-vidange.kan:6:7: error: write 136.00 EUR, not "136,00 €"
+clio/entretiens/Pneus 2024.kan: error: the file name is the object's id: write pneus-2024.kan, not "Pneus 2024.kan"
+clio/entretiens/notes.txt: warning: not a .kan file; ignored
+clio/reparations: error: `Vehicule` has no field `reparations`
+6 errors, 1 warning
+[exit 1]

@@ -1,0 +1,11 @@
+# Product 69
+
+product-name: Gudbrandsdalsost
+supplier: [[../suppliers/15]]
+category: [[../categories/4]]
+quantity-per-unit: 10 kg pkg.
+unit-price: 36
+units-in-stock: 26
+units-on-order: 0
+reorder-level: 15
+discontinued: 0

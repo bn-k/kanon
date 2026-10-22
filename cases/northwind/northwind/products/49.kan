@@ -1,0 +1,11 @@
+# Product 49
+
+product-name: Maxilaku
+supplier: [[../suppliers/23]]
+category: [[../categories/3]]
+quantity-per-unit: 24 - 50 g pkgs.
+unit-price: 20
+units-in-stock: 10
+units-on-order: 60
+reorder-level: 15
+discontinued: 0

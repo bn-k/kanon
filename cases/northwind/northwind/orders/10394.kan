@@ -1,0 +1,22 @@
+# Order 10394
+
+customer: [[../customers/hungc]]
+employee: [[../employees/1]]
+order-date: 1996-12-25
+required-date: 1997-01-22
+shipped-date: 1997-01-03
+ship-via: [[../shippers/3]]
+freight: 30.34
+ship-name: Hungry Coyote Import Store
+ship-address: City Center Plaza 516 Main St.
+ship-city: Elgin
+ship-region: OR
+ship-postal-code: 97827
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 13 | [[../products/13]] | 4.8 | 10 | 0 |
+| 62 | [[../products/62]] | 39.4 | 10 | 0 |

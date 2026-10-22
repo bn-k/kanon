@@ -1,0 +1,11 @@
+# Product 4
+
+product-name: Chef Anton's Cajun Seasoning
+supplier: [[../suppliers/2]]
+category: [[../categories/2]]
+quantity-per-unit: 48 - 6 oz jars
+unit-price: 22
+units-in-stock: 53
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

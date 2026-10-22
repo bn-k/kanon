@@ -1,0 +1,10 @@
+---
+type: Depense
+---
+
+# Dîner du 22 octobre
+
+montant: 96.00 EUR
+taux: 10 %
+le: 2026-10-22
+participants: [[alice]], [[bruno]]

@@ -1,0 +1,20 @@
+# Order 10602
+
+customer: [[../customers/vaffe]]
+employee: [[../employees/8]]
+order-date: 1997-07-17
+required-date: 1997-08-14
+shipped-date: 1997-07-22
+ship-via: [[../shippers/2]]
+freight: 2.92
+ship-name: Vaffeljernet
+ship-address: Smagsloget 45
+ship-city: Århus
+ship-postal-code: 8200
+ship-country: Denmark
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 77 | [[../products/77]] | 13 | 5 | 0.25 |

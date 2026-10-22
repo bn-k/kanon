@@ -1,0 +1,11 @@
+# Product 42
+
+product-name: Singaporean Hokkien Fried Mee
+supplier: [[../suppliers/20]]
+category: [[../categories/5]]
+quantity-per-unit: 32 - 1 kg pkgs.
+unit-price: 14
+units-in-stock: 26
+units-on-order: 0
+reorder-level: 0
+discontinued: 1

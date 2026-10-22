@@ -1,0 +1,21 @@
+# Order 10972
+
+customer: [[../customers/lacor]]
+employee: [[../employees/4]]
+order-date: 1998-03-24
+required-date: 1998-04-21
+shipped-date: 1998-03-26
+ship-via: [[../shippers/2]]
+freight: 0.02
+ship-name: La corne d-abondance
+ship-address: 67, avenue de l-Europe
+ship-city: Versailles
+ship-postal-code: 78000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 17 | [[../products/17]] | 39 | 6 | 0 |
+| 33 | [[../products/33]] | 2.5 | 7 | 0 |

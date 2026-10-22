@@ -1,0 +1,14 @@
+---
+type: Agent
+---
+
+# Sophie Bernard
+
+agence: Rhône Immobilier, Caluire
+telephone: +33 4 65 71 45 61
+email: sophie.bernard@rhone-immobilier.example
+portrait: [[sophie-bernard/portrait.jpg]]
+
+## Mandats
+
+- [[../maison-caluire]]

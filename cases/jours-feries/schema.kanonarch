@@ -1,0 +1,14 @@
+// Working material: the public holidays of metropolitan France, from Etalab's open data (see source/README.md).
+
+schema Calendrier {
+  titre:  Text @heading
+  source: Text
+  jours:  [JourFerie]
+}
+
+schema JourFerie "Jour férié" {
+  date:  Date
+  annee: Int "Année"
+  zone:  Text
+  nom:   Text
+}

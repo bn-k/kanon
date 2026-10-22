@@ -1,0 +1,23 @@
+# Order 10399
+
+customer: [[../customers/vaffe]]
+employee: [[../employees/8]]
+order-date: 1996-12-31
+required-date: 1997-01-14
+shipped-date: 1997-01-08
+ship-via: [[../shippers/3]]
+freight: 27.36
+ship-name: Vaffeljernet
+ship-address: Smagsloget 45
+ship-city: Århus
+ship-postal-code: 8200
+ship-country: Denmark
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 68 | [[../products/68]] | 10 | 60 | 0 |
+| 71 | [[../products/71]] | 17.2 | 30 | 0 |
+| 76 | [[../products/76]] | 14.4 | 35 | 0 |
+| 77 | [[../products/77]] | 10.4 | 14 | 0 |

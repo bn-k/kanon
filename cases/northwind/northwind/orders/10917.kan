@@ -1,0 +1,21 @@
+# Order 10917
+
+customer: [[../customers/romey]]
+employee: [[../employees/4]]
+order-date: 1998-03-02
+required-date: 1998-03-30
+shipped-date: 1998-03-11
+ship-via: [[../shippers/2]]
+freight: 8.29
+ship-name: Romero y tomillo
+ship-address: Gran Vía, 1
+ship-city: Madrid
+ship-postal-code: 28001
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 30 | [[../products/30]] | 25.89 | 1 | 0 |
+| 60 | [[../products/60]] | 34 | 10 | 0 |

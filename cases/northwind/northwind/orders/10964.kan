@@ -1,0 +1,22 @@
+# Order 10964
+
+customer: [[../customers/specd]]
+employee: [[../employees/3]]
+order-date: 1998-03-20
+required-date: 1998-04-17
+shipped-date: 1998-03-24
+ship-via: [[../shippers/2]]
+freight: 87.38
+ship-name: Spécialités du monde
+ship-address: 25, rue Lauriston
+ship-city: Paris
+ship-postal-code: 75016
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 18 | [[../products/18]] | 62.5 | 6 | 0 |
+| 38 | [[../products/38]] | 263.5 | 5 | 0 |
+| 69 | [[../products/69]] | 36 | 10 | 0 |

@@ -1,0 +1,22 @@
+# Order 11070
+
+customer: [[../customers/lehms]]
+employee: [[../employees/2]]
+order-date: 1998-05-05
+required-date: 1998-06-02
+ship-via: [[../shippers/1]]
+freight: 136
+ship-name: Lehmanns Marktstand
+ship-address: Magazinweg 7
+ship-city: Frankfurt a.M.
+ship-postal-code: 60528
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 18 | 40 | 0.15 |
+| 2 | [[../products/2]] | 19 | 20 | 0.15 |
+| 16 | [[../products/16]] | 17.45 | 30 | 0.15 |
+| 31 | [[../products/31]] | 12.5 | 20 | 0 |

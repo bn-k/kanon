@@ -1,0 +1,22 @@
+# Order 10929
+
+customer: [[../customers/frank]]
+employee: [[../employees/6]]
+order-date: 1998-03-05
+required-date: 1998-04-02
+shipped-date: 1998-03-12
+ship-via: [[../shippers/1]]
+freight: 33.93
+ship-name: Frankenversand
+ship-address: Berliner Platz 43
+ship-city: München
+ship-postal-code: 80805
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 21 | [[../products/21]] | 10 | 60 | 0 |
+| 75 | [[../products/75]] | 7.75 | 49 | 0 |
+| 77 | [[../products/77]] | 13 | 15 | 0 |

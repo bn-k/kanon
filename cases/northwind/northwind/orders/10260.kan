@@ -1,0 +1,23 @@
+# Order 10260
+
+customer: [[../customers/ottik]]
+employee: [[../employees/4]]
+order-date: 1996-07-19
+required-date: 1996-08-16
+shipped-date: 1996-07-29
+ship-via: [[../shippers/1]]
+freight: 55.09
+ship-name: Ottilies Käseladen
+ship-address: Mehrheimerstr. 369
+ship-city: Köln
+ship-postal-code: 50739
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 41 | [[../products/41]] | 7.7 | 16 | 0.25 |
+| 57 | [[../products/57]] | 15.6 | 50 | 0 |
+| 62 | [[../products/62]] | 39.4 | 15 | 0.25 |
+| 70 | [[../products/70]] | 12 | 21 | 0.25 |

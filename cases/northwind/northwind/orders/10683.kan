@@ -1,0 +1,20 @@
+# Order 10683
+
+customer: [[../customers/dumon]]
+employee: [[../employees/2]]
+order-date: 1997-09-26
+required-date: 1997-10-24
+shipped-date: 1997-10-01
+ship-via: [[../shippers/1]]
+freight: 4.4
+ship-name: Du monde entier
+ship-address: 67, rue des Cinquante Otages
+ship-city: Nantes
+ship-postal-code: 44000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 52 | [[../products/52]] | 7 | 9 | 0 |

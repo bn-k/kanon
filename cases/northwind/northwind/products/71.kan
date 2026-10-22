@@ -1,0 +1,11 @@
+# Product 71
+
+product-name: Flotemysost
+supplier: [[../suppliers/15]]
+category: [[../categories/4]]
+quantity-per-unit: 10 - 500 g pkgs.
+unit-price: 21.5
+units-in-stock: 26
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

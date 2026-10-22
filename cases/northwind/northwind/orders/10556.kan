@@ -1,0 +1,20 @@
+# Order 10556
+
+customer: [[../customers/simob]]
+employee: [[../employees/2]]
+order-date: 1997-06-03
+required-date: 1997-07-15
+shipped-date: 1997-06-13
+ship-via: [[../shippers/1]]
+freight: 9.8
+ship-name: Simons bistro
+ship-address: Vinbæltet 34
+ship-city: Kobenhavn
+ship-postal-code: 1734
+ship-country: Denmark
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 72 | [[../products/72]] | 34.8 | 24 | 0 |

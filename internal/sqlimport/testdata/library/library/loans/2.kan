@@ -1,0 +1,7 @@
+# Loan 2
+
+book: [[../books/sicp]]
+member: [[../members/3]]
+checked-by: [[../members/1]]
+lent-at: 2026-10-01 09:05:30
+returned: no

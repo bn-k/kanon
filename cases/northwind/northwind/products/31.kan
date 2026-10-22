@@ -1,0 +1,11 @@
+# Product 31
+
+product-name: Gorgonzola Telino
+supplier: [[../suppliers/14]]
+category: [[../categories/4]]
+quantity-per-unit: 12 - 100 g pkgs
+unit-price: 12.5
+units-in-stock: 0
+units-on-order: 70
+reorder-level: 20
+discontinued: 0

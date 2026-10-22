@@ -1,0 +1,27 @@
+---
+type: Parc
+---
+
+# Parc informatique de la maison
+
+## Atlas {#atlas}
+
+role: serveur de fichiers de la famille, toujours allumé
+systeme: Debian 13
+processeur: Intel Core i5-8500 (2018, 6 cœurs)
+chiffrement: yes
+memoire: 32 GB
+carte-graphique: Intel UHD Graphics 630
+bios: 2104
+
+### Disques
+
+| id | modele | capacite | etat | usage |
+|---|---|---|---|---|
+| ssd-systeme | SSD NVMe | 500 GB | bon | système |
+| disque-archives | Disque 3,5 pouces | | mort | aucun : à remplacer |
+
+### Notes
+
+Les sauvegardes partent chaque nuit vers un disque externe. Garder le BIOS en version {bios} ou plus récente : voir
+la règle [[schema#bios-a-jour]].

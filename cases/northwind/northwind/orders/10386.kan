@@ -1,0 +1,22 @@
+# Order 10386
+
+customer: [[../customers/famia]]
+employee: [[../employees/9]]
+order-date: 1996-12-18
+required-date: 1997-01-01
+shipped-date: 1996-12-25
+ship-via: [[../shippers/3]]
+freight: 13.99
+ship-name: Familia Arquibaldo
+ship-address: Rua Orós, 92
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05442-030
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 24 | [[../products/24]] | 3.6 | 15 | 0 |
+| 34 | [[../products/34]] | 11.2 | 10 | 0 |

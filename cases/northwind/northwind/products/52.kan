@@ -1,0 +1,11 @@
+# Product 52
+
+product-name: Filo Mix
+supplier: [[../suppliers/24]]
+category: [[../categories/5]]
+quantity-per-unit: 16 - 2 kg boxes
+unit-price: 7
+units-in-stock: 38
+units-on-order: 0
+reorder-level: 25
+discontinued: 0

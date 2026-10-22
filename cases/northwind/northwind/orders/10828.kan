@@ -1,0 +1,21 @@
+# Order 10828
+
+customer: [[../customers/ranch]]
+employee: [[../employees/9]]
+order-date: 1998-01-13
+required-date: 1998-01-27
+shipped-date: 1998-02-04
+ship-via: [[../shippers/1]]
+freight: 90.85
+ship-name: Rancho grande
+ship-address: Av. del Libertador 900
+ship-city: Buenos Aires
+ship-postal-code: 1010
+ship-country: Argentina
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 20 | [[../products/20]] | 81 | 5 | 0 |
+| 38 | [[../products/38]] | 263.5 | 2 | 0 |

@@ -1,0 +1,11 @@
+# Product 19
+
+product-name: Teatime Chocolate Biscuits
+supplier: [[../suppliers/8]]
+category: [[../categories/3]]
+quantity-per-unit: 10 boxes x 12 pieces
+unit-price: 9.2
+units-in-stock: 25
+units-on-order: 0
+reorder-level: 5
+discontinued: 0

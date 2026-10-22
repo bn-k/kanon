@@ -1,0 +1,21 @@
+# Order 10931
+
+customer: [[../customers/ricsu]]
+employee: [[../employees/4]]
+order-date: 1998-03-06
+required-date: 1998-03-20
+shipped-date: 1998-03-19
+ship-via: [[../shippers/2]]
+freight: 13.6
+ship-name: Richter Supermarkt
+ship-address: Starenweg 5
+ship-city: Genève
+ship-postal-code: 1204
+ship-country: Switzerland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 13 | [[../products/13]] | 6 | 42 | 0.15 |
+| 57 | [[../products/57]] | 19.5 | 30 | 0 |

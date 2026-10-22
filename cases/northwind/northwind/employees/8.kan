@@ -1,0 +1,29 @@
+# Employee 8
+
+last-name: Callahan
+first-name: Laura
+title: Inside Sales Coordinator
+title-of-courtesy: Ms.
+birth-date: 1958-01-09
+hire-date: 1994-03-05
+city: Seattle
+region: WA
+postal-code: 98105
+country: USA
+home-phone: (206) 555-1189
+extension: 2344
+photo: [[8/photo.jpg]]
+notes: Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.
+reports-to: [[2]]
+photo-path: http://accweb/emmployees/davolio.bmp
+
+## Address
+
+4726 - 11th Ave. N.E.
+
+## Territories
+
+- [[../territories/19428]]
+- [[../territories/44122]]
+- [[../territories/45839]]
+- [[../territories/53404]]

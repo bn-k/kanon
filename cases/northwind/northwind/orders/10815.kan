@@ -1,0 +1,21 @@
+# Order 10815
+
+customer: [[../customers/savea]]
+employee: [[../employees/2]]
+order-date: 1998-01-05
+required-date: 1998-02-02
+shipped-date: 1998-01-14
+ship-via: [[../shippers/3]]
+freight: 14.62
+ship-name: Save-a-lot Markets
+ship-address: 187 Suffolk Ln.
+ship-city: Boise
+ship-region: ID
+ship-postal-code: 83720
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 33 | [[../products/33]] | 2.5 | 16 | 0 |

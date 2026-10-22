@@ -1,0 +1,11 @@
+# Product 76
+
+product-name: Lakkalikööri
+supplier: [[../suppliers/23]]
+category: [[../categories/1]]
+quantity-per-unit: 500 ml
+unit-price: 18
+units-in-stock: 57
+units-on-order: 0
+reorder-level: 20
+discontinued: 0

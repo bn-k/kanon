@@ -1,0 +1,23 @@
+# Order 10291
+
+customer: [[../customers/quede]]
+employee: [[../employees/6]]
+order-date: 1996-08-27
+required-date: 1996-09-24
+shipped-date: 1996-09-04
+ship-via: [[../shippers/2]]
+freight: 6.4
+ship-name: Que Delícia
+ship-address: Rua da Panificadora, 12
+ship-city: Rio de Janeiro
+ship-region: RJ
+ship-postal-code: 02389-673
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 13 | [[../products/13]] | 4.8 | 20 | 0.1 |
+| 44 | [[../products/44]] | 15.5 | 24 | 0.1 |
+| 51 | [[../products/51]] | 42.4 | 2 | 0.1 |

@@ -1,0 +1,10 @@
+# Member 3
+
+name: Grace Hopper
+joined: 2025-03-02
+active: yes
+sponsor: [[1]]
+
+## Books
+
+- [[../books/sicp]]

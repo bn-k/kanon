@@ -1,0 +1,23 @@
+# Order 10312
+
+customer: [[../customers/wandk]]
+employee: [[../employees/2]]
+order-date: 1996-09-23
+required-date: 1996-10-21
+shipped-date: 1996-10-03
+ship-via: [[../shippers/2]]
+freight: 40.26
+ship-name: Die Wandernde Kuh
+ship-address: Adenauerallee 900
+ship-city: Stuttgart
+ship-postal-code: 70563
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 28 | [[../products/28]] | 36.4 | 4 | 0 |
+| 43 | [[../products/43]] | 36.8 | 24 | 0 |
+| 53 | [[../products/53]] | 26.2 | 20 | 0 |
+| 75 | [[../products/75]] | 6.2 | 10 | 0 |

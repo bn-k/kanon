@@ -1,0 +1,24 @@
+# Order 10420
+
+customer: [[../customers/welli]]
+employee: [[../employees/3]]
+order-date: 1997-01-21
+required-date: 1997-02-18
+shipped-date: 1997-01-27
+ship-via: [[../shippers/1]]
+freight: 44.12
+ship-name: Wellington Importadora
+ship-address: Rua do Mercado, 12
+ship-city: Resende
+ship-region: SP
+ship-postal-code: 08737-363
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 9 | [[../products/9]] | 77.6 | 20 | 0.1 |
+| 13 | [[../products/13]] | 4.8 | 2 | 0.1 |
+| 70 | [[../products/70]] | 12 | 8 | 0.1 |
+| 73 | [[../products/73]] | 12 | 20 | 0.1 |

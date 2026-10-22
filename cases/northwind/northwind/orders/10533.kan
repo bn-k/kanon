@@ -1,0 +1,22 @@
+# Order 10533
+
+customer: [[../customers/folko]]
+employee: [[../employees/8]]
+order-date: 1997-05-12
+required-date: 1997-06-09
+shipped-date: 1997-05-22
+ship-via: [[../shippers/1]]
+freight: 188.04
+ship-name: Folk och fä HB
+ship-address: Åkergatan 24
+ship-city: Bräcke
+ship-postal-code: S-844 67
+ship-country: Sweden
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 4 | [[../products/4]] | 22 | 50 | 0.05 |
+| 72 | [[../products/72]] | 34.8 | 24 | 0 |
+| 73 | [[../products/73]] | 15 | 24 | 0.05 |

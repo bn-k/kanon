@@ -1,0 +1,29 @@
+# Employee 3
+
+last-name: Leverling
+first-name: Janet
+title: Sales Representative
+title-of-courtesy: Ms.
+birth-date: 1963-08-30
+hire-date: 1992-04-01
+city: Kirkland
+region: WA
+postal-code: 98033
+country: USA
+home-phone: (206) 555-3412
+extension: 3355
+photo: [[3/photo.jpg]]
+notes: Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.
+reports-to: [[2]]
+photo-path: http://accweb/emmployees/leverling.bmp
+
+## Address
+
+722 Moss Bay Blvd.
+
+## Territories
+
+- [[../territories/30346]]
+- [[../territories/31406]]
+- [[../territories/32859]]
+- [[../territories/33607]]

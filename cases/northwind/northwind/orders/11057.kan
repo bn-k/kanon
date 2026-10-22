@@ -1,0 +1,20 @@
+# Order 11057
+
+customer: [[../customers/norts]]
+employee: [[../employees/3]]
+order-date: 1998-04-29
+required-date: 1998-05-27
+shipped-date: 1998-05-01
+ship-via: [[../shippers/3]]
+freight: 4.13
+ship-name: North/South
+ship-address: South House 300 Queensbridge
+ship-city: London
+ship-postal-code: SW7 1RZ
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 70 | [[../products/70]] | 15 | 3 | 0 |

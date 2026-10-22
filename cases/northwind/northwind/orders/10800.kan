@@ -1,0 +1,22 @@
+# Order 10800
+
+customer: [[../customers/seves]]
+employee: [[../employees/1]]
+order-date: 1997-12-26
+required-date: 1998-01-23
+shipped-date: 1998-01-05
+ship-via: [[../shippers/3]]
+freight: 137.44
+ship-name: Seven Seas Imports
+ship-address: 90 Wadhurst Rd.
+ship-city: London
+ship-postal-code: OX15 4NB
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 11 | [[../products/11]] | 21 | 50 | 0.1 |
+| 51 | [[../products/51]] | 53 | 10 | 0.1 |
+| 54 | [[../products/54]] | 7.45 | 7 | 0.1 |

@@ -1,0 +1,14 @@
+$ kan lint ../lease/schema.kanonarch bail.kan
+bail.kan:8:8: error: unknown duration unit "ans"; use min, h, days, weeks, months or years
+bail.kan:11:14: error: write yes or no, not "oui"
+bail.kan:18:1: error: every object has an id: this `Personne` needs one; give it an id, as in ## Locataire {#id}
+bail.kan:21:7: error: "physiques" is not a `TypePersonne`; did you mean physique?
+bail.kan:27:1: error: names are ASCII: write pieces, not "pièces"
+bail.kan:29:4: error: "Dépôt de garantie" is the label of `depot-de-garantie`, a `Money` written as a key line: depot-de-garantie: 1 250.50 EUR; to start a section, give it another title
+bail.kan:33:12: error: an id is a slug of lowercase ASCII letters, digits and hyphens: write conge, not "Conge"
+bail.kan:35:52: error: {preavis} inserts no field; did you mean {preavis-locataire}?
+bail.kan:36:12: error: unknown id `claire-martn` in bail.kan; did you mean `claire-martin`?
+etat-des-lieux-entree.kan:15:21: error: write use, not "usé"
+etat-des-lieux-entree.kan:16:21: error: "correct" is not an `Etat`: write neuf, bon, use or degrade
+11 errors
+[exit 1]

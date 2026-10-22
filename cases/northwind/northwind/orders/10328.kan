@@ -1,0 +1,22 @@
+# Order 10328
+
+customer: [[../customers/furib]]
+employee: [[../employees/4]]
+order-date: 1996-10-14
+required-date: 1996-11-11
+shipped-date: 1996-10-17
+ship-via: [[../shippers/3]]
+freight: 87.03
+ship-name: Furia Bacalhau e Frutos do Mar
+ship-address: Jardim das rosas n. 32
+ship-city: Lisboa
+ship-postal-code: 1675
+ship-country: Portugal
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 59 | [[../products/59]] | 44 | 9 | 0 |
+| 65 | [[../products/65]] | 16.8 | 40 | 0 |
+| 68 | [[../products/68]] | 10 | 10 | 0 |

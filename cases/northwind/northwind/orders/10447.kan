@@ -1,0 +1,23 @@
+# Order 10447
+
+customer: [[../customers/ricar]]
+employee: [[../employees/4]]
+order-date: 1997-02-14
+required-date: 1997-03-14
+shipped-date: 1997-03-07
+ship-via: [[../shippers/2]]
+freight: 68.66
+ship-name: Ricardo Adocicados
+ship-address: Av. Copacabana, 267
+ship-city: Rio de Janeiro
+ship-region: RJ
+ship-postal-code: 02389-890
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 19 | [[../products/19]] | 7.3 | 40 | 0 |
+| 65 | [[../products/65]] | 16.8 | 35 | 0 |
+| 71 | [[../products/71]] | 17.2 | 2 | 0 |

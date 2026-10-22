@@ -1,0 +1,22 @@
+# Order 10256
+
+customer: [[../customers/welli]]
+employee: [[../employees/3]]
+order-date: 1996-07-15
+required-date: 1996-08-12
+shipped-date: 1996-07-17
+ship-via: [[../shippers/2]]
+freight: 13.97
+ship-name: Wellington Importadora
+ship-address: Rua do Mercado, 12
+ship-city: Resende
+ship-region: SP
+ship-postal-code: 08737-363
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 53 | [[../products/53]] | 26.2 | 15 | 0 |
+| 77 | [[../products/77]] | 10.4 | 12 | 0 |

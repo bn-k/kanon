@@ -1,0 +1,22 @@
+# Order 10363
+
+customer: [[../customers/dracd]]
+employee: [[../employees/4]]
+order-date: 1996-11-26
+required-date: 1996-12-24
+shipped-date: 1996-12-04
+ship-via: [[../shippers/3]]
+freight: 30.54
+ship-name: Drachenblut Delikatessen
+ship-address: Walserweg 21
+ship-city: Aachen
+ship-postal-code: 52066
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 31 | [[../products/31]] | 10 | 20 | 0 |
+| 75 | [[../products/75]] | 6.2 | 12 | 0 |
+| 76 | [[../products/76]] | 14.4 | 12 | 0 |

@@ -1,0 +1,21 @@
+# Order 10409
+
+customer: [[../customers/ocean]]
+employee: [[../employees/3]]
+order-date: 1997-01-09
+required-date: 1997-02-06
+shipped-date: 1997-01-14
+ship-via: [[../shippers/1]]
+freight: 29.83
+ship-name: Océano Atlántico Ltda.
+ship-address: Ing. Gustavo Moncada 8585 Piso 20-A
+ship-city: Buenos Aires
+ship-postal-code: 1010
+ship-country: Argentina
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 14 | [[../products/14]] | 18.6 | 12 | 0 |
+| 21 | [[../products/21]] | 8 | 12 | 0 |

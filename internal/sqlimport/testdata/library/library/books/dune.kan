@@ -1,0 +1,20 @@
+# Book dune
+
+title: Dune {1965}
+price: 1 250.5
+available: yes
+sample: [[dune/sample.pdf]]
+
+## Summary
+
+A desert planet.
+\- first edition: Chilton
+
+See \[\[spice]] and \{water}.
+
+## Copies
+
+| id | shelf | bought |
+|---|---|---|
+| 1 | A\|3 | 2020-02-01 |
+| 2 | B1 | |

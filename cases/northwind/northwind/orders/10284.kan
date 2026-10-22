@@ -1,0 +1,23 @@
+# Order 10284
+
+customer: [[../customers/lehms]]
+employee: [[../employees/4]]
+order-date: 1996-08-19
+required-date: 1996-09-16
+shipped-date: 1996-08-27
+ship-via: [[../shippers/1]]
+freight: 76.56
+ship-name: Lehmanns Marktstand
+ship-address: Magazinweg 7
+ship-city: Frankfurt a.M.
+ship-postal-code: 60528
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 27 | [[../products/27]] | 35.1 | 15 | 0.25 |
+| 44 | [[../products/44]] | 15.5 | 21 | 0 |
+| 60 | [[../products/60]] | 27.2 | 20 | 0.25 |
+| 67 | [[../products/67]] | 11.2 | 5 | 0.25 |

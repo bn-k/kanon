@@ -1,0 +1,3 @@
+$ kan sql -q "SELECT company_nam FROM customer" ../northwind/schema.kanonarch ../northwind/northwind.kan
+query:1:8: error: no such column `company_nam`; did you mean `company_name`?
+[exit 1]

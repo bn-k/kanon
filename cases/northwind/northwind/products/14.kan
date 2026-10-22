@@ -1,0 +1,11 @@
+# Product 14
+
+product-name: Tofu
+supplier: [[../suppliers/6]]
+category: [[../categories/7]]
+quantity-per-unit: 40 - 100 g pkgs.
+unit-price: 23.25
+units-in-stock: 35
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

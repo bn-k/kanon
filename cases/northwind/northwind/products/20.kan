@@ -1,0 +1,11 @@
+# Product 20
+
+product-name: Sir Rodney's Marmalade
+supplier: [[../suppliers/8]]
+category: [[../categories/3]]
+quantity-per-unit: 30 gift boxes
+unit-price: 81
+units-in-stock: 40
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

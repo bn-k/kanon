@@ -1,0 +1,20 @@
+# Order 10320
+
+customer: [[../customers/warth]]
+employee: [[../employees/5]]
+order-date: 1996-10-03
+required-date: 1996-10-17
+shipped-date: 1996-10-18
+ship-via: [[../shippers/3]]
+freight: 34.57
+ship-name: Wartian Herkku
+ship-address: Torikatu 38
+ship-city: Oulu
+ship-postal-code: 90110
+ship-country: Finland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 71 | [[../products/71]] | 17.2 | 30 | 0 |

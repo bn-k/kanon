@@ -1,0 +1,22 @@
+# Order 10306
+
+customer: [[../customers/romey]]
+employee: [[../employees/1]]
+order-date: 1996-09-16
+required-date: 1996-10-14
+shipped-date: 1996-09-23
+ship-via: [[../shippers/3]]
+freight: 7.56
+ship-name: Romero y tomillo
+ship-address: Gran Vía, 1
+ship-city: Madrid
+ship-postal-code: 28001
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 30 | [[../products/30]] | 20.7 | 10 | 0 |
+| 53 | [[../products/53]] | 26.2 | 10 | 0 |
+| 54 | [[../products/54]] | 5.9 | 5 | 0 |

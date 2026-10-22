@@ -1,0 +1,20 @@
+# Order 10478
+
+customer: [[../customers/victe]]
+employee: [[../employees/2]]
+order-date: 1997-03-18
+required-date: 1997-04-01
+shipped-date: 1997-03-26
+ship-via: [[../shippers/3]]
+freight: 4.81
+ship-name: Victuailles en stock
+ship-address: 2, rue du Commerce
+ship-city: Lyon
+ship-postal-code: 69004
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 10 | [[../products/10]] | 24.8 | 20 | 0.05 |

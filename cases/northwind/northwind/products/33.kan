@@ -1,0 +1,11 @@
+# Product 33
+
+product-name: Geitost
+supplier: [[../suppliers/15]]
+category: [[../categories/4]]
+quantity-per-unit: 500 g
+unit-price: 2.5
+units-in-stock: 112
+units-on-order: 0
+reorder-level: 20
+discontinued: 0

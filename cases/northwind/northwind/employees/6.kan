@@ -1,0 +1,30 @@
+# Employee 6
+
+last-name: Suyama
+first-name: Michael
+title: Sales Representative
+title-of-courtesy: Mr.
+birth-date: 1963-07-02
+hire-date: 1993-10-17
+city: London
+postal-code: EC2 7JR
+country: UK
+home-phone: (71) 555-7773
+extension: 428
+photo: [[6/photo.jpg]]
+notes: Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses "Multi-Cultural Selling" and "Time Management for the Sales Professional."  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.
+reports-to: [[5]]
+photo-path: http://accweb/emmployees/davolio.bmp
+
+## Address
+
+Coventry House
+Miner Rd.
+
+## Territories
+
+- [[../territories/85014]]
+- [[../territories/85251]]
+- [[../territories/98004]]
+- [[../territories/98052]]
+- [[../territories/98104]]

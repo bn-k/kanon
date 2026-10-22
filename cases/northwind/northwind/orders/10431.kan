@@ -1,0 +1,23 @@
+# Order 10431
+
+customer: [[../customers/bottm]]
+employee: [[../employees/4]]
+order-date: 1997-01-30
+required-date: 1997-02-13
+shipped-date: 1997-02-07
+ship-via: [[../shippers/2]]
+freight: 44.17
+ship-name: Bottom-Dollar Markets
+ship-address: 23 Tsawassen Blvd.
+ship-city: Tsawassen
+ship-region: BC
+ship-postal-code: T2F 8M4
+ship-country: Canada
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 17 | [[../products/17]] | 31.2 | 50 | 0.25 |
+| 40 | [[../products/40]] | 14.7 | 50 | 0.25 |
+| 47 | [[../products/47]] | 7.6 | 30 | 0.25 |

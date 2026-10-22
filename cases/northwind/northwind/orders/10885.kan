@@ -1,0 +1,23 @@
+# Order 10885
+
+customer: [[../customers/suprd]]
+employee: [[../employees/6]]
+order-date: 1998-02-12
+required-date: 1998-03-12
+shipped-date: 1998-02-18
+ship-via: [[../shippers/3]]
+freight: 5.64
+ship-name: Suprêmes délices
+ship-address: Boulevard Tirou, 255
+ship-city: Charleroi
+ship-postal-code: B-6000
+ship-country: Belgium
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 2 | [[../products/2]] | 19 | 20 | 0 |
+| 24 | [[../products/24]] | 4.5 | 12 | 0 |
+| 70 | [[../products/70]] | 15 | 30 | 0 |
+| 77 | [[../products/77]] | 13 | 25 | 0 |

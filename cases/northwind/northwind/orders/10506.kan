@@ -1,0 +1,21 @@
+# Order 10506
+
+customer: [[../customers/koene]]
+employee: [[../employees/9]]
+order-date: 1997-04-15
+required-date: 1997-05-13
+shipped-date: 1997-05-02
+ship-via: [[../shippers/2]]
+freight: 21.19
+ship-name: Königlich Essen
+ship-address: Maubelstr. 90
+ship-city: Brandenburg
+ship-postal-code: 14776
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 25 | [[../products/25]] | 14 | 18 | 0.1 |
+| 70 | [[../products/70]] | 15 | 14 | 0.1 |

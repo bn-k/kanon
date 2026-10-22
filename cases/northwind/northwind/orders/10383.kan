@@ -1,0 +1,23 @@
+# Order 10383
+
+customer: [[../customers/arout]]
+employee: [[../employees/8]]
+order-date: 1996-12-16
+required-date: 1997-01-13
+shipped-date: 1996-12-18
+ship-via: [[../shippers/3]]
+freight: 34.24
+ship-name: Around the Horn
+ship-address: Brook Farm Stratford St. Mary
+ship-city: Colchester
+ship-region: Essex
+ship-postal-code: CO7 6JX
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 13 | [[../products/13]] | 4.8 | 20 | 0 |
+| 50 | [[../products/50]] | 13 | 15 | 0 |
+| 56 | [[../products/56]] | 30.4 | 20 | 0 |

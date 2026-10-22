@@ -1,0 +1,22 @@
+# Order 11007
+
+customer: [[../customers/prini]]
+employee: [[../employees/8]]
+order-date: 1998-04-08
+required-date: 1998-05-06
+shipped-date: 1998-04-13
+ship-via: [[../shippers/2]]
+freight: 202.24
+ship-name: Princesa Isabel Vinhos
+ship-address: Estrada da saúde n. 58
+ship-city: Lisboa
+ship-postal-code: 1756
+ship-country: Portugal
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 8 | [[../products/8]] | 40 | 30 | 0 |
+| 29 | [[../products/29]] | 123.79 | 10 | 0 |
+| 42 | [[../products/42]] | 14 | 14 | 0 |

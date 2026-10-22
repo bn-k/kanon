@@ -1,0 +1,23 @@
+# Order 10817
+
+customer: [[../customers/koene]]
+employee: [[../employees/3]]
+order-date: 1998-01-06
+required-date: 1998-01-20
+shipped-date: 1998-01-13
+ship-via: [[../shippers/2]]
+freight: 306.07
+ship-name: Königlich Essen
+ship-address: Maubelstr. 90
+ship-city: Brandenburg
+ship-postal-code: 14776
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 26 | [[../products/26]] | 31.23 | 40 | 0.15 |
+| 38 | [[../products/38]] | 263.5 | 30 | 0 |
+| 40 | [[../products/40]] | 18.4 | 60 | 0.15 |
+| 62 | [[../products/62]] | 49.3 | 25 | 0.15 |

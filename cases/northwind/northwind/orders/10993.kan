@@ -1,0 +1,21 @@
+# Order 10993
+
+customer: [[../customers/folko]]
+employee: [[../employees/7]]
+order-date: 1998-04-01
+required-date: 1998-04-29
+shipped-date: 1998-04-10
+ship-via: [[../shippers/3]]
+freight: 8.81
+ship-name: Folk och fä HB
+ship-address: Åkergatan 24
+ship-city: Bräcke
+ship-postal-code: S-844 67
+ship-country: Sweden
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 29 | [[../products/29]] | 123.79 | 50 | 0.25 |
+| 41 | [[../products/41]] | 9.65 | 35 | 0.25 |

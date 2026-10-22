@@ -1,0 +1,24 @@
+# Order 10623
+
+customer: [[../customers/frank]]
+employee: [[../employees/8]]
+order-date: 1997-08-07
+required-date: 1997-09-04
+shipped-date: 1997-08-12
+ship-via: [[../shippers/2]]
+freight: 97.18
+ship-name: Frankenversand
+ship-address: Berliner Platz 43
+ship-city: München
+ship-postal-code: 80805
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 14 | [[../products/14]] | 23.25 | 21 | 0 |
+| 19 | [[../products/19]] | 9.2 | 15 | 0.1 |
+| 21 | [[../products/21]] | 10 | 25 | 0.1 |
+| 24 | [[../products/24]] | 4.5 | 3 | 0 |
+| 35 | [[../products/35]] | 18 | 30 | 0.1 |

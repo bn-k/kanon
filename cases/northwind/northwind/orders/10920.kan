@@ -1,0 +1,21 @@
+# Order 10920
+
+customer: [[../customers/arout]]
+employee: [[../employees/4]]
+order-date: 1998-03-03
+required-date: 1998-03-31
+shipped-date: 1998-03-09
+ship-via: [[../shippers/2]]
+freight: 29.61
+ship-name: Around the Horn
+ship-address: Brook Farm Stratford St. Mary
+ship-city: Colchester
+ship-region: Essex
+ship-postal-code: CO7 6JX
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 50 | [[../products/50]] | 16.25 | 24 | 0 |

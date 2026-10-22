@@ -1,0 +1,22 @@
+# Order 10879
+
+customer: [[../customers/wilmk]]
+employee: [[../employees/3]]
+order-date: 1998-02-10
+required-date: 1998-03-10
+shipped-date: 1998-02-12
+ship-via: [[../shippers/3]]
+freight: 8.5
+ship-name: Wilman Kala
+ship-address: Keskuskatu 45
+ship-city: Helsinki
+ship-postal-code: 21240
+ship-country: Finland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 40 | [[../products/40]] | 18.4 | 12 | 0 |
+| 65 | [[../products/65]] | 21.05 | 10 | 0 |
+| 76 | [[../products/76]] | 18 | 10 | 0 |

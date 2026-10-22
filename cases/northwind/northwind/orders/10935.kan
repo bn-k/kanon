@@ -1,0 +1,23 @@
+# Order 10935
+
+customer: [[../customers/welli]]
+employee: [[../employees/4]]
+order-date: 1998-03-09
+required-date: 1998-04-06
+shipped-date: 1998-03-18
+ship-via: [[../shippers/3]]
+freight: 47.59
+ship-name: Wellington Importadora
+ship-address: Rua do Mercado, 12
+ship-city: Resende
+ship-region: SP
+ship-postal-code: 08737-363
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 18 | 21 | 0 |
+| 18 | [[../products/18]] | 62.5 | 4 | 0.25 |
+| 23 | [[../products/23]] | 9 | 8 | 0.25 |

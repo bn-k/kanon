@@ -1,0 +1,21 @@
+# Order 10374
+
+customer: [[../customers/wolza]]
+employee: [[../employees/1]]
+order-date: 1996-12-05
+required-date: 1997-01-02
+shipped-date: 1996-12-09
+ship-via: [[../shippers/3]]
+freight: 3.94
+ship-name: Wolski Zajazd
+ship-address: ul. Filtrowa 68
+ship-city: Warszawa
+ship-postal-code: 01-012
+ship-country: Poland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 31 | [[../products/31]] | 10 | 30 | 0 |
+| 58 | [[../products/58]] | 10.6 | 15 | 0 |

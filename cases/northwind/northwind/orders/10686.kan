@@ -1,0 +1,21 @@
+# Order 10686
+
+customer: [[../customers/picco]]
+employee: [[../employees/2]]
+order-date: 1997-09-30
+required-date: 1997-10-28
+shipped-date: 1997-10-08
+ship-via: [[../shippers/1]]
+freight: 96.5
+ship-name: Piccolo und mehr
+ship-address: Geislweg 14
+ship-city: Salzburg
+ship-postal-code: 5020
+ship-country: Austria
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 17 | [[../products/17]] | 39 | 30 | 0.2 |
+| 26 | [[../products/26]] | 31.23 | 15 | 0 |

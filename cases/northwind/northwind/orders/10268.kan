@@ -1,0 +1,22 @@
+# Order 10268
+
+customer: [[../customers/grosr]]
+employee: [[../employees/8]]
+order-date: 1996-07-30
+required-date: 1996-08-27
+shipped-date: 1996-08-02
+ship-via: [[../shippers/3]]
+freight: 66.29
+ship-name: GROSELLA-Restaurante
+ship-address: 5ª Ave. Los Palos Grandes
+ship-city: Caracas
+ship-region: DF
+ship-postal-code: 1081
+ship-country: Venezuela
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 29 | [[../products/29]] | 99 | 10 | 0 |
+| 72 | [[../products/72]] | 27.8 | 4 | 0 |

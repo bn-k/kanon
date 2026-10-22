@@ -1,0 +1,11 @@
+# Product 74
+
+product-name: Longlife Tofu
+supplier: [[../suppliers/4]]
+category: [[../categories/7]]
+quantity-per-unit: 5 kg pkg.
+unit-price: 10
+units-in-stock: 4
+units-on-order: 20
+reorder-level: 5
+discontinued: 0

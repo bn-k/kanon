@@ -1,0 +1,11 @@
+# Product 28
+
+product-name: Rössle Sauerkraut
+supplier: [[../suppliers/12]]
+category: [[../categories/7]]
+quantity-per-unit: 25 - 825 g cans
+unit-price: 45.6
+units-in-stock: 26
+units-on-order: 0
+reorder-level: 0
+discontinued: 1

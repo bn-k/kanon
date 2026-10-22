@@ -1,0 +1,11 @@
+# Product 21
+
+product-name: Sir Rodney's Scones
+supplier: [[../suppliers/8]]
+category: [[../categories/3]]
+quantity-per-unit: 24 pkgs. x 4 pieces
+unit-price: 10
+units-in-stock: 3
+units-on-order: 40
+reorder-level: 5
+discontinued: 0

@@ -1,0 +1,20 @@
+# Order 10782
+
+customer: [[../customers/cactu]]
+employee: [[../employees/9]]
+order-date: 1997-12-17
+required-date: 1998-01-14
+shipped-date: 1997-12-22
+ship-via: [[../shippers/3]]
+freight: 1.1
+ship-name: Cactus Comidas para llevar
+ship-address: Cerrito 333
+ship-city: Buenos Aires
+ship-postal-code: 1010
+ship-country: Argentina
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 31 | [[../products/31]] | 12.5 | 1 | 0 |

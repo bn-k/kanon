@@ -1,0 +1,11 @@
+# Product 53
+
+product-name: Perth Pasties
+supplier: [[../suppliers/24]]
+category: [[../categories/6]]
+quantity-per-unit: 48 pieces
+unit-price: 32.8
+units-in-stock: 0
+units-on-order: 0
+reorder-level: 0
+discontinued: 1

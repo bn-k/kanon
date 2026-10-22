@@ -1,0 +1,22 @@
+# Order 10735
+
+customer: [[../customers/letss]]
+employee: [[../employees/6]]
+order-date: 1997-11-10
+required-date: 1997-12-08
+shipped-date: 1997-11-21
+ship-via: [[../shippers/2]]
+freight: 45.97
+ship-name: Let-s Stop N Shop
+ship-address: 87 Polk St. Suite 5
+ship-city: San Francisco
+ship-region: CA
+ship-postal-code: 94117
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 61 | [[../products/61]] | 28.5 | 20 | 0.1 |
+| 77 | [[../products/77]] | 13 | 2 | 0.1 |

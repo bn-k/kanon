@@ -1,0 +1,54 @@
+---
+type: Annonce
+---
+
+# Maison familiale avec jardin à Caluire-et-Cuire
+
+reference: CAL-2026-118
+bien: maison
+prix: 645 000.00 EUR
+surface: 112 m2
+terrain: 480 m2
+chambres: 3
+dpe: c
+visite: 25/10/2026 10h30
+vendeur: [[vendeurs/famille-roux]]
+localisation: [[communes/caluire-et-cuire]]
+plan: [[maison-caluire/plan-rez.pdf]]
+
+![[maison-caluire/photos/01-facade.jpg]]
+
+Au calme d'une impasse, à dix minutes du centre de Lyon, cette maison de {surface} sur un terrain de {terrain}
+offre trois chambres, un séjour lumineux ouvert sur le jardin, une buanderie et un garage.
+
+![La terrasse](maison-caluire/photos/04-terrasse.jpg)
+
+Visite sur rendez-vous avec [[agents/sophie-bernard]]. Du même vendeur : [[appartement-croix-rousse]].
+
+## Agent {#sophie-bernard}
+
+nom: Sophie Bernard
+telephone: +33 4 65 71 45 61
+
+## Co-mandataires
+
+- [[agents/marc-petit]]
+- [[vendeurs/famille-roux]]
+
+## Pièces
+
+| id | nom | niveau | surface |
+|---|---|---|---|
+| sejour | Séjour | rez-de-chaussee | 38 m2 |
+| cuisine | Cuisine | rez-de-chaussee | 14 m2 |
+| cuisine | Cellier | rez-de-chaussee | 6 m2 |
+
+## Visite virtuelle
+
+```html
+<iframe src="https://visite.example/cal-2026-118" width="640" height="360" allowfullscreen></iframe>
+```
+
+```html
+<a href="https://visite.example/cal-2026-118">Ouvrir la visite en plein écran</a>
+```

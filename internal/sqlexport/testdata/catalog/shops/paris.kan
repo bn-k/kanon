@@ -1,0 +1,40 @@
+# Paris
+
+name: Paris
+opened: 2025-01-15
+staff: 3
+margin: 8 %
+revenue: 90 000 EUR
+open: no
+condition: new
+manager: [[../../people/zed]]
+
+## Description
+
+The second shop.
+
+## Address {#paris-address}
+
+city: Paris
+
+### Street
+
+1 rue de Rivoli
+
+## Employees
+
+| id | name |
+|---|---|
+| dee | Dee |
+
+## Orders
+
+### First order {#o1}
+
+date: 2026-10-02
+
+#### Lines
+
+| id | product | quantity | price |
+|---|---|---|---|
+| l1 | [[../suppliers/acme#soap]] | 10 | 3.20 EUR |

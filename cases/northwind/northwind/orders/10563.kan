@@ -1,0 +1,22 @@
+# Order 10563
+
+customer: [[../customers/ricar]]
+employee: [[../employees/2]]
+order-date: 1997-06-10
+required-date: 1997-07-22
+shipped-date: 1997-06-24
+ship-via: [[../shippers/2]]
+freight: 60.43
+ship-name: Ricardo Adocicados
+ship-address: Av. Copacabana, 267
+ship-city: Rio de Janeiro
+ship-region: RJ
+ship-postal-code: 02389-890
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 36 | [[../products/36]] | 19 | 25 | 0 |
+| 52 | [[../products/52]] | 7 | 70 | 0 |

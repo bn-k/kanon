@@ -1,0 +1,11 @@
+# Product 72
+
+product-name: Mozzarella di Giovanni
+supplier: [[../suppliers/14]]
+category: [[../categories/4]]
+quantity-per-unit: 24 - 200 g pkgs.
+unit-price: 34.8
+units-in-stock: 14
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

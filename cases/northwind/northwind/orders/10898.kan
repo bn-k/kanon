@@ -1,0 +1,20 @@
+# Order 10898
+
+customer: [[../customers/ocean]]
+employee: [[../employees/4]]
+order-date: 1998-02-20
+required-date: 1998-03-20
+shipped-date: 1998-03-06
+ship-via: [[../shippers/2]]
+freight: 1.27
+ship-name: Océano Atlántico Ltda.
+ship-address: Ing. Gustavo Moncada 8585 Piso 20-A
+ship-city: Buenos Aires
+ship-postal-code: 1010
+ship-country: Argentina
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 13 | [[../products/13]] | 6 | 5 | 0 |

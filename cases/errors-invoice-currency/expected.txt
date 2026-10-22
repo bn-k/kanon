@@ -1,0 +1,4 @@
+$ kan lint ../invoice/schema.kanonarch f-2026-034.kan
+f-2026-034.kan: error: `total-ht`: 7 800.00 EUR and 120.00 USD are in two currencies; write them in one
+1 error
+[exit 1]

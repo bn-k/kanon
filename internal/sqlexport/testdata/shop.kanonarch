@@ -1,0 +1,84 @@
+// Every row of the table of docs/data.md §4, as kan sql lays it out.
+
+enum Condition { new, good, worn }
+
+// A collection: no table, and no parent column in its entries.
+schema Catalog {
+  shops:     [Shop]
+  suppliers: [Supplier]
+}
+
+schema Shop {
+  name:        Text
+  description: Prose
+  opened:      Date
+  updated:     DateTime?
+  delay:       Duration?
+  version:     Version?
+  staff:       Int
+  rating:      Number?
+  margin:      Percent
+  revenue:     Money
+  area:        Quantity?
+  open:        Bool
+  condition:   Condition
+  logo:        Image?
+  terms:       File?
+  widget:      Code?
+  address:     Address
+  manager:     -> Person
+  suppliers:   [-> Supplier]?
+  tags:        [Text]?
+  photos:      [Image]?
+  employees:   [Person]
+  owners:      [Person]?
+  orders:      [Order]
+
+  seats: Int = staff + 2
+}
+
+schema Address {
+  street: Prose
+  city:   Text
+}
+
+schema Person {
+  name:    Text
+  friends: [-> Person]?
+
+  managed: [Shop] <- manager
+}
+
+// Weak: held by Shop.orders only.
+schema Order {
+  date:     Date
+  customer: -> Person?
+  lines:    [Line]
+}
+
+// Weak in a weak schema: its key is the key of its order and its id.
+schema Line {
+  product:  -> Product
+  index:    Int?
+  quantity: Int
+  price:    Money
+  notes:    [Text]?
+
+  total: Money = price * quantity
+}
+
+schema Supplier {
+  name:     Text
+  products: [Product]?
+}
+
+// Held by Supplier.products and linked to from Line.product, so not weak; its field supplier takes supplier_id.
+schema Product {
+  name:       Text
+  supplier:   -> Supplier?
+  prices:     [Money]?
+  sizes:      [Quantity]?
+  conditions: [Condition]?
+
+  lines: [Line] <- product
+}

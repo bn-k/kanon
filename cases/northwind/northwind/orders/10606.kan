@@ -1,0 +1,23 @@
+# Order 10606
+
+customer: [[../customers/tradh]]
+employee: [[../employees/4]]
+order-date: 1997-07-22
+required-date: 1997-08-19
+shipped-date: 1997-07-31
+ship-via: [[../shippers/3]]
+freight: 79.4
+ship-name: Tradiçao Hipermercados
+ship-address: Av. Inês de Castro, 414
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05634-030
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 4 | [[../products/4]] | 22 | 20 | 0.2 |
+| 55 | [[../products/55]] | 24 | 20 | 0.2 |
+| 62 | [[../products/62]] | 49.3 | 10 | 0.2 |

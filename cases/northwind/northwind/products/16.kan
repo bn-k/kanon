@@ -1,0 +1,11 @@
+# Product 16
+
+product-name: Pavlova
+supplier: [[../suppliers/7]]
+category: [[../categories/3]]
+quantity-per-unit: 32 - 500 g boxes
+unit-price: 17.45
+units-in-stock: 29
+units-on-order: 0
+reorder-level: 10
+discontinued: 0

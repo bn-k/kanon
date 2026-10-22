@@ -1,0 +1,11 @@
+# Product 43
+
+product-name: Ipoh Coffee
+supplier: [[../suppliers/20]]
+category: [[../categories/1]]
+quantity-per-unit: 16 - 500 g tins
+unit-price: 46
+units-in-stock: 17
+units-on-order: 10
+reorder-level: 25
+discontinued: 0

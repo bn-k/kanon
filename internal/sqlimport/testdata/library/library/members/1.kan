@@ -1,0 +1,11 @@
+# Member 1
+
+name: Ada Lovelace
+joined: 2023-06-01
+active: yes
+photo: [[1/photo.svg]]
+
+## Books
+
+- [[../books/dune]]
+- [[../books/sicp]]

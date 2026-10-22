@@ -1,0 +1,22 @@
+# Order 10497
+
+customer: [[../customers/lehms]]
+employee: [[../employees/7]]
+order-date: 1997-04-04
+required-date: 1997-05-02
+shipped-date: 1997-04-07
+ship-via: [[../shippers/1]]
+freight: 36.21
+ship-name: Lehmanns Marktstand
+ship-address: Magazinweg 7
+ship-city: Frankfurt a.M.
+ship-postal-code: 60528
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 56 | [[../products/56]] | 30.4 | 14 | 0 |
+| 72 | [[../products/72]] | 27.8 | 25 | 0 |
+| 77 | [[../products/77]] | 10.4 | 25 | 0 |

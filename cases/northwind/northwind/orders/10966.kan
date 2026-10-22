@@ -1,0 +1,22 @@
+# Order 10966
+
+customer: [[../customers/chops]]
+employee: [[../employees/4]]
+order-date: 1998-03-20
+required-date: 1998-04-17
+shipped-date: 1998-04-08
+ship-via: [[../shippers/1]]
+freight: 27.19
+ship-name: Chop-suey Chinese
+ship-address: Hauptstr. 31
+ship-city: Bern
+ship-postal-code: 3012
+ship-country: Switzerland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 37 | [[../products/37]] | 26 | 8 | 0 |
+| 56 | [[../products/56]] | 38 | 12 | 0.15 |
+| 62 | [[../products/62]] | 49.3 | 12 | 0.15 |

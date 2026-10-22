@@ -1,0 +1,29 @@
+# Acme
+
+name: Acme
+
+## Products
+
+### Soap {#soap}
+
+name: Soap
+supplier: [[acme]]
+
+#### Prices
+
+- 3.50 EUR
+- 3.20 EUR
+
+#### Sizes
+
+- 250 ml
+- 2
+
+#### Conditions
+
+- new
+- worn
+
+### Brush {#brush}
+
+name: Brush

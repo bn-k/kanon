@@ -1,0 +1,20 @@
+# Order 10295
+
+customer: [[../customers/vinet]]
+employee: [[../employees/2]]
+order-date: 1996-09-02
+required-date: 1996-09-30
+shipped-date: 1996-09-10
+ship-via: [[../shippers/2]]
+freight: 1.15
+ship-name: Vins et alcools Chevalier
+ship-address: 59 rue de l-Abbaye
+ship-city: Reims
+ship-postal-code: 51100
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 56 | [[../products/56]] | 30.4 | 4 | 0 |

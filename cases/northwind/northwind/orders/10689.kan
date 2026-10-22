@@ -1,0 +1,20 @@
+# Order 10689
+
+customer: [[../customers/bergs]]
+employee: [[../employees/1]]
+order-date: 1997-10-01
+required-date: 1997-10-29
+shipped-date: 1997-10-07
+ship-via: [[../shippers/2]]
+freight: 13.42
+ship-name: Berglunds snabbköp
+ship-address: Berguvsvägen  8
+ship-city: Luleå
+ship-postal-code: S-958 22
+ship-country: Sweden
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 18 | 35 | 0.25 |

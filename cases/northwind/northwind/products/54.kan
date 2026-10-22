@@ -1,0 +1,11 @@
+# Product 54
+
+product-name: Tourtière
+supplier: [[../suppliers/25]]
+category: [[../categories/6]]
+quantity-per-unit: 16 pies
+unit-price: 7.45
+units-in-stock: 21
+units-on-order: 0
+reorder-level: 10
+discontinued: 0

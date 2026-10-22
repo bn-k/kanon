@@ -1,0 +1,19 @@
+# Order 11074
+
+customer: [[../customers/simob]]
+employee: [[../employees/7]]
+order-date: 1998-05-06
+required-date: 1998-06-03
+ship-via: [[../shippers/2]]
+freight: 18.44
+ship-name: Simons bistro
+ship-address: Vinbæltet 34
+ship-city: Kobenhavn
+ship-postal-code: 1734
+ship-country: Denmark
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 16 | [[../products/16]] | 17.45 | 14 | 0.05 |

@@ -1,0 +1,24 @@
+# Order 10515
+
+customer: [[../customers/quick]]
+employee: [[../employees/2]]
+order-date: 1997-04-23
+required-date: 1997-05-07
+shipped-date: 1997-05-23
+ship-via: [[../shippers/1]]
+freight: 204.47
+ship-name: QUICK-Stop
+ship-address: Taucherstraße 10
+ship-city: Cunewalde
+ship-postal-code: 1307
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 9 | [[../products/9]] | 97 | 16 | 0.15 |
+| 16 | [[../products/16]] | 17.45 | 50 | 0 |
+| 27 | [[../products/27]] | 43.9 | 120 | 0 |
+| 33 | [[../products/33]] | 2.5 | 16 | 0.15 |
+| 60 | [[../products/60]] | 34 | 84 | 0.15 |

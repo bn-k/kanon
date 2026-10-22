@@ -1,0 +1,20 @@
+# Order 10878
+
+customer: [[../customers/quick]]
+employee: [[../employees/4]]
+order-date: 1998-02-10
+required-date: 1998-03-10
+shipped-date: 1998-02-12
+ship-via: [[../shippers/1]]
+freight: 46.69
+ship-name: QUICK-Stop
+ship-address: Taucherstraße 10
+ship-city: Cunewalde
+ship-postal-code: 1307
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 20 | [[../products/20]] | 81 | 20 | 0.05 |

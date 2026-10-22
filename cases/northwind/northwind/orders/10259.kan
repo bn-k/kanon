@@ -1,0 +1,21 @@
+# Order 10259
+
+customer: [[../customers/centc]]
+employee: [[../employees/4]]
+order-date: 1996-07-18
+required-date: 1996-08-15
+shipped-date: 1996-07-25
+ship-via: [[../shippers/3]]
+freight: 3.25
+ship-name: Centro comercial Moctezuma
+ship-address: Sierras de Granada 9993
+ship-city: México D.F.
+ship-postal-code: 5022
+ship-country: Mexico
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 21 | [[../products/21]] | 8 | 10 | 0 |
+| 37 | [[../products/37]] | 20.8 | 1 | 0 |

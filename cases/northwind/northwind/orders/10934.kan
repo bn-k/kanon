@@ -1,0 +1,20 @@
+# Order 10934
+
+customer: [[../customers/lehms]]
+employee: [[../employees/3]]
+order-date: 1998-03-09
+required-date: 1998-04-06
+shipped-date: 1998-03-12
+ship-via: [[../shippers/3]]
+freight: 32.01
+ship-name: Lehmanns Marktstand
+ship-address: Magazinweg 7
+ship-city: Frankfurt a.M.
+ship-postal-code: 60528
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 6 | [[../products/6]] | 25 | 20 | 0 |

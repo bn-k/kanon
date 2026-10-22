@@ -1,0 +1,11 @@
+# Product 45
+
+product-name: Rogede sild
+supplier: [[../suppliers/21]]
+category: [[../categories/8]]
+quantity-per-unit: 1k pkg.
+unit-price: 9.5
+units-in-stock: 5
+units-on-order: 70
+reorder-level: 15
+discontinued: 0

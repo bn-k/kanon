@@ -1,0 +1,11 @@
+# Product 11
+
+product-name: Queso Cabrales
+supplier: [[../suppliers/5]]
+category: [[../categories/4]]
+quantity-per-unit: 1 kg pkg.
+unit-price: 21
+units-in-stock: 22
+units-on-order: 30
+reorder-level: 30
+discontinued: 0

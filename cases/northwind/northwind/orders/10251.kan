@@ -1,0 +1,22 @@
+# Order 10251
+
+customer: [[../customers/victe]]
+employee: [[../employees/3]]
+order-date: 1996-07-08
+required-date: 1996-08-05
+shipped-date: 1996-07-15
+ship-via: [[../shippers/1]]
+freight: 41.34
+ship-name: Victuailles en stock
+ship-address: 2, rue du Commerce
+ship-city: Lyon
+ship-postal-code: 69004
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 22 | [[../products/22]] | 16.8 | 6 | 0.05 |
+| 57 | [[../products/57]] | 15.6 | 15 | 0.05 |
+| 65 | [[../products/65]] | 16.8 | 20 | 0 |

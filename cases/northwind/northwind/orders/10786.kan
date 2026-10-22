@@ -1,0 +1,23 @@
+# Order 10786
+
+customer: [[../customers/queen]]
+employee: [[../employees/8]]
+order-date: 1997-12-19
+required-date: 1998-01-16
+shipped-date: 1997-12-23
+ship-via: [[../shippers/1]]
+freight: 110.87
+ship-name: Queen Cozinha
+ship-address: Alameda dos Canàrios, 891
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05487-020
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 8 | [[../products/8]] | 40 | 30 | 0.2 |
+| 30 | [[../products/30]] | 25.89 | 15 | 0.2 |
+| 75 | [[../products/75]] | 7.75 | 42 | 0.2 |

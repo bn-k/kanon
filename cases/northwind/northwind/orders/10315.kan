@@ -1,0 +1,22 @@
+# Order 10315
+
+customer: [[../customers/islat]]
+employee: [[../employees/4]]
+order-date: 1996-09-26
+required-date: 1996-10-24
+shipped-date: 1996-10-03
+ship-via: [[../shippers/2]]
+freight: 41.76
+ship-name: Island Trading
+ship-address: Garden House Crowther Way
+ship-city: Cowes
+ship-region: Isle of Wight
+ship-postal-code: PO31 7PJ
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 34 | [[../products/34]] | 11.2 | 14 | 0 |
+| 70 | [[../products/70]] | 12 | 30 | 0 |

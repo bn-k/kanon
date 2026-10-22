@@ -1,0 +1,11 @@
+# Product 35
+
+product-name: Steeleye Stout
+supplier: [[../suppliers/16]]
+category: [[../categories/1]]
+quantity-per-unit: 24 - 12 oz bottles
+unit-price: 18
+units-in-stock: 20
+units-on-order: 0
+reorder-level: 15
+discontinued: 0

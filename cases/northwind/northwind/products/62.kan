@@ -1,0 +1,11 @@
+# Product 62
+
+product-name: Tarte au sucre
+supplier: [[../suppliers/29]]
+category: [[../categories/3]]
+quantity-per-unit: 48 pies
+unit-price: 49.3
+units-in-stock: 17
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

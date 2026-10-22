@@ -1,0 +1,11 @@
+# Product 6
+
+product-name: Grandma's Boysenberry Spread
+supplier: [[../suppliers/3]]
+category: [[../categories/2]]
+quantity-per-unit: 12 - 8 oz jars
+unit-price: 25
+units-in-stock: 120
+units-on-order: 0
+reorder-level: 25
+discontinued: 0

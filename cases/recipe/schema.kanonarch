@@ -1,0 +1,28 @@
+// Working material: cooking recipes.
+
+unit pincee "pincée"
+
+schema Recette {
+  titre:       Text @heading
+  portions:    Int
+  preparation: Duration "Préparation"
+  repos:       Duration?
+  cuisson:     Duration?
+  ingredients: [Ingredient] "Ingrédients"
+  etapes:      [Prose] "Étapes"
+
+  duree-totale: Duration "Durée totale" = preparation + (repos ?? 0 min) + (cuisson ?? 0 min)
+}
+
+// A list item such as "250 g de farine {#farine}" is read through this pattern; [de] is optional.
+schema Ingredient "Ingrédient" reads "{quantite} [de] {nom}" {
+  quantite: Quantity "Quantité"
+  nom:      Text
+}
+
+fn pour(r: Recette, n: Int) -> Recette
+  reads fr "{r.titre} pour {n} personnes"
+  = r with {
+      portions:    n,
+      ingredients: r.ingredients.map(i => i with { quantite: i.quantite * n / r.portions }),
+    }

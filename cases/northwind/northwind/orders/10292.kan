@@ -1,0 +1,21 @@
+# Order 10292
+
+customer: [[../customers/tradh]]
+employee: [[../employees/1]]
+order-date: 1996-08-28
+required-date: 1996-09-25
+shipped-date: 1996-09-02
+ship-via: [[../shippers/2]]
+freight: 1.35
+ship-name: Tradiçao Hipermercados
+ship-address: Av. Inês de Castro, 414
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05634-030
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 20 | [[../products/20]] | 64.8 | 20 | 0 |

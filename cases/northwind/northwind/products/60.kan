@@ -1,0 +1,11 @@
+# Product 60
+
+product-name: Camembert Pierrot
+supplier: [[../suppliers/28]]
+category: [[../categories/4]]
+quantity-per-unit: 15 - 300 g rounds
+unit-price: 34
+units-in-stock: 19
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

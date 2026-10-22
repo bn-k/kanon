@@ -1,0 +1,22 @@
+# Order 10999
+
+customer: [[../customers/ottik]]
+employee: [[../employees/6]]
+order-date: 1998-04-03
+required-date: 1998-05-01
+shipped-date: 1998-04-10
+ship-via: [[../shippers/2]]
+freight: 96.35
+ship-name: Ottilies Käseladen
+ship-address: Mehrheimerstr. 369
+ship-city: Köln
+ship-postal-code: 50739
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 41 | [[../products/41]] | 9.65 | 20 | 0.05 |
+| 51 | [[../products/51]] | 53 | 15 | 0.05 |
+| 77 | [[../products/77]] | 13 | 21 | 0.05 |

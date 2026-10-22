@@ -1,0 +1,26 @@
+// Working material: a shared expense whose computed fields hold mistakes. The schema check finds them before any
+// document is read.
+
+schema Personne {
+  nom: Text @heading
+}
+
+schema Depense "Dépense" {
+  objet:        Text @heading
+  montant:      Money
+  taux:         Percent
+  le:           Date
+  participants: [-> Personne]
+
+  part:      Money  = montant / participants
+  pourboire: Money  = montant * taux + 5
+  total:     Money  = sum(participants, p => p.nom)
+  echeance:  Date   = le + 30 jours
+  payee:     Bool   = if montant then yes else no
+  noms:      [Text] = participants.map(p => p.age)
+  grosse:    Bool   = montant > 1 25 EUR
+}
+
+rule partagee(d: Depense) -> Bool
+  reads fr "{d.objet} est partagé entre {d.participants}"
+  = count(d.participants) > "1"

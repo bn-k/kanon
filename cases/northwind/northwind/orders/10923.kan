@@ -1,0 +1,22 @@
+# Order 10923
+
+customer: [[../customers/lamai]]
+employee: [[../employees/7]]
+order-date: 1998-03-03
+required-date: 1998-04-14
+shipped-date: 1998-03-13
+ship-via: [[../shippers/3]]
+freight: 68.26
+ship-name: La maison d-Asie
+ship-address: 1 rue Alsace-Lorraine
+ship-city: Toulouse
+ship-postal-code: 31000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 42 | [[../products/42]] | 14 | 10 | 0.2 |
+| 43 | [[../products/43]] | 46 | 10 | 0.2 |
+| 67 | [[../products/67]] | 14 | 24 | 0.2 |

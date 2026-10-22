@@ -1,0 +1,22 @@
+# Order 10477
+
+customer: [[../customers/prini]]
+employee: [[../employees/5]]
+order-date: 1997-03-17
+required-date: 1997-04-14
+shipped-date: 1997-03-25
+ship-via: [[../shippers/2]]
+freight: 13.02
+ship-name: Princesa Isabel Vinhos
+ship-address: Estrada da saúde n. 58
+ship-city: Lisboa
+ship-postal-code: 1756
+ship-country: Portugal
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 14.4 | 15 | 0 |
+| 21 | [[../products/21]] | 8 | 21 | 0.25 |
+| 39 | [[../products/39]] | 14.4 | 20 | 0.25 |

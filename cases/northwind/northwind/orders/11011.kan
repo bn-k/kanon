@@ -1,0 +1,21 @@
+# Order 11011
+
+customer: [[../customers/alfki]]
+employee: [[../employees/3]]
+order-date: 1998-04-09
+required-date: 1998-05-07
+shipped-date: 1998-04-13
+ship-via: [[../shippers/1]]
+freight: 1.21
+ship-name: Alfred-s Futterkiste
+ship-address: Obere Str. 57
+ship-city: Berlin
+ship-postal-code: 12209
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 58 | [[../products/58]] | 13.25 | 40 | 0.05 |
+| 71 | [[../products/71]] | 21.5 | 20 | 0 |

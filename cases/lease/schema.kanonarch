@@ -1,0 +1,63 @@
+// Working material: French unfurnished residential leases (loi n° 89-462 du 6 juillet 1989).
+
+enum TypePersonne { physique, morale }
+enum Etat { neuf, bon, use "usé", degrade "dégradé" }
+
+schema Personne {
+  nom:     Text
+  type:    TypePersonne
+  adresse: Text?
+}
+
+schema Logement {
+  adresse: Text
+  surface: Quantity
+  pieces:  Int "Pièces"
+}
+
+schema Clause {
+  titre: Text  @heading
+  corps: Prose @body
+}
+
+schema Bail {
+  titre:             Text @heading
+  bailleur:          Personne
+  locataire:         Personne
+  logement:          Logement
+  debut:             Date "Début"
+  duree:             Duration "Durée"
+  loyer-hc:          Money "Loyer hors charges"
+  charges:           Money
+  depot-de-garantie: Money "Dépôt de garantie"
+  zone-tendue:       Bool
+  clauses:           [Clause] @sections
+
+  fin:               Date = debut + duree
+  preavis-locataire: Duration "Préavis du locataire" = if zone-tendue then 1 month else 3 months
+}
+
+schema Piece "Pièce" {
+  piece:     Text "Pièce"
+  etat:      Etat "État"
+  remarques: Text?
+}
+
+schema EtatDesLieux "État des lieux" {
+  bail:   -> Bail
+  date:   Date
+  cles:   Int "Clés"
+  pieces: [Piece] "Pièces"
+}
+
+rule depot-plafonne(b: Bail) -> Bool
+  reads fr "le dépôt de garantie ne dépasse pas un mois de loyer hors charges (art. 22)"
+  = b.depot-de-garantie <= b.loyer-hc
+
+rule duree-minimale(b: Bail) -> Bool
+  reads fr "le bail dure au moins 3 ans, 6 ans si le bailleur est une personne morale (art. 10)"
+  = b.duree >= (if b.bailleur.type == morale then 6 years else 3 years)
+
+rule etat-des-lieux-date(e: EtatDesLieux) -> Bool
+  reads fr "l'état des lieux d'entrée est daté au plus tard du premier jour du bail"
+  = e.date <= e.bail.debut

@@ -1,0 +1,11 @@
+# Product 15
+
+product-name: Genen Shouyu
+supplier: [[../suppliers/6]]
+category: [[../categories/2]]
+quantity-per-unit: 24 - 250 ml bottles
+unit-price: 15.5
+units-in-stock: 39
+units-on-order: 0
+reorder-level: 5
+discontinued: 0

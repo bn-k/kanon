@@ -1,0 +1,21 @@
+# Order 11045
+
+customer: [[../customers/bottm]]
+employee: [[../employees/6]]
+order-date: 1998-04-23
+required-date: 1998-05-21
+ship-via: [[../shippers/2]]
+freight: 70.58
+ship-name: Bottom-Dollar Markets
+ship-address: 23 Tsawassen Blvd.
+ship-city: Tsawassen
+ship-region: BC
+ship-postal-code: T2F 8M4
+ship-country: Canada
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 33 | [[../products/33]] | 2.5 | 15 | 0 |
+| 51 | [[../products/51]] | 53 | 24 | 0 |

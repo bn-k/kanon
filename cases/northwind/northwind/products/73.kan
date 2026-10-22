@@ -1,0 +1,11 @@
+# Product 73
+
+product-name: Röd Kaviar
+supplier: [[../suppliers/17]]
+category: [[../categories/8]]
+quantity-per-unit: 24 - 150 g jars
+unit-price: 15
+units-in-stock: 101
+units-on-order: 0
+reorder-level: 5
+discontinued: 0

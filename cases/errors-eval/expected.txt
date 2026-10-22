@@ -1,0 +1,6 @@
+$ kan lint schema.kanonarch diner.kan
+bruno.kan: error: `rang` depends on itself, through the objects it links to
+diner.kan: error: `part`: a division by zero
+diner.kan: error: `rappel`: a date and time moves by whole months, not by 1.5 months
+3 errors
+[exit 1]

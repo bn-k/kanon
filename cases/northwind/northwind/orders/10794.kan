@@ -1,0 +1,22 @@
+# Order 10794
+
+customer: [[../customers/quede]]
+employee: [[../employees/6]]
+order-date: 1997-12-24
+required-date: 1998-01-21
+shipped-date: 1998-01-02
+ship-via: [[../shippers/1]]
+freight: 21.49
+ship-name: Que Delícia
+ship-address: Rua da Panificadora, 12
+ship-city: Rio de Janeiro
+ship-region: RJ
+ship-postal-code: 02389-673
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 14 | [[../products/14]] | 23.25 | 15 | 0.2 |
+| 54 | [[../products/54]] | 7.45 | 6 | 0.2 |

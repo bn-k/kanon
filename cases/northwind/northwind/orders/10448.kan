@@ -1,0 +1,21 @@
+# Order 10448
+
+customer: [[../customers/ranch]]
+employee: [[../employees/4]]
+order-date: 1997-02-17
+required-date: 1997-03-17
+shipped-date: 1997-02-24
+ship-via: [[../shippers/2]]
+freight: 38.82
+ship-name: Rancho grande
+ship-address: Av. del Libertador 900
+ship-city: Buenos Aires
+ship-postal-code: 1010
+ship-country: Argentina
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 26 | [[../products/26]] | 24.9 | 6 | 0 |
+| 40 | [[../products/40]] | 14.7 | 20 | 0 |

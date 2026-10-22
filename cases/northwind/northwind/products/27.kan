@@ -1,0 +1,11 @@
+# Product 27
+
+product-name: Schoggi Schokolade
+supplier: [[../suppliers/11]]
+category: [[../categories/3]]
+quantity-per-unit: 100 - 100 g pieces
+unit-price: 43.9
+units-in-stock: 49
+units-on-order: 0
+reorder-level: 30
+discontinued: 0

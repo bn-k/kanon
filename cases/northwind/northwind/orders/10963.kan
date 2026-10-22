@@ -1,0 +1,20 @@
+# Order 10963
+
+customer: [[../customers/furib]]
+employee: [[../employees/9]]
+order-date: 1998-03-19
+required-date: 1998-04-16
+shipped-date: 1998-03-26
+ship-via: [[../shippers/3]]
+freight: 2.7
+ship-name: Furia Bacalhau e Frutos do Mar
+ship-address: Jardim das rosas n. 32
+ship-city: Lisboa
+ship-postal-code: 1675
+ship-country: Portugal
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 60 | [[../products/60]] | 34 | 2 | 0.15 |

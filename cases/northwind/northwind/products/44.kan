@@ -1,0 +1,11 @@
+# Product 44
+
+product-name: Gula Malacca
+supplier: [[../suppliers/20]]
+category: [[../categories/2]]
+quantity-per-unit: 20 - 2 kg bags
+unit-price: 19.45
+units-in-stock: 27
+units-on-order: 0
+reorder-level: 15
+discontinued: 0

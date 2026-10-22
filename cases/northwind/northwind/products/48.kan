@@ -1,0 +1,11 @@
+# Product 48
+
+product-name: Chocolade
+supplier: [[../suppliers/22]]
+category: [[../categories/3]]
+quantity-per-unit: 10 pkgs.
+unit-price: 12.75
+units-in-stock: 15
+units-on-order: 70
+reorder-level: 25
+discontinued: 0

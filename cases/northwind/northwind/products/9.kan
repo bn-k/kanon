@@ -1,0 +1,11 @@
+# Product 9
+
+product-name: Mishi Kobe Niku
+supplier: [[../suppliers/4]]
+category: [[../categories/6]]
+quantity-per-unit: 18 - 500 g pkgs.
+unit-price: 97
+units-in-stock: 29
+units-on-order: 0
+reorder-level: 0
+discontinued: 1

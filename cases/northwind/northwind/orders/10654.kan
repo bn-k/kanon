@@ -1,0 +1,22 @@
+# Order 10654
+
+customer: [[../customers/bergs]]
+employee: [[../employees/5]]
+order-date: 1997-09-02
+required-date: 1997-09-30
+shipped-date: 1997-09-11
+ship-via: [[../shippers/1]]
+freight: 55.26
+ship-name: Berglunds snabbköp
+ship-address: Berguvsvägen  8
+ship-city: Luleå
+ship-postal-code: S-958 22
+ship-country: Sweden
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 4 | [[../products/4]] | 22 | 12 | 0.1 |
+| 39 | [[../products/39]] | 18 | 20 | 0.1 |
+| 54 | [[../products/54]] | 7.45 | 6 | 0.1 |

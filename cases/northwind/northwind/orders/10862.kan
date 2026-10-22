@@ -1,0 +1,21 @@
+# Order 10862
+
+customer: [[../customers/lehms]]
+employee: [[../employees/8]]
+order-date: 1998-01-30
+required-date: 1998-03-13
+shipped-date: 1998-02-02
+ship-via: [[../shippers/2]]
+freight: 53.23
+ship-name: Lehmanns Marktstand
+ship-address: Magazinweg 7
+ship-city: Frankfurt a.M.
+ship-postal-code: 60528
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 11 | [[../products/11]] | 21 | 25 | 0 |
+| 52 | [[../products/52]] | 7 | 8 | 0 |

@@ -1,0 +1,88 @@
+# Lyon
+
+name: Lyon, it's "Croix-Rousse"
+opened: 2024-03-01
+updated: 2026-10-22 14:30:05 +02:00
+delay: 1 h 30 min
+version: 1.2.3
+staff: 12
+rating: 4.5
+margin: 12.5 %
+revenue: 1 250 000.50 EUR
+area: 48 m2
+open: yes
+condition: good
+logo: [[lyon/logo.svg]]
+terms: [[lyon/terms.txt]]
+manager: [[lyon#ana]]
+suppliers: [[../suppliers/acme]], [[../suppliers/bolt]]
+
+## Description
+
+A shop on the hill,
+two lines in its first paragraph.
+
+Its second paragraph.
+
+## Widget
+
+```html
+<b>open</b>
+```
+
+## Address {#lyon-address}
+
+city: Lyon
+
+### Street
+
+12 rue d'Austerlitz
+
+## Tags
+
+- organic
+- bulk
+
+## Employees
+
+### Ana {#ana}
+
+name: Ana
+friends: [[lyon#bo]], [[lyon#cy]]
+
+### Bo {#bo}
+
+name: Bo
+
+## Owners
+
+| id | name |
+|---|---|
+| cy | Cy |
+
+## Orders
+
+### First order {#o1}
+
+date: 2026-10-01
+customer: [[lyon#cy]]
+
+#### Lines
+
+##### Soap {#l1}
+
+product: [[../suppliers/acme#soap]]
+index: 1
+quantity: 2
+price: 3.50 EUR
+
+###### Notes
+
+- fragile
+- gift
+
+##### Brush {#l2}
+
+product: [[../suppliers/acme#brush]]
+quantity: 1
+price: 12 EUR

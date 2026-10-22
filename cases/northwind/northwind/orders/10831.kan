@@ -1,0 +1,23 @@
+# Order 10831
+
+customer: [[../customers/santg]]
+employee: [[../employees/3]]
+order-date: 1998-01-14
+required-date: 1998-02-11
+shipped-date: 1998-01-23
+ship-via: [[../shippers/2]]
+freight: 72.19
+ship-name: Santé Gourmet
+ship-address: Erling Skakkes gate 78
+ship-city: Stavern
+ship-postal-code: 4110
+ship-country: Norway
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 19 | [[../products/19]] | 9.2 | 2 | 0 |
+| 35 | [[../products/35]] | 18 | 8 | 0 |
+| 38 | [[../products/38]] | 263.5 | 8 | 0 |
+| 43 | [[../products/43]] | 46 | 9 | 0 |

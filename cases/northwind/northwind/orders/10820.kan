@@ -1,0 +1,21 @@
+# Order 10820
+
+customer: [[../customers/rattc]]
+employee: [[../employees/3]]
+order-date: 1998-01-07
+required-date: 1998-02-04
+shipped-date: 1998-01-13
+ship-via: [[../shippers/2]]
+freight: 37.52
+ship-name: Rattlesnake Canyon Grocery
+ship-address: 2817 Milton Dr.
+ship-city: Albuquerque
+ship-region: NM
+ship-postal-code: 87110
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 56 | [[../products/56]] | 38 | 30 | 0 |

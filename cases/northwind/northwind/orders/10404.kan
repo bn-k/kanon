@@ -1,0 +1,22 @@
+# Order 10404
+
+customer: [[../customers/magaa]]
+employee: [[../employees/2]]
+order-date: 1997-01-03
+required-date: 1997-01-31
+shipped-date: 1997-01-08
+ship-via: [[../shippers/1]]
+freight: 155.97
+ship-name: Magazzini Alimentari Riuniti
+ship-address: Via Ludovico il Moro 22
+ship-city: Bergamo
+ship-postal-code: 24100
+ship-country: Italy
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 26 | [[../products/26]] | 24.9 | 30 | 0.05 |
+| 42 | [[../products/42]] | 11.2 | 40 | 0.05 |
+| 49 | [[../products/49]] | 16 | 30 | 0.05 |

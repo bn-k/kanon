@@ -1,0 +1,11 @@
+# Product 1
+
+product-name: Chai
+supplier: [[../suppliers/1]]
+category: [[../categories/1]]
+quantity-per-unit: 10 boxes x 20 bags
+unit-price: 18
+units-in-stock: 39
+units-on-order: 0
+reorder-level: 10
+discontinued: 0

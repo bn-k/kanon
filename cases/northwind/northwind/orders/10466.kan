@@ -1,0 +1,22 @@
+# Order 10466
+
+customer: [[../customers/commi]]
+employee: [[../employees/4]]
+order-date: 1997-03-06
+required-date: 1997-04-03
+shipped-date: 1997-03-13
+ship-via: [[../shippers/1]]
+freight: 11.93
+ship-name: Comércio Mineiro
+ship-address: Av. dos Lusíadas, 23
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05432-043
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 11 | [[../products/11]] | 16.8 | 10 | 0 |
+| 46 | [[../products/46]] | 9.6 | 5 | 0 |

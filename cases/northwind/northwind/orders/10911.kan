@@ -1,0 +1,22 @@
+# Order 10911
+
+customer: [[../customers/godos]]
+employee: [[../employees/3]]
+order-date: 1998-02-26
+required-date: 1998-03-26
+shipped-date: 1998-03-05
+ship-via: [[../shippers/1]]
+freight: 38.19
+ship-name: Godos Cocina Típica
+ship-address: C/ Romero, 33
+ship-city: Sevilla
+ship-postal-code: 41101
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 18 | 10 | 0 |
+| 17 | [[../products/17]] | 39 | 12 | 0 |
+| 67 | [[../products/67]] | 14 | 15 | 0 |

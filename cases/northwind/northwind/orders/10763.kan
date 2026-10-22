@@ -1,0 +1,22 @@
+# Order 10763
+
+customer: [[../customers/folig]]
+employee: [[../employees/3]]
+order-date: 1997-12-03
+required-date: 1997-12-31
+shipped-date: 1997-12-08
+ship-via: [[../shippers/3]]
+freight: 37.35
+ship-name: Folies gourmandes
+ship-address: 184, chaussée de Tournai
+ship-city: Lille
+ship-postal-code: 59000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 21 | [[../products/21]] | 10 | 40 | 0 |
+| 22 | [[../products/22]] | 21 | 6 | 0 |
+| 24 | [[../products/24]] | 4.5 | 20 | 0 |

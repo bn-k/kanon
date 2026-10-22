@@ -1,0 +1,11 @@
+# Product 41
+
+product-name: Jack's New England Clam Chowder
+supplier: [[../suppliers/19]]
+category: [[../categories/8]]
+quantity-per-unit: 12 - 12 oz cans
+unit-price: 9.65
+units-in-stock: 85
+units-on-order: 0
+reorder-level: 10
+discontinued: 0

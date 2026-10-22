@@ -1,0 +1,20 @@
+# Order 10457
+
+customer: [[../customers/koene]]
+employee: [[../employees/2]]
+order-date: 1997-02-25
+required-date: 1997-03-25
+shipped-date: 1997-03-03
+ship-via: [[../shippers/1]]
+freight: 11.57
+ship-name: Königlich Essen
+ship-address: Maubelstr. 90
+ship-city: Brandenburg
+ship-postal-code: 14776
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 59 | [[../products/59]] | 44 | 36 | 0 |

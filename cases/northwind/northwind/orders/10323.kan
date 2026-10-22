@@ -1,0 +1,22 @@
+# Order 10323
+
+customer: [[../customers/koene]]
+employee: [[../employees/4]]
+order-date: 1996-10-07
+required-date: 1996-11-04
+shipped-date: 1996-10-14
+ship-via: [[../shippers/1]]
+freight: 4.88
+ship-name: Königlich Essen
+ship-address: Maubelstr. 90
+ship-city: Brandenburg
+ship-postal-code: 14776
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 15 | [[../products/15]] | 12.4 | 5 | 0 |
+| 25 | [[../products/25]] | 11.2 | 4 | 0 |
+| 39 | [[../products/39]] | 14.4 | 4 | 0 |

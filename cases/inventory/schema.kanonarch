@@ -1,0 +1,32 @@
+// Working material: a home computer inventory, fictional.
+
+enum Etat { bon, fragile, mort }
+
+schema Disque {
+  modele:   Text "Modèle"
+  capacite: Quantity? "Capacité"
+  etat:     Etat "État"
+  usage:    Text?
+}
+
+schema Machine {
+  nom:             Text @heading
+  role:            Text "Rôle"
+  systeme:         Text "Système"
+  processeur:      Text
+  chiffrement:     Bool
+  memoire:         Quantity "Mémoire"
+  carte-graphique: Text?
+  bios:            Version? "BIOS"
+  disques:         [Disque]
+  notes:           Prose?
+}
+
+schema Parc {
+  titre:    Text @heading
+  machines: [Machine] @sections
+}
+
+rule bios-a-jour(m: Machine) -> Bool
+  reads fr "{m.nom} a un BIOS en version 2003 ou plus, qui corrige la faille du démarrage sécurisé"
+  = m.bios == none or m.bios >= 2003

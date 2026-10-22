@@ -1,0 +1,23 @@
+# Order 10523
+
+customer: [[../customers/seves]]
+employee: [[../employees/7]]
+order-date: 1997-05-01
+required-date: 1997-05-29
+shipped-date: 1997-05-30
+ship-via: [[../shippers/2]]
+freight: 77.63
+ship-name: Seven Seas Imports
+ship-address: 90 Wadhurst Rd.
+ship-city: London
+ship-postal-code: OX15 4NB
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 17 | [[../products/17]] | 39 | 25 | 0.1 |
+| 20 | [[../products/20]] | 81 | 15 | 0.1 |
+| 37 | [[../products/37]] | 26 | 18 | 0.1 |
+| 41 | [[../products/41]] | 9.65 | 6 | 0.1 |

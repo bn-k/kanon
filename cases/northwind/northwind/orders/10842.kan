@@ -1,0 +1,23 @@
+# Order 10842
+
+customer: [[../customers/tortu]]
+employee: [[../employees/1]]
+order-date: 1998-01-20
+required-date: 1998-02-17
+shipped-date: 1998-01-29
+ship-via: [[../shippers/3]]
+freight: 54.42
+ship-name: Tortuga Restaurante
+ship-address: Avda. Azteca 123
+ship-city: México D.F.
+ship-postal-code: 5033
+ship-country: Mexico
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 11 | [[../products/11]] | 21 | 15 | 0 |
+| 43 | [[../products/43]] | 46 | 5 | 0 |
+| 68 | [[../products/68]] | 12.5 | 20 | 0 |
+| 70 | [[../products/70]] | 15 | 12 | 0 |

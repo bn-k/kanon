@@ -1,0 +1,22 @@
+# Order 10543
+
+customer: [[../customers/lilas]]
+employee: [[../employees/8]]
+order-date: 1997-05-21
+required-date: 1997-06-18
+shipped-date: 1997-05-23
+ship-via: [[../shippers/2]]
+freight: 48.17
+ship-name: LILA-Supermercado
+ship-address: Carrera 52 con Ave. Bolívar #65-98 Llano Largo
+ship-city: Barquisimeto
+ship-region: Lara
+ship-postal-code: 3508
+ship-country: Venezuela
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 12 | [[../products/12]] | 38 | 30 | 0.15 |
+| 23 | [[../products/23]] | 9 | 70 | 0.15 |

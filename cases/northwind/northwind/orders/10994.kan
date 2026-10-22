@@ -1,0 +1,20 @@
+# Order 10994
+
+customer: [[../customers/vaffe]]
+employee: [[../employees/2]]
+order-date: 1998-04-02
+required-date: 1998-04-16
+shipped-date: 1998-04-09
+ship-via: [[../shippers/3]]
+freight: 65.53
+ship-name: Vaffeljernet
+ship-address: Smagsloget 45
+ship-city: Århus
+ship-postal-code: 8200
+ship-country: Denmark
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 59 | [[../products/59]] | 55 | 18 | 0.05 |

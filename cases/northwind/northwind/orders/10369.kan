@@ -1,0 +1,22 @@
+# Order 10369
+
+customer: [[../customers/splir]]
+employee: [[../employees/8]]
+order-date: 1996-12-02
+required-date: 1996-12-30
+shipped-date: 1996-12-09
+ship-via: [[../shippers/2]]
+freight: 195.68
+ship-name: Split Rail Beer & Ale
+ship-address: P.O. Box 555
+ship-city: Lander
+ship-region: WY
+ship-postal-code: 82520
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 29 | [[../products/29]] | 99 | 20 | 0 |
+| 56 | [[../products/56]] | 30.4 | 18 | 0.25 |

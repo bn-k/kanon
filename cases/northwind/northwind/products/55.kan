@@ -1,0 +1,11 @@
+# Product 55
+
+product-name: Pâté chinois
+supplier: [[../suppliers/25]]
+category: [[../categories/6]]
+quantity-per-unit: 24 boxes x 2 pies
+unit-price: 24
+units-in-stock: 115
+units-on-order: 0
+reorder-level: 20
+discontinued: 0

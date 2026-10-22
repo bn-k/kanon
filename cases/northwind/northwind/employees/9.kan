@@ -1,0 +1,31 @@
+# Employee 9
+
+last-name: Dodsworth
+first-name: Anne
+title: Sales Representative
+title-of-courtesy: Ms.
+birth-date: 1966-01-27
+hire-date: 1994-11-15
+city: London
+postal-code: WG2 7LT
+country: UK
+home-phone: (71) 555-4444
+extension: 452
+photo: [[9/photo.jpg]]
+notes: Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.
+reports-to: [[5]]
+photo-path: http://accweb/emmployees/davolio.bmp
+
+## Address
+
+7 Houndstooth Rd.
+
+## Territories
+
+- [[../territories/03049]]
+- [[../territories/03801]]
+- [[../territories/48075]]
+- [[../territories/48084]]
+- [[../territories/48304]]
+- [[../territories/55113]]
+- [[../territories/55439]]

@@ -1,0 +1,22 @@
+# Order 11042
+
+customer: [[../customers/commi]]
+employee: [[../employees/2]]
+order-date: 1998-04-22
+required-date: 1998-05-06
+shipped-date: 1998-05-01
+ship-via: [[../shippers/1]]
+freight: 29.99
+ship-name: Comércio Mineiro
+ship-address: Av. dos Lusíadas, 23
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05432-043
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 44 | [[../products/44]] | 19.45 | 15 | 0 |
+| 61 | [[../products/61]] | 28.5 | 4 | 0 |

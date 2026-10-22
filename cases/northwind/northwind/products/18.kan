@@ -1,0 +1,11 @@
+# Product 18
+
+product-name: Carnarvon Tigers
+supplier: [[../suppliers/7]]
+category: [[../categories/8]]
+quantity-per-unit: 16 kg pkg.
+unit-price: 62.5
+units-in-stock: 42
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

@@ -1,0 +1,21 @@
+# Order 10809
+
+customer: [[../customers/welli]]
+employee: [[../employees/7]]
+order-date: 1998-01-01
+required-date: 1998-01-29
+shipped-date: 1998-01-07
+ship-via: [[../shippers/1]]
+freight: 4.87
+ship-name: Wellington Importadora
+ship-address: Rua do Mercado, 12
+ship-city: Resende
+ship-region: SP
+ship-postal-code: 08737-363
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 52 | [[../products/52]] | 7 | 20 | 0 |

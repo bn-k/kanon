@@ -1,0 +1,30 @@
+---
+type: Facture
+---
+
+# Facture F-2026-031
+
+numero: F-2026-031
+date: 2026-10-22
+echeance: 2026-11-21
+client: [[clients/dupont-batiment]]
+taux-tva: 20 %
+total-ttc: 9 504.00 EUR
+
+## Émetteur {#atelier-lune}
+
+nom: Atelier Lune SARL
+adresse: 8 quai des Brumes, 69002 Lyon
+
+## Lignes
+
+| id | designation | quantite | prix-unitaire |
+|---|---|---|---|
+| dev-api | Développement de l'API de réservation (jours) | 12 | 650.00 EUR |
+| hebergement | Hébergement, octobre à décembre (mois) | 3 | 40.00 EUR |
+
+## Conditions
+
+Paiement par virement au plus tard le {echeance}, soit {total-ttc}. En cas de retard, des pénalités au taux de
+trois fois le taux d'intérêt légal sont exigibles, ainsi qu'une indemnité forfaitaire de 40 EUR pour frais de
+recouvrement (Code de commerce, art. D441-5).

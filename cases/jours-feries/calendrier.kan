@@ -1,0 +1,8 @@
+---
+type: Calendrier
+---
+
+# Jours fériés en France métropolitaine, 2006 à 2031
+
+source: Etalab, « Jours fériés en France », data.gouv.fr, Licence Ouverte v2.0
+jours: [[jours-feries-metropole.csv]]

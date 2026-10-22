@@ -1,0 +1,11 @@
+# Product 59
+
+product-name: Raclette Courdavault
+supplier: [[../suppliers/28]]
+category: [[../categories/4]]
+quantity-per-unit: 5 kg pkg.
+unit-price: 55
+units-in-stock: 79
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

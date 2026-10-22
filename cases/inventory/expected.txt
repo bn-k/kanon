@@ -1,0 +1,3 @@
+$ kan lint schema.kanonarch maison.kan
+ok  schema.kanonarch
+ok  maison.kan

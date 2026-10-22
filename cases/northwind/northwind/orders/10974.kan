@@ -1,0 +1,21 @@
+# Order 10974
+
+customer: [[../customers/splir]]
+employee: [[../employees/3]]
+order-date: 1998-03-25
+required-date: 1998-04-08
+shipped-date: 1998-04-03
+ship-via: [[../shippers/3]]
+freight: 12.96
+ship-name: Split Rail Beer & Ale
+ship-address: P.O. Box 555
+ship-city: Lander
+ship-region: WY
+ship-postal-code: 82520
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 63 | [[../products/63]] | 43.9 | 10 | 0 |

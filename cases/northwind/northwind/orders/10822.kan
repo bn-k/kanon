@@ -1,0 +1,22 @@
+# Order 10822
+
+customer: [[../customers/traih]]
+employee: [[../employees/6]]
+order-date: 1998-01-08
+required-date: 1998-02-05
+shipped-date: 1998-01-16
+ship-via: [[../shippers/3]]
+freight: 7
+ship-name: Trail-s Head Gourmet Provisioners
+ship-address: 722 DaVinci Blvd.
+ship-city: Kirkland
+ship-region: WA
+ship-postal-code: 98034
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 62 | [[../products/62]] | 49.3 | 3 | 0 |
+| 70 | [[../products/70]] | 15 | 6 | 0 |

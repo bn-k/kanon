@@ -1,0 +1,22 @@
+# Order 10663
+
+customer: [[../customers/bonap]]
+employee: [[../employees/2]]
+order-date: 1997-09-10
+required-date: 1997-09-24
+shipped-date: 1997-10-03
+ship-via: [[../shippers/2]]
+freight: 113.15
+ship-name: Bon app-
+ship-address: 12, rue des Bouchers
+ship-city: Marseille
+ship-postal-code: 13008
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 40 | [[../products/40]] | 18.4 | 30 | 0.05 |
+| 42 | [[../products/42]] | 14 | 30 | 0.05 |
+| 51 | [[../products/51]] | 53 | 20 | 0.05 |

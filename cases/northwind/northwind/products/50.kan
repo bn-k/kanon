@@ -1,0 +1,11 @@
+# Product 50
+
+product-name: Valkoinen suklaa
+supplier: [[../suppliers/23]]
+category: [[../categories/3]]
+quantity-per-unit: 12 - 100 g bars
+unit-price: 16.25
+units-in-stock: 65
+units-on-order: 0
+reorder-level: 30
+discontinued: 0

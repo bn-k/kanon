@@ -1,0 +1,24 @@
+# Order 10382
+
+customer: [[../customers/ernsh]]
+employee: [[../employees/4]]
+order-date: 1996-12-13
+required-date: 1997-01-10
+shipped-date: 1996-12-16
+ship-via: [[../shippers/1]]
+freight: 94.77
+ship-name: Ernst Handel
+ship-address: Kirchgasse 6
+ship-city: Graz
+ship-postal-code: 8010
+ship-country: Austria
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 5 | [[../products/5]] | 17 | 32 | 0 |
+| 18 | [[../products/18]] | 50 | 9 | 0 |
+| 29 | [[../products/29]] | 99 | 14 | 0 |
+| 33 | [[../products/33]] | 2 | 60 | 0 |
+| 74 | [[../products/74]] | 8 | 50 | 0 |

@@ -1,0 +1,22 @@
+# Order 10473
+
+customer: [[../customers/islat]]
+employee: [[../employees/1]]
+order-date: 1997-03-13
+required-date: 1997-03-27
+shipped-date: 1997-03-21
+ship-via: [[../shippers/3]]
+freight: 16.37
+ship-name: Island Trading
+ship-address: Garden House Crowther Way
+ship-city: Cowes
+ship-region: Isle of Wight
+ship-postal-code: PO31 7PJ
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 33 | [[../products/33]] | 2 | 12 | 0 |
+| 71 | [[../products/71]] | 17.2 | 12 | 0 |

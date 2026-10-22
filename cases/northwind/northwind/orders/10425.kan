@@ -1,0 +1,21 @@
+# Order 10425
+
+customer: [[../customers/lamai]]
+employee: [[../employees/6]]
+order-date: 1997-01-24
+required-date: 1997-02-21
+shipped-date: 1997-02-14
+ship-via: [[../shippers/2]]
+freight: 7.93
+ship-name: La maison d-Asie
+ship-address: 1 rue Alsace-Lorraine
+ship-city: Toulouse
+ship-postal-code: 31000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 55 | [[../products/55]] | 19.2 | 10 | 0.25 |
+| 76 | [[../products/76]] | 14.4 | 20 | 0.25 |

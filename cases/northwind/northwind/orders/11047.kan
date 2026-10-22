@@ -1,0 +1,21 @@
+# Order 11047
+
+customer: [[../customers/eastc]]
+employee: [[../employees/7]]
+order-date: 1998-04-24
+required-date: 1998-05-22
+shipped-date: 1998-05-01
+ship-via: [[../shippers/3]]
+freight: 46.62
+ship-name: Eastern Connection
+ship-address: 35 King George
+ship-city: London
+ship-postal-code: WX3 6FW
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 18 | 25 | 0.25 |
+| 5 | [[../products/5]] | 21.35 | 30 | 0.25 |

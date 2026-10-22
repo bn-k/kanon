@@ -1,0 +1,22 @@
+# Order 10304
+
+customer: [[../customers/tortu]]
+employee: [[../employees/1]]
+order-date: 1996-09-12
+required-date: 1996-10-10
+shipped-date: 1996-09-17
+ship-via: [[../shippers/2]]
+freight: 63.79
+ship-name: Tortuga Restaurante
+ship-address: Avda. Azteca 123
+ship-city: México D.F.
+ship-postal-code: 5033
+ship-country: Mexico
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 49 | [[../products/49]] | 16 | 30 | 0 |
+| 59 | [[../products/59]] | 44 | 10 | 0 |
+| 71 | [[../products/71]] | 17.2 | 2 | 0 |

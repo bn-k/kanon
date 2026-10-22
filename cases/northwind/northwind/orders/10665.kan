@@ -1,0 +1,23 @@
+# Order 10665
+
+customer: [[../customers/lonep]]
+employee: [[../employees/1]]
+order-date: 1997-09-11
+required-date: 1997-10-09
+shipped-date: 1997-09-17
+ship-via: [[../shippers/2]]
+freight: 26.31
+ship-name: Lonesome Pine Restaurant
+ship-address: 89 Chiaroscuro Rd.
+ship-city: Portland
+ship-region: OR
+ship-postal-code: 97219
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 51 | [[../products/51]] | 53 | 20 | 0 |
+| 59 | [[../products/59]] | 55 | 1 | 0 |
+| 76 | [[../products/76]] | 18 | 10 | 0 |

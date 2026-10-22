@@ -1,0 +1,241 @@
+# Kanon
+
+Kanon describes structured documents as code. A `.kanonarch` file holds the schema: types, units, enums, computed
+fields and rules, written once by someone technical. A `.kan` file is the document anyone edits, like Markdown:
+key lines, headings, lists, tables and prose.
+
+```
+$ go build ./cmd/kan
+$ kan lint cases/invoice/schema.kanonarch cases/invoice/f-2026-031.kan
+ok  cases/invoice/schema.kanonarch
+ok  cases/invoice/f-2026-031.kan
+ok  cases/invoice/clients/dupont-batiment.kan
+```
+
+`kan lint` checks the document, every document it links to and every entry of its folders against the schema. It
+reports like a compiler, `file:line:col: error: message`, and exits with 1 when there is an error, 2 when it is
+misused.
+
+```
+f-2026-032.kan:8:7: error: write a date as YYYY-MM-DD (2026-10-22), not "22/10/2026"
+f-2026-032.kan:20:8: error: a key or a column is a name, not a label: write designation, not "Désignation"
+f-2026-032.kan:27:44: error: {total-tc} inserts no field; did you mean {total-ttc}?
+```
+
+It checks structure (fields, values, ids, links, files and folders), then evaluates the computed fields and the
+rules. A computed field written in the document must hold its computed value, and a rule that fails is reported at
+the object, in the words of its `reads` sentence when it has one:
+
+```
+f-2026-033.kan:12:1: error: `total-ttc` is 9 504.00 EUR, not "9 500.00 EUR"
+clio.kan: error: `vidange-a-jour` fails: "Renault Clio a roulé moins de 15 000 km depuis sa dernière vidange"; 15 250 km is not less than 15 000 km
+```
+
+## Computed fields and rules
+
+```
+$ kan eval cases/invoice/schema.kanonarch cases/invoice/f-2026-031.kan
+f-2026-031.kan: total-ht = 7 920.00 EUR
+f-2026-031.kan: tva = 1 584.00 EUR
+f-2026-031.kan: total-ttc = 9 504.00 EUR
+f-2026-031.kan:23:1: montant = 7 800.00 EUR
+f-2026-031.kan:24:1: montant = 120.00 EUR
+```
+
+`kan eval` lints like `kan lint`, then prints the value of every computed field, where its object is written; the
+diagnostics follow. A type error in an expression is found when the schema is checked, before any document is
+read: ``cannot add `Money` and `Int` ``.
+
+`today` is the local date, or the one given by `-today`, on `kan lint` and `kan eval` alike:
+`kan lint -today 2026-10-22 schema.kanonarch clio.kan`. A case whose output depends on the date passes it, so its
+output stays the same.
+
+- A literal is written as in a document: `1 250.50 EUR`, `15 000 km`, `20 %`, `3 years`; `1250.50 EUR` reads too,
+  and a number badly grouped is an error that says what to write: `write 125, not "1 25"`. A number followed by a
+  currency code is an amount (`total > 1 EUR`), unless the schema declares a unit of that name.
+- Arithmetic keeps units. Money adds to money of the same currency only; a quantity converts between the built-in
+  units of one dimension (`500 g + 1 kg` is `1 500 g`), and a unit a schema declares converts to none. A sum of
+  nothing is a zero without a currency or a unit, which adds to and compares with any amount; a percentage
+  applies to what it multiplies. A date moves by a duration (`le + 3 months`); a date and time moves by whole
+  months only.
+- `if c then a else b`, `x ?? y` (`y` when `x` is none), `o?.f` (none when `o` is), `o with { f: v }` (a copy of
+  `o`), `and`, `or`, `not` and comparisons.
+- Builtins: `today`, `none`, `yes`, `no`; `sum(xs)` and `sum(xs, x => …)`, `count(xs)` and
+  `count(xs, x => …)`, `round(x, n)`, `abs(x)`, `min(…)`, `max(…)`. Methods on arrays: `xs.filter(x => …)`,
+  `xs.map(x => …)`, `xs.max-by(x => …)`.
+- A function (`fn`) may give its parameters defaults. A field computed from itself, through the objects it links
+  to, is an error, and so is a division by zero.
+
+## SQL
+
+```
+$ kan import northwind.sqlite northwind
+$ kan sql northwind/schema.kanonarch northwind/northwind.kan -o northwind.db
+```
+
+`kan import` writes a schema and a tree of documents from a SQLite database or a SQL dump, into a new folder, and
+prints what it changed on the way (keys turned into ids, empty texts left out). `kan sql` lints a document first:
+on an error it prints the diagnostics and writes nothing. Otherwise it prints a SQL script, or writes it to the new
+file named by `-o`: a script for `.sql`, a SQLite database for `.sqlite` or `.db`. It never overwrites a file. The
+mapping both ways is in `docs/data.md`.
+
+There are two ways to search a document: its files, with grep, and SQL. `kan sql -q` runs a query over the same
+tables, without writing any file:
+
+```
+$ kan sql -q 'SELECT c.company_name AS customer, count(*) AS orders
+              FROM customer c JOIN "order" o ON o.customer_id = c.id
+              GROUP BY c.id ORDER BY orders DESC LIMIT 3' northwind/schema.kanonarch northwind/northwind.kan
+customer            orders
+------------------  ------
+Save-a-lot Markets      31
+Ernst Handel            30
+QUICK-Stop              28
+3 rows
+```
+
+- The query is an argument, or `-q @query.sql` reads it from a file. It lints the document first, as `kan sql`
+  does: on an error it prints the diagnostics and runs nothing.
+- The database is built in memory and only read: a query is one `SELECT`, `WITH`, `VALUES` or `EXPLAIN` statement,
+  and anything that writes is refused. The table names are those of `kan sql`; one that is an SQL keyword is
+  written with double quotes (`"order"`).
+- The rows are an aligned table, numbers to the right, `NULL` for none, a BLOB as its size (`<blob 10151 bytes>`),
+  then their number. `-format csv` prints them as CSV instead, with no count. Values come as SQLite stores them:
+  dates and times as written in the document, a `Money` in two columns (`revenue`, `revenue_currency`).
+- A mistake in the query is a diagnostic at its position, in the file of `@query.sql` or in `query`, with exit
+  code 1: ``query:1:8: error: no such column `company_nam`; did you mean `company_name`?``.
+
+## Cases
+
+`cases/` holds real use cases, one folder each: a schema, documents, and `expected.txt`, the exact output of the
+command on its first line (an argument with spaces is in quotes). `go test ./internal/cli` runs them all; `go test ./internal/cli -update` rewrites the
+expected outputs after a deliberate change. The content of a case is in its own language (French here); everything
+that belongs to the language is English.
+
+| Case | What it shows |
+|---|---|
+| `recipe/` | key lines, units, a list read through a `reads` pattern, numbered steps |
+| `invoice/` | a table of objects, a sub-object, a link to another document, written computed fields |
+| `lease/` | clauses as `@sections`, `{field}` inside prose, links across documents and back |
+| `inventory/` | nested sections, enums, versions, a link to a rule of the schema |
+| `car/` | an array as a folder: one file per entry |
+| `annonce/` | links and lists of links to other documents, inverses, photos as a folder, a PDF, code, a date and time |
+| `northwind/` | the Northwind database, as `kan import` writes it from `create.sql` |
+| `northwind-query/`, `northwind-query-join/` | `kan sql -q` over Northwind: a revenue per customer read from a file, a join through a link column |
+| `jours-feries/` | an array as a CSV file: the public holidays of France, Etalab's open data |
+| `errors-*/` | the same schemas with mistakes, and what `kan lint` says about them; `errors-eval/` and `errors-schema/`, mistakes in computations, when a document is evaluated and when its schema is checked; `errors-northwind-query*/`, mistakes in a query |
+
+## Names, ids and labels
+
+1. **Names** are ASCII slugs: lowercase letters, digits and hyphens (`prix-unitaire`, `controle-technique`). This
+   covers fields, enum values, rules, functions and methods (`max-by`). Type names are PascalCase ASCII
+   (`EtatDesLieux`). Because a hyphen belongs to the name, subtraction needs spaces: `total-ht` is a name,
+   `total - ht` is a subtraction.
+2. **Every object has an id**, a slug of the same shape. A UUID is valid; a meaningful slug is better. Plain values
+   (the steps of a recipe) are not objects and have no id.
+3. An id is **always written**, never derived from a title:
+
+   | Where the object is | How its id is written |
+   |---|---|
+   | a whole file | the file name: `f-2026-031.kan` is the object `f-2026-031` |
+   | a section | `{#id}` at the end of the heading: `## Bailleur {#claire-martin}` |
+   | a table row | the `id` column |
+   | a list item | `{#id}` at the end of the item: `- 4 œufs {#oeufs}` |
+
+   An id is unique within its file. The rows of a spreadsheet are objects of the `.kan` file that links to it:
+   their ids share its namespace, and a link in a cell is relative to its folder. An entry of a folder is a file
+   of its own, linked to by its path (`[[clio/entretiens/2025-06-10-vidange]]`), so `categories/1.kan` and
+   `employees/1.kan` don't clash.
+4. **Labels** are what a reader sees: free Unicode text, given in the schema after the type
+   (`echeance: Date "Échéance"`, `schema Piece "Pièce"`). Without one, the label is the name with hyphens turned
+   into spaces and the first letter uppercased: `zone-tendue` reads "Zone tendue".
+5. In a document, **headings match labels**; **keys, table headers and enum values use names** (`etat: use` is
+   shown as "usé"). Names are matched exactly, with no tolerance for case or accents.
+
+## Files and folders
+
+6. The front matter holds one key, `type:`, the schema of the document. The schema file is given to `kan lint`.
+7. **An array can be written inline** (a table, a list, sections) **or as a folder** holding one `.kan` file per
+   entry. The folder is a sibling of the object's file and is named after the field: the entries of `clio.kan`'s
+   field `entretiens` are `clio/entretiens/*.kan`. An array of objects can also be **a spreadsheet**, linked to
+   on a key line (`jours: [[jours-feries-metropole.csv]]`, `produits: [[catalogue.xlsx#produits]]` for one sheet
+   of a workbook, its first sheet without `#`) or alone under the field's heading. Its first row holds the `id`
+   column and field names; every other row is an entry, its cells in the canonical format, checked like a table.
+8. A file inside such a folder needs no front matter: its position gives its type (`Vehicule.entretiens` is
+   `[Entretien]`). Its id is its file name.
+9. Entries of a folder are ordered by id, in lexical order: prefix ids with a date (`2025-06-10-vidange`) or a
+   number (`-001`) to control the order.
+10. A field is written in one place only: inline, as a folder or as a spreadsheet, never two of them.
+
+## How a document is read
+
+11. A `key: value` line fills a field of the current object.
+12. A heading whose text matches a field's label opens that field: a sub-object (with its own key lines and an
+    id), a list, a table or prose. A field that holds a single value is always a key line.
+13. Under a field heading, a table fills an array of objects (one column per field, plus `id`); a list fills an
+    array of values, or of objects when their schema has a `reads` pattern; paragraphs fill a `Prose` field. The
+    value of a `Prose` field is its text as written: the lines of a paragraph stay separate lines, and paragraphs
+    are separated by a blank line. A renderer may reflow it; the data doesn't.
+14. Any other heading becomes an object of the field marked `@sections`: the heading text fills the field marked
+    `@heading`, the content fills the field marked `@body` or the object's own fields.
+15. The H1 is the document's title; it fills the root field marked `@heading`, if there is one. Only the front
+    matter comes before it.
+16. `{field}` inserts a value into prose, looked up in the current object, then in the objects that hold it.
+    `[[path#id]]` links to a document, an object or a declaration of a schema; `[[path.ext]]` links to a file and
+    `![[path.ext]]` embeds one. The path is relative to the document's folder, without `.kan`. Markdown links
+    with a relative path, `[text](path)` and `![alt](path)`, are checked the same way, and `![alt](path)` must be
+    an image; links to another site (`https:`, `mailto:`) or within the page (`#top`) are not checked.
+17. Computed fields (`= …` in the schema) need not be written. When one is, it must hold its computed
+    value. An inverse (`<- f`) is never written: it is computed from the documents that link here.
+18. A `rule` is a statement that must hold. `today` is supplied by the tool (`-today`), so rules stay pure.
+19. Values are written in the canonical English format only, whatever the language of the content: `2026-09-01`,
+    `2026-10-25 10:30`, `1 250.50 EUR`, `no`, `3 years`, `48 m2`. A date and time takes seconds and a zone when it
+    needs them: `2026-10-25 10:30:05 UTC`, `2026-10-25 10:30 +02:00`. Without a zone it is a floating local time,
+    not UTC, and it reads back as written: `2026-10-22 14:30` stays `2026-10-22 14:30`, `+02:00` stays `+02:00`.
+
+## Relations
+
+20. A field whose type is a schema **holds its own object** (`localisation: Localisation`): it is written here,
+    under the field's heading with its id (`## Localisation {#impasse-des-vergers}`), and `[T]` as a table, a list,
+    sections or a folder. A link there is an error.
+21. `-> T` is a **link** to an object written elsewhere, as a key line: `agent: [[agents/sophie-bernard]]`, or
+    `[[bail#garantie]]` for an object inside a document. The target must be a `T`. `[-> T]` is a list of links:
+    one per item under the field's heading (`- [[agents/marc-petit]]`, with no id), or separated by commas on a
+    key line. A table cell may hold a link too.
+22. `[S] <- f` and `S? <- f` are **inverses**: the `S` objects whose field `f` links here. Rule 17: never written.
+
+## Files and code
+
+23. `File` and `Image` are **links to files** next to the document: `plan: [[maison-caluire/plan-rdc.pdf]]`. Every
+    segment of the path is an id and the extension is lowercase: `Plan RDC.PDF` is reported with the name to give
+    it, `plan-rdc.pdf`. The content decides what a file is, not its extension: an `Image` that holds a PDF is an
+    error, a `.png` that holds a JPEG image a warning.
+24. An array of files (`photos: [Image]`) is a list of file links under its heading, file links separated by
+    commas on a key line, or **a folder** holding the files themselves, named after the field:
+    `maison-caluire/photos/*.jpg`, in lexical order. It holds no folders; hidden files are skipped.
+    An object's folder (`maison-caluire/` next to `maison-caluire.kan`) holds the folders of its arrays and its
+    own files, which it links to (`maison-caluire/plan-rdc.pdf`). A folder there that names no array field is an
+    error, and so is a `.kan` file that is no entry of a list.
+25. `Code` is **one fenced block** under the field's heading, its language as the info string (```` ```html ````),
+    or a link to a source file, which must hold text.
+
+## Code
+
+Go, standard library only, except the pure Go SQLite driver `modernc.org/sqlite` in the SQL packages.
+
+| Package | Role |
+|---|---|
+| `cmd/kan` | the command |
+| `internal/cli` | arguments, output, exit codes; the golden tests over `cases/` |
+| `internal/lint` | binds documents and their files to their schema and reports what doesn't fit |
+| `internal/model` | the bound model of a document, as lint read it: its objects, values, links, files and text |
+| `internal/eval` | `kan eval`: computed fields and rules, evaluated over the model; a computed field is a field of the model whose schema field has an expression |
+| `internal/sqlimport` | `kan import`: a SQLite database or dump read into a schema and a tree of documents |
+| `internal/sqlexport` | `kan sql`: the tables of a schema and the rows of a document, as a script, a database, or the rows of a query |
+| `internal/schema` | lexer, parser and checker of `.kanonarch` files |
+| `internal/doc` | parser of `.kan` files: front matter, sections, key lines, lists, tables, paragraphs |
+| `internal/sheet` | CSV files and xlsx sheets, read as rows of cells in the canonical format |
+| `internal/pattern` | `reads` patterns such as `"{quantite} [de] {nom}"` |
+| `internal/value` | literals: numbers, money, percentages, quantities, dates and times, durations, versions |
+| `internal/names` | slugs, labels, and "did you mean" suggestions |
+| `internal/diag` | diagnostics |

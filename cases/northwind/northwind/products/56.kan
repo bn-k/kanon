@@ -1,0 +1,11 @@
+# Product 56
+
+product-name: Gnocchi di nonna Alice
+supplier: [[../suppliers/26]]
+category: [[../categories/5]]
+quantity-per-unit: 24 - 250 g pkgs.
+unit-price: 38
+units-in-stock: 21
+units-on-order: 10
+reorder-level: 30
+discontinued: 0

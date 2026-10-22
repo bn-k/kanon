@@ -1,0 +1,25 @@
+# Order 10294
+
+customer: [[../customers/rattc]]
+employee: [[../employees/4]]
+order-date: 1996-08-30
+required-date: 1996-09-27
+shipped-date: 1996-09-05
+ship-via: [[../shippers/2]]
+freight: 147.26
+ship-name: Rattlesnake Canyon Grocery
+ship-address: 2817 Milton Dr.
+ship-city: Albuquerque
+ship-region: NM
+ship-postal-code: 87110
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 14.4 | 18 | 0 |
+| 17 | [[../products/17]] | 31.2 | 15 | 0 |
+| 43 | [[../products/43]] | 36.8 | 15 | 0 |
+| 60 | [[../products/60]] | 27.2 | 21 | 0 |
+| 75 | [[../products/75]] | 6.2 | 6 | 0 |

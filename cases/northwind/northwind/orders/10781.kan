@@ -1,0 +1,22 @@
+# Order 10781
+
+customer: [[../customers/warth]]
+employee: [[../employees/2]]
+order-date: 1997-12-17
+required-date: 1998-01-14
+shipped-date: 1997-12-19
+ship-via: [[../shippers/3]]
+freight: 73.16
+ship-name: Wartian Herkku
+ship-address: Torikatu 38
+ship-city: Oulu
+ship-postal-code: 90110
+ship-country: Finland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 54 | [[../products/54]] | 7.45 | 3 | 0.2 |
+| 56 | [[../products/56]] | 38 | 20 | 0.2 |
+| 74 | [[../products/74]] | 10 | 35 | 0 |

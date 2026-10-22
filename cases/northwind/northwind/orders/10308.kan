@@ -1,0 +1,21 @@
+# Order 10308
+
+customer: [[../customers/anatr]]
+employee: [[../employees/7]]
+order-date: 1996-09-18
+required-date: 1996-10-16
+shipped-date: 1996-09-24
+ship-via: [[../shippers/3]]
+freight: 1.61
+ship-name: Ana Trujillo Emparedados y helados
+ship-address: Avda. de la Constitución 2222
+ship-city: México D.F.
+ship-postal-code: 5021
+ship-country: Mexico
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 69 | [[../products/69]] | 28.8 | 1 | 0 |
+| 70 | [[../products/70]] | 12 | 5 | 0 |

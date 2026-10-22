@@ -1,0 +1,20 @@
+# Order 11043
+
+customer: [[../customers/specd]]
+employee: [[../employees/5]]
+order-date: 1998-04-22
+required-date: 1998-05-20
+shipped-date: 1998-04-29
+ship-via: [[../shippers/2]]
+freight: 8.8
+ship-name: Spécialités du monde
+ship-address: 25, rue Lauriston
+ship-city: Paris
+ship-postal-code: 75016
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 11 | [[../products/11]] | 21 | 10 | 0 |

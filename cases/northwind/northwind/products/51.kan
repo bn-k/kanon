@@ -1,0 +1,11 @@
+# Product 51
+
+product-name: Manjimup Dried Apples
+supplier: [[../suppliers/24]]
+category: [[../categories/7]]
+quantity-per-unit: 50 - 300 g pkgs.
+unit-price: 53
+units-in-stock: 20
+units-on-order: 0
+reorder-level: 10
+discontinued: 0

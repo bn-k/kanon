@@ -1,0 +1,21 @@
+# Order 10914
+
+customer: [[../customers/queen]]
+employee: [[../employees/6]]
+order-date: 1998-02-27
+required-date: 1998-03-27
+shipped-date: 1998-03-02
+ship-via: [[../shippers/1]]
+freight: 21.19
+ship-name: Queen Cozinha
+ship-address: Alameda dos Canàrios, 891
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05487-020
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 71 | [[../products/71]] | 21.5 | 25 | 0 |

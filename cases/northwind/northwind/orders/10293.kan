@@ -1,0 +1,23 @@
+# Order 10293
+
+customer: [[../customers/tortu]]
+employee: [[../employees/1]]
+order-date: 1996-08-29
+required-date: 1996-09-26
+shipped-date: 1996-09-11
+ship-via: [[../shippers/3]]
+freight: 21.18
+ship-name: Tortuga Restaurante
+ship-address: Avda. Azteca 123
+ship-city: México D.F.
+ship-postal-code: 5033
+ship-country: Mexico
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 18 | [[../products/18]] | 50 | 12 | 0 |
+| 24 | [[../products/24]] | 3.6 | 10 | 0 |
+| 63 | [[../products/63]] | 35.1 | 5 | 0 |
+| 75 | [[../products/75]] | 6.2 | 6 | 0 |

@@ -1,0 +1,22 @@
+# Order 10400
+
+customer: [[../customers/eastc]]
+employee: [[../employees/1]]
+order-date: 1997-01-01
+required-date: 1997-01-29
+shipped-date: 1997-01-16
+ship-via: [[../shippers/3]]
+freight: 83.93
+ship-name: Eastern Connection
+ship-address: 35 King George
+ship-city: London
+ship-postal-code: WX3 6FW
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 29 | [[../products/29]] | 99 | 21 | 0 |
+| 35 | [[../products/35]] | 14.4 | 35 | 0 |
+| 49 | [[../products/49]] | 16 | 30 | 0 |

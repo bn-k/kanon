@@ -1,0 +1,23 @@
+# Order 10681
+
+customer: [[../customers/greal]]
+employee: [[../employees/3]]
+order-date: 1997-09-25
+required-date: 1997-10-23
+shipped-date: 1997-09-30
+ship-via: [[../shippers/3]]
+freight: 76.13
+ship-name: Great Lakes Food Market
+ship-address: 2732 Baker Blvd.
+ship-city: Eugene
+ship-region: OR
+ship-postal-code: 97403
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 19 | [[../products/19]] | 9.2 | 30 | 0.1 |
+| 21 | [[../products/21]] | 10 | 12 | 0.1 |
+| 64 | [[../products/64]] | 33.25 | 28 | 0 |

@@ -1,0 +1,22 @@
+# Order 10483
+
+customer: [[../customers/whitc]]
+employee: [[../employees/7]]
+order-date: 1997-03-24
+required-date: 1997-04-21
+shipped-date: 1997-04-25
+ship-via: [[../shippers/2]]
+freight: 15.28
+ship-name: White Clover Markets
+ship-address: 1029 - 12th Ave. S.
+ship-city: Seattle
+ship-region: WA
+ship-postal-code: 98124
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 34 | [[../products/34]] | 11.2 | 35 | 0.05 |
+| 77 | [[../products/77]] | 10.4 | 30 | 0.05 |

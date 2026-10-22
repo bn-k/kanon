@@ -1,0 +1,11 @@
+# Product 38
+
+product-name: Côte de Blaye
+supplier: [[../suppliers/18]]
+category: [[../categories/1]]
+quantity-per-unit: 12 - 75 cl bottles
+unit-price: 263.5
+units-in-stock: 17
+units-on-order: 0
+reorder-level: 15
+discontinued: 0

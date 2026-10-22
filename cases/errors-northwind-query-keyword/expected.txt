@@ -1,0 +1,3 @@
+$ kan sql -q "SELECT count(*) FROM order" ../northwind/schema.kanonarch ../northwind/northwind.kan
+query:1:22: error: `order` is a table here but also a SQL keyword; write "order" with double quotes
+[exit 1]

@@ -1,0 +1,11 @@
+# Product 61
+
+product-name: Sirop d'érable
+supplier: [[../suppliers/29]]
+category: [[../categories/2]]
+quantity-per-unit: 24 - 500 ml bottles
+unit-price: 28.5
+units-in-stock: 113
+units-on-order: 0
+reorder-level: 25
+discontinued: 0

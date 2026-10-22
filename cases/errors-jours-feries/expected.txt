@@ -1,0 +1,9 @@
+$ kan lint ../jours-feries/schema.kanonarch calendrier.kan
+jours-feries-2008.csv:1:9: error: names are ASCII: write annee, not "année"
+jours-feries-2008.csv:3:22: error: write a date as YYYY-MM-DD (2026-10-22), not "24/03/2008"
+jours-feries-2008.csv:5:1: error: the id `2008-ascension` is already used, at line 4
+jours-feries-2008.csv:6:38: error: `nom` needs a value
+jours-feries-2008.csv:7:1: error: an id is a slug of lowercase ASCII letters, digits and hyphens: write 2008-lundi-de-pentecote, not "2008-Lundi-de-Pentecote"
+jours-feries-2008.csv:9:54: error: this cell is in a column with no name: write a field name at the top of its column, or clear it
+6 errors
+[exit 1]

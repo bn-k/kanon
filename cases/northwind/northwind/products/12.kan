@@ -1,0 +1,11 @@
+# Product 12
+
+product-name: Queso Manchego La Pastora
+supplier: [[../suppliers/5]]
+category: [[../categories/4]]
+quantity-per-unit: 10 - 500 g pkgs.
+unit-price: 38
+units-in-stock: 86
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

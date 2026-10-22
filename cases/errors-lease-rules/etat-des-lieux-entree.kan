@@ -1,0 +1,16 @@
+---
+type: EtatDesLieux
+---
+
+# État des lieux d'entrée — 12 rue des Lilas
+
+bail: [[bail]]
+date: 2026-09-05
+cles: 3
+
+## Pièces
+
+| id | piece | etat | remarques |
+|---|---|---|---|
+| sejour | Séjour | bon | |
+| chambre | Chambre | neuf | |

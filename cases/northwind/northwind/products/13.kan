@@ -1,0 +1,11 @@
+# Product 13
+
+product-name: Konbu
+supplier: [[../suppliers/6]]
+category: [[../categories/8]]
+quantity-per-unit: 2 kg box
+unit-price: 6
+units-in-stock: 24
+units-on-order: 0
+reorder-level: 5
+discontinued: 0

@@ -1,0 +1,22 @@
+# Order 10839
+
+customer: [[../customers/tradh]]
+employee: [[../employees/3]]
+order-date: 1998-01-19
+required-date: 1998-02-16
+shipped-date: 1998-01-22
+ship-via: [[../shippers/3]]
+freight: 35.43
+ship-name: Tradiçao Hipermercados
+ship-address: Av. Inês de Castro, 414
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05634-030
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 58 | [[../products/58]] | 13.25 | 30 | 0.1 |
+| 72 | [[../products/72]] | 34.8 | 15 | 0.1 |

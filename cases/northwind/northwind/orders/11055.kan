@@ -1,0 +1,24 @@
+# Order 11055
+
+customer: [[../customers/hilaa]]
+employee: [[../employees/7]]
+order-date: 1998-04-28
+required-date: 1998-05-26
+shipped-date: 1998-05-05
+ship-via: [[../shippers/2]]
+freight: 120.92
+ship-name: HILARION-Abastos
+ship-address: Carrera 22 con Ave. Carlos Soublette #8-35
+ship-city: San Cristóbal
+ship-region: Táchira
+ship-postal-code: 5022
+ship-country: Venezuela
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 24 | [[../products/24]] | 4.5 | 15 | 0 |
+| 25 | [[../products/25]] | 14 | 15 | 0 |
+| 51 | [[../products/51]] | 53 | 20 | 0 |
+| 57 | [[../products/57]] | 19.5 | 20 | 0 |

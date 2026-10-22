@@ -1,0 +1,22 @@
+# Order 10570
+
+customer: [[../customers/merep]]
+employee: [[../employees/3]]
+order-date: 1997-06-17
+required-date: 1997-07-15
+shipped-date: 1997-06-19
+ship-via: [[../shippers/3]]
+freight: 188.99
+ship-name: Mère Paillarde
+ship-address: 43 rue St. Laurent
+ship-city: Montréal
+ship-region: Québec
+ship-postal-code: H1J 1C3
+ship-country: Canada
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 11 | [[../products/11]] | 21 | 15 | 0.05 |
+| 56 | [[../products/56]] | 38 | 60 | 0.05 |

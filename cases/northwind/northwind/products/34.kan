@@ -1,0 +1,11 @@
+# Product 34
+
+product-name: Sasquatch Ale
+supplier: [[../suppliers/16]]
+category: [[../categories/1]]
+quantity-per-unit: 24 - 12 oz bottles
+unit-price: 14
+units-in-stock: 111
+units-on-order: 0
+reorder-level: 15
+discontinued: 0

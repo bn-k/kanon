@@ -1,0 +1,21 @@
+# Order 10677
+
+customer: [[../customers/anton]]
+employee: [[../employees/1]]
+order-date: 1997-09-22
+required-date: 1997-10-20
+shipped-date: 1997-09-26
+ship-via: [[../shippers/3]]
+freight: 4.03
+ship-name: Antonio Moreno Taquería
+ship-address: Mataderos  2312
+ship-city: México D.F.
+ship-postal-code: 5023
+ship-country: Mexico
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 26 | [[../products/26]] | 31.23 | 30 | 0.15 |
+| 33 | [[../products/33]] | 2.5 | 8 | 0.15 |

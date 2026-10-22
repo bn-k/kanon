@@ -1,0 +1,23 @@
+# Order 11013
+
+customer: [[../customers/romey]]
+employee: [[../employees/2]]
+order-date: 1998-04-09
+required-date: 1998-05-07
+shipped-date: 1998-04-10
+ship-via: [[../shippers/1]]
+freight: 32.99
+ship-name: Romero y tomillo
+ship-address: Gran Vía, 1
+ship-city: Madrid
+ship-postal-code: 28001
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 23 | [[../products/23]] | 9 | 10 | 0 |
+| 42 | [[../products/42]] | 14 | 4 | 0 |
+| 45 | [[../products/45]] | 9.5 | 20 | 0 |
+| 68 | [[../products/68]] | 12.5 | 2 | 0 |

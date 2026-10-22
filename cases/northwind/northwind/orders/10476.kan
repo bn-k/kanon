@@ -1,0 +1,22 @@
+# Order 10476
+
+customer: [[../customers/hilaa]]
+employee: [[../employees/8]]
+order-date: 1997-03-17
+required-date: 1997-04-14
+shipped-date: 1997-03-24
+ship-via: [[../shippers/3]]
+freight: 4.41
+ship-name: HILARION-Abastos
+ship-address: Carrera 22 con Ave. Carlos Soublette #8-35
+ship-city: San Cristóbal
+ship-region: Táchira
+ship-postal-code: 5022
+ship-country: Venezuela
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 55 | [[../products/55]] | 19.2 | 2 | 0.05 |
+| 70 | [[../products/70]] | 12 | 12 | 0 |

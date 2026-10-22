@@ -1,0 +1,24 @@
+# Order 10514
+
+customer: [[../customers/ernsh]]
+employee: [[../employees/3]]
+order-date: 1997-04-22
+required-date: 1997-05-20
+shipped-date: 1997-05-16
+ship-via: [[../shippers/2]]
+freight: 789.95
+ship-name: Ernst Handel
+ship-address: Kirchgasse 6
+ship-city: Graz
+ship-postal-code: 8010
+ship-country: Austria
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 20 | [[../products/20]] | 81 | 39 | 0 |
+| 28 | [[../products/28]] | 45.6 | 35 | 0 |
+| 56 | [[../products/56]] | 38 | 70 | 0 |
+| 65 | [[../products/65]] | 21.05 | 39 | 0 |
+| 75 | [[../products/75]] | 7.75 | 50 | 0 |

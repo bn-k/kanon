@@ -1,0 +1,22 @@
+# Order 10758
+
+customer: [[../customers/ricsu]]
+employee: [[../employees/3]]
+order-date: 1997-11-28
+required-date: 1997-12-26
+shipped-date: 1997-12-04
+ship-via: [[../shippers/3]]
+freight: 138.17
+ship-name: Richter Supermarkt
+ship-address: Starenweg 5
+ship-city: Genève
+ship-postal-code: 1204
+ship-country: Switzerland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 26 | [[../products/26]] | 31.23 | 20 | 0 |
+| 52 | [[../products/52]] | 7 | 60 | 0 |
+| 70 | [[../products/70]] | 15 | 40 | 0 |

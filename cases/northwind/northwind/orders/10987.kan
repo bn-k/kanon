@@ -1,0 +1,22 @@
+# Order 10987
+
+customer: [[../customers/eastc]]
+employee: [[../employees/8]]
+order-date: 1998-03-31
+required-date: 1998-04-28
+shipped-date: 1998-04-06
+ship-via: [[../shippers/1]]
+freight: 185.48
+ship-name: Eastern Connection
+ship-address: 35 King George
+ship-city: London
+ship-postal-code: WX3 6FW
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 7 | [[../products/7]] | 30 | 60 | 0 |
+| 43 | [[../products/43]] | 46 | 6 | 0 |
+| 72 | [[../products/72]] | 34.8 | 20 | 0 |

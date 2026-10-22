@@ -1,0 +1,21 @@
+# Order 10361
+
+customer: [[../customers/quick]]
+employee: [[../employees/1]]
+order-date: 1996-11-22
+required-date: 1996-12-20
+shipped-date: 1996-12-03
+ship-via: [[../shippers/2]]
+freight: 183.17
+ship-name: QUICK-Stop
+ship-address: Taucherstraße 10
+ship-city: Cunewalde
+ship-postal-code: 1307
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 39 | [[../products/39]] | 14.4 | 54 | 0.1 |
+| 60 | [[../products/60]] | 27.2 | 55 | 0.1 |

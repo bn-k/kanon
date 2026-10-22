@@ -1,0 +1,21 @@
+# Order 10545
+
+customer: [[../customers/lazyk]]
+employee: [[../employees/8]]
+order-date: 1997-05-22
+required-date: 1997-06-19
+shipped-date: 1997-06-26
+ship-via: [[../shippers/2]]
+freight: 11.92
+ship-name: Lazy K Kountry Store
+ship-address: 12 Orchestra Terrace
+ship-city: Walla Walla
+ship-region: WA
+ship-postal-code: 99362
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 11 | [[../products/11]] | 21 | 10 | 0 |

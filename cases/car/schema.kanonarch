@@ -1,0 +1,34 @@
+// Working material: a car maintenance log.
+
+enum Operation { vidange, controle-technique "contrôle technique", pneus, freins, distribution }
+
+schema Entretien {
+  date:        Date
+  kilometrage: Quantity "Kilométrage"
+  operation:   Operation "Opération"
+  garage:      Text?
+  cout:        Money? "Coût"
+}
+
+schema Vehicule "Véhicule" {
+  nom:                 Text @heading
+  immatriculation:     Text
+  mise-en-circulation: Date
+  kilometrage:         Quantity "Kilométrage"
+  releve-le:           Date "Relevé le"
+  intervalle-vidange:  Quantity
+  entretiens:          [Entretien]
+}
+
+fn dernier(v: Vehicule, op: Operation) -> Entretien?
+  reads fr "le dernier entretien « {op} » de {v.nom}"
+  = v.entretiens.filter(e => e.operation == op).max-by(e => e.date)
+
+// today is supplied by the tool, so the rule stays pure.
+rule controle-technique-a-jour(v: Vehicule, le: Date = today) -> Bool
+  reads fr "le dernier contrôle technique de {v.nom} a moins de 2 ans au {le}"
+  = dernier(v, controle-technique)?.date + 2 years >= le
+
+rule vidange-a-jour(v: Vehicule) -> Bool
+  reads fr "{v.nom} a roulé moins de {v.intervalle-vidange} depuis sa dernière vidange"
+  = v.kilometrage - dernier(v, vidange)?.kilometrage < v.intervalle-vidange

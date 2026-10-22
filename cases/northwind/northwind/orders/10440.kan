@@ -1,0 +1,24 @@
+# Order 10440
+
+customer: [[../customers/savea]]
+employee: [[../employees/4]]
+order-date: 1997-02-10
+required-date: 1997-03-10
+shipped-date: 1997-02-28
+ship-via: [[../shippers/2]]
+freight: 86.53
+ship-name: Save-a-lot Markets
+ship-address: 187 Suffolk Ln.
+ship-city: Boise
+ship-region: ID
+ship-postal-code: 83720
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 2 | [[../products/2]] | 15.2 | 45 | 0.15 |
+| 16 | [[../products/16]] | 13.9 | 49 | 0.15 |
+| 29 | [[../products/29]] | 99 | 24 | 0.15 |
+| 61 | [[../products/61]] | 22.8 | 90 | 0.15 |

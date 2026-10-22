@@ -1,0 +1,21 @@
+# Order 10582
+
+customer: [[../customers/blaus]]
+employee: [[../employees/3]]
+order-date: 1997-06-27
+required-date: 1997-07-25
+shipped-date: 1997-07-14
+ship-via: [[../shippers/2]]
+freight: 27.71
+ship-name: Blauer See Delikatessen
+ship-address: Forsterstr. 57
+ship-city: Mannheim
+ship-postal-code: 68306
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 57 | [[../products/57]] | 19.5 | 4 | 0 |
+| 76 | [[../products/76]] | 18 | 14 | 0 |

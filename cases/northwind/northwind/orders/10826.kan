@@ -1,0 +1,21 @@
+# Order 10826
+
+customer: [[../customers/blonp]]
+employee: [[../employees/6]]
+order-date: 1998-01-12
+required-date: 1998-02-09
+shipped-date: 1998-02-06
+ship-via: [[../shippers/1]]
+freight: 7.09
+ship-name: Blondel père et fils
+ship-address: 24, place Kléber
+ship-city: Strasbourg
+ship-postal-code: 67000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 31 | [[../products/31]] | 12.5 | 35 | 0 |
+| 57 | [[../products/57]] | 19.5 | 15 | 0 |

@@ -1,0 +1,23 @@
+# Order 11003
+
+customer: [[../customers/thecr]]
+employee: [[../employees/3]]
+order-date: 1998-04-06
+required-date: 1998-05-04
+shipped-date: 1998-04-08
+ship-via: [[../shippers/3]]
+freight: 14.91
+ship-name: The Cracker Box
+ship-address: 55 Grizzly Peak Rd.
+ship-city: Butte
+ship-region: MT
+ship-postal-code: 59801
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 18 | 4 | 0 |
+| 40 | [[../products/40]] | 18.4 | 10 | 0 |
+| 52 | [[../products/52]] | 7 | 10 | 0 |

@@ -1,0 +1,21 @@
+# Order 10752
+
+customer: [[../customers/norts]]
+employee: [[../employees/2]]
+order-date: 1997-11-24
+required-date: 1997-12-22
+shipped-date: 1997-11-28
+ship-via: [[../shippers/3]]
+freight: 1.39
+ship-name: North/South
+ship-address: South House 300 Queensbridge
+ship-city: London
+ship-postal-code: SW7 1RZ
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 1 | [[../products/1]] | 18 | 8 | 0 |
+| 69 | [[../products/69]] | 36 | 3 | 0 |

@@ -1,0 +1,11 @@
+# Product 26
+
+product-name: Gumbär Gummibärchen
+supplier: [[../suppliers/11]]
+category: [[../categories/3]]
+quantity-per-unit: 100 - 250 g bags
+unit-price: 31.23
+units-in-stock: 15
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

@@ -1,0 +1,23 @@
+# Order 10903
+
+customer: [[../customers/hanar]]
+employee: [[../employees/3]]
+order-date: 1998-02-24
+required-date: 1998-03-24
+shipped-date: 1998-03-04
+ship-via: [[../shippers/3]]
+freight: 36.71
+ship-name: Hanari Carnes
+ship-address: Rua do Paço, 67
+ship-city: Rio de Janeiro
+ship-region: RJ
+ship-postal-code: 05454-876
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 13 | [[../products/13]] | 6 | 40 | 0 |
+| 65 | [[../products/65]] | 21.05 | 21 | 0 |
+| 68 | [[../products/68]] | 12.5 | 20 | 0 |

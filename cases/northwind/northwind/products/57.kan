@@ -1,0 +1,11 @@
+# Product 57
+
+product-name: Ravioli Angelo
+supplier: [[../suppliers/26]]
+category: [[../categories/5]]
+quantity-per-unit: 24 - 250 g pkgs.
+unit-price: 19.5
+units-in-stock: 36
+units-on-order: 0
+reorder-level: 20
+discontinued: 0

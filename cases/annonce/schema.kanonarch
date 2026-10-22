@@ -1,0 +1,56 @@
+// Working material: a property listing (annonce immobilière), with its photos and floor plan, the agents who sell
+// the property and its seller, each in a document of their own.
+
+enum TypeBien { appartement, maison, terrain }
+enum Classe { a, b, c, d, e, f, g }
+enum Niveau { sous-sol, rez-de-chaussee "rez-de-chaussée", etage "étage" }
+
+schema Annonce {
+  titre:            Text @heading
+  reference:        Text "Référence"
+  bien:             TypeBien
+  prix:             Money
+  surface:          Quantity
+  terrain:          Quantity?
+  chambres:         Int
+  dpe:              Classe "DPE"
+  visite:           DateTime "Prochaine visite"
+  agent:            -> Agent
+  co-mandataires:   [-> Agent]? "Co-mandataires"
+  vendeur:          -> Vendeur
+  localisation:     Localisation
+  plan:           File
+  photos:           [Image]
+  description:      Prose @body
+  pieces:           [Piece] "Pièces"
+  visite-virtuelle: Code? "Visite virtuelle"
+}
+
+schema Localisation {
+  commune:     Text
+  code-postal: Text
+  quartier:    Text?
+}
+
+schema Piece "Pièce" {
+  nom:     Text
+  niveau:  Niveau
+  surface: Quantity
+}
+
+schema Agent {
+  nom:        Text @heading
+  agence:     Text
+  telephone:  Text "Téléphone"
+  email:      Text
+  portrait:   Image?
+  mandats:    [Annonce] <- agent
+  co-mandats: [Annonce] <- co-mandataires
+}
+
+// The seller of one property: its listing is the inverse of Annonce.vendeur, one to one.
+schema Vendeur {
+  nom:     Text @heading
+  adresse: Text
+  annonce: Annonce? <- vendeur
+}

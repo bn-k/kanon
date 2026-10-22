@@ -1,0 +1,8 @@
+$ kan sql -q "SELECT p.product_name AS product, s.company_name AS supplier, p.unit_price AS price FROM product p JOIN category c ON c.id = p.category_id JOIN supplier s ON s.id = p.supplier_id WHERE c.category_name = 'Beverages' ORDER BY p.unit_price DESC, p.product_name LIMIT 4" ../northwind/schema.kanonarch ../northwind/northwind.kan
+product        supplier                    price
+-------------  --------------------------  -----
+Côte de Blaye  Aux joyeux ecclésiastiques  263.5
+Ipoh Coffee    Leka Trading                   46
+Chang          Exotic Liquids                 19
+Chai           Exotic Liquids                 18
+4 rows

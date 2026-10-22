@@ -1,0 +1,22 @@
+# Order 10502
+
+customer: [[../customers/peric]]
+employee: [[../employees/2]]
+order-date: 1997-04-10
+required-date: 1997-05-08
+shipped-date: 1997-04-29
+ship-via: [[../shippers/1]]
+freight: 69.32
+ship-name: Pericles Comidas clásicas
+ship-address: Calle Dr. Jorge Cash 321
+ship-city: México D.F.
+ship-postal-code: 5033
+ship-country: Mexico
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 45 | [[../products/45]] | 9.5 | 21 | 0 |
+| 53 | [[../products/53]] | 32.8 | 6 | 0 |
+| 67 | [[../products/67]] | 14 | 30 | 0 |

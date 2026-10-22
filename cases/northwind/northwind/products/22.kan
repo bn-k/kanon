@@ -1,0 +1,11 @@
+# Product 22
+
+product-name: Gustaf's Knäckebröd
+supplier: [[../suppliers/9]]
+category: [[../categories/5]]
+quantity-per-unit: 24 - 500 g pkgs.
+unit-price: 21
+units-in-stock: 104
+units-on-order: 0
+reorder-level: 25
+discontinued: 0

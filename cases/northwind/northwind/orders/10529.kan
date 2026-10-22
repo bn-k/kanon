@@ -1,0 +1,22 @@
+# Order 10529
+
+customer: [[../customers/maisd]]
+employee: [[../employees/5]]
+order-date: 1997-05-07
+required-date: 1997-06-04
+shipped-date: 1997-05-09
+ship-via: [[../shippers/2]]
+freight: 66.69
+ship-name: Maison Dewey
+ship-address: Rue Joseph-Bens 532
+ship-city: Bruxelles
+ship-postal-code: B-1180
+ship-country: Belgium
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 55 | [[../products/55]] | 24 | 14 | 0 |
+| 68 | [[../products/68]] | 12.5 | 20 | 0 |
+| 69 | [[../products/69]] | 36 | 10 | 0 |

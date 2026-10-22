@@ -1,0 +1,7 @@
+# Loan 1
+
+book: [[../books/dune]]
+member: [[../members/2]]
+checked-by: [[../members/1]]
+lent-at: 2026-09-30 00:00
+returned: yes

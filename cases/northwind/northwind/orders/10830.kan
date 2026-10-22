@@ -1,0 +1,24 @@
+# Order 10830
+
+customer: [[../customers/tradh]]
+employee: [[../employees/4]]
+order-date: 1998-01-13
+required-date: 1998-02-24
+shipped-date: 1998-01-21
+ship-via: [[../shippers/2]]
+freight: 81.83
+ship-name: Tradiçao Hipermercados
+ship-address: Av. Inês de Castro, 414
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05634-030
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 6 | [[../products/6]] | 25 | 6 | 0 |
+| 39 | [[../products/39]] | 18 | 28 | 0 |
+| 60 | [[../products/60]] | 34 | 30 | 0 |
+| 68 | [[../products/68]] | 12.5 | 24 | 0 |

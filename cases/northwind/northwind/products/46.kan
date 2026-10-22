@@ -1,0 +1,11 @@
+# Product 46
+
+product-name: Spegesild
+supplier: [[../suppliers/21]]
+category: [[../categories/8]]
+quantity-per-unit: 4 - 450 g glasses
+unit-price: 12
+units-in-stock: 95
+units-on-order: 0
+reorder-level: 0
+discontinued: 0

@@ -1,0 +1,31 @@
+# Employee 2
+
+last-name: Fuller
+first-name: Andrew
+title: Vice President, Sales
+title-of-courtesy: Dr.
+birth-date: 1952-02-19
+hire-date: 1992-08-14
+city: Tacoma
+region: WA
+postal-code: 98401
+country: USA
+home-phone: (206) 555-9482
+extension: 3457
+photo: [[2/photo.jpg]]
+notes: Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.
+photo-path: http://accweb/emmployees/fuller.bmp
+
+## Address
+
+908 W. Capital Way
+
+## Territories
+
+- [[../territories/01581]]
+- [[../territories/01730]]
+- [[../territories/01833]]
+- [[../territories/02116]]
+- [[../territories/02139]]
+- [[../territories/02184]]
+- [[../territories/40222]]

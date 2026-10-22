@@ -1,0 +1,23 @@
+# Order 10814
+
+customer: [[../customers/victe]]
+employee: [[../employees/3]]
+order-date: 1998-01-05
+required-date: 1998-02-02
+shipped-date: 1998-01-14
+ship-via: [[../shippers/3]]
+freight: 130.94
+ship-name: Victuailles en stock
+ship-address: 2, rue du Commerce
+ship-city: Lyon
+ship-postal-code: 69004
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 41 | [[../products/41]] | 9.65 | 20 | 0 |
+| 43 | [[../products/43]] | 46 | 20 | 0.15 |
+| 48 | [[../products/48]] | 12.75 | 8 | 0.15 |
+| 61 | [[../products/61]] | 28.5 | 30 | 0.15 |

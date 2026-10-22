@@ -1,0 +1,22 @@
+# Order 10254
+
+customer: [[../customers/chops]]
+employee: [[../employees/5]]
+order-date: 1996-07-11
+required-date: 1996-08-08
+shipped-date: 1996-07-23
+ship-via: [[../shippers/2]]
+freight: 22.98
+ship-name: Chop-suey Chinese
+ship-address: Hauptstr. 31
+ship-city: Bern
+ship-postal-code: 3012
+ship-country: Switzerland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 24 | [[../products/24]] | 3.6 | 15 | 0.15 |
+| 55 | [[../products/55]] | 19.2 | 21 | 0.15 |
+| 74 | [[../products/74]] | 8 | 21 | 0 |

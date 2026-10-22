@@ -1,0 +1,24 @@
+# Order 10954
+
+customer: [[../customers/linod]]
+employee: [[../employees/5]]
+order-date: 1998-03-17
+required-date: 1998-04-28
+shipped-date: 1998-03-20
+ship-via: [[../shippers/1]]
+freight: 27.91
+ship-name: LINO-Delicateses
+ship-address: Ave. 5 de Mayo Porlamar
+ship-city: I. de Margarita
+ship-region: Nueva Esparta
+ship-postal-code: 4980
+ship-country: Venezuela
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 16 | [[../products/16]] | 17.45 | 28 | 0.15 |
+| 31 | [[../products/31]] | 12.5 | 25 | 0.15 |
+| 45 | [[../products/45]] | 9.5 | 30 | 0 |
+| 60 | [[../products/60]] | 34 | 24 | 0.15 |

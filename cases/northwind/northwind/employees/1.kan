@@ -1,0 +1,27 @@
+# Employee 1
+
+last-name: Davolio
+first-name: Nancy
+title: Sales Representative
+title-of-courtesy: Ms.
+birth-date: 1948-12-08
+hire-date: 1992-05-01
+city: Seattle
+region: WA
+postal-code: 98122
+country: USA
+home-phone: (206) 555-9857
+extension: 5467
+photo: [[1/photo.jpg]]
+notes: Education includes a BA in psychology from Colorado State University in 1970.  She also completed "The Art of the Cold Call."  Nancy is a member of Toastmasters International.
+reports-to: [[2]]
+photo-path: http://accweb/emmployees/davolio.bmp
+
+## Address
+
+507 - 20th Ave. E.Apt. 2A
+
+## Territories
+
+- [[../territories/06897]]
+- [[../territories/19713]]

@@ -1,0 +1,21 @@
+# Order 10779
+
+customer: [[../customers/morgk]]
+employee: [[../employees/3]]
+order-date: 1997-12-16
+required-date: 1998-01-13
+shipped-date: 1998-01-14
+ship-via: [[../shippers/2]]
+freight: 58.13
+ship-name: Morgenstern Gesundkost
+ship-address: Heerstr. 22
+ship-city: Leipzig
+ship-postal-code: 4179
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 16 | [[../products/16]] | 17.45 | 20 | 0 |
+| 62 | [[../products/62]] | 49.3 | 20 | 0 |

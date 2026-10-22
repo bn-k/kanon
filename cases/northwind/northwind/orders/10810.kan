@@ -1,0 +1,23 @@
+# Order 10810
+
+customer: [[../customers/laugb]]
+employee: [[../employees/2]]
+order-date: 1998-01-01
+required-date: 1998-01-29
+shipped-date: 1998-01-07
+ship-via: [[../shippers/3]]
+freight: 4.33
+ship-name: Laughing Bacchus Wine Cellars
+ship-address: 2319 Elm St.
+ship-city: Vancouver
+ship-region: BC
+ship-postal-code: V3F 2K1
+ship-country: Canada
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 13 | [[../products/13]] | 6 | 7 | 0 |
+| 25 | [[../products/25]] | 14 | 5 | 0 |
+| 70 | [[../products/70]] | 15 | 5 | 0 |

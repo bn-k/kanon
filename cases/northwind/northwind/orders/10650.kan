@@ -1,0 +1,23 @@
+# Order 10650
+
+customer: [[../customers/famia]]
+employee: [[../employees/5]]
+order-date: 1997-08-29
+required-date: 1997-09-26
+shipped-date: 1997-09-03
+ship-via: [[../shippers/3]]
+freight: 176.81
+ship-name: Familia Arquibaldo
+ship-address: Rua Orós, 92
+ship-city: Sao Paulo
+ship-region: SP
+ship-postal-code: 05442-030
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 30 | [[../products/30]] | 25.89 | 30 | 0 |
+| 53 | [[../products/53]] | 32.8 | 25 | 0.05 |
+| 54 | [[../products/54]] | 7.45 | 30 | 0 |

@@ -1,0 +1,21 @@
+# Order 11060
+
+customer: [[../customers/frans]]
+employee: [[../employees/2]]
+order-date: 1998-04-30
+required-date: 1998-05-28
+shipped-date: 1998-05-04
+ship-via: [[../shippers/2]]
+freight: 10.98
+ship-name: Franchi S.p.A.
+ship-address: Via Monte Bianco 34
+ship-city: Torino
+ship-postal-code: 10100
+ship-country: Italy
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 60 | [[../products/60]] | 34 | 4 | 0 |
+| 77 | [[../products/77]] | 13 | 10 | 0 |

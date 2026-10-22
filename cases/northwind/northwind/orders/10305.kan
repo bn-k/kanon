@@ -1,0 +1,23 @@
+# Order 10305
+
+customer: [[../customers/oldwo]]
+employee: [[../employees/8]]
+order-date: 1996-09-13
+required-date: 1996-10-11
+shipped-date: 1996-10-09
+ship-via: [[../shippers/3]]
+freight: 257.62
+ship-name: Old World Delicatessen
+ship-address: 2743 Bering St.
+ship-city: Anchorage
+ship-region: AK
+ship-postal-code: 99508
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 18 | [[../products/18]] | 50 | 25 | 0.1 |
+| 29 | [[../products/29]] | 99 | 25 | 0.1 |
+| 39 | [[../products/39]] | 14.4 | 30 | 0.1 |

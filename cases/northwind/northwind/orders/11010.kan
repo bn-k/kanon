@@ -1,0 +1,21 @@
+# Order 11010
+
+customer: [[../customers/reggc]]
+employee: [[../employees/2]]
+order-date: 1998-04-09
+required-date: 1998-05-07
+shipped-date: 1998-04-21
+ship-via: [[../shippers/2]]
+freight: 28.71
+ship-name: Reggiani Caseifici
+ship-address: Strada Provinciale 124
+ship-city: Reggio Emilia
+ship-postal-code: 42100
+ship-country: Italy
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 7 | [[../products/7]] | 30 | 20 | 0 |
+| 24 | [[../products/24]] | 4.5 | 10 | 0 |

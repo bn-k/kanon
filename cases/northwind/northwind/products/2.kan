@@ -1,0 +1,11 @@
+# Product 2
+
+product-name: Chang
+supplier: [[../suppliers/1]]
+category: [[../categories/1]]
+quantity-per-unit: 24 - 12 oz bottles
+unit-price: 19
+units-in-stock: 17
+units-on-order: 40
+reorder-level: 25
+discontinued: 0

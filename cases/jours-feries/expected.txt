@@ -1,0 +1,4 @@
+$ kan lint schema.kanonarch calendrier.kan
+ok  schema.kanonarch
+ok  calendrier.kan
+ok  jours-feries-metropole.csv

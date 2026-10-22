@@ -1,0 +1,22 @@
+# Order 10783
+
+customer: [[../customers/hanar]]
+employee: [[../employees/4]]
+order-date: 1997-12-18
+required-date: 1998-01-15
+shipped-date: 1997-12-19
+ship-via: [[../shippers/2]]
+freight: 124.98
+ship-name: Hanari Carnes
+ship-address: Rua do Paço, 67
+ship-city: Rio de Janeiro
+ship-region: RJ
+ship-postal-code: 05454-876
+ship-country: Brazil
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 31 | [[../products/31]] | 12.5 | 10 | 0 |
+| 38 | [[../products/38]] | 263.5 | 5 | 0 |

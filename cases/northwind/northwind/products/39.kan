@@ -1,0 +1,11 @@
+# Product 39
+
+product-name: Chartreuse verte
+supplier: [[../suppliers/18]]
+category: [[../categories/1]]
+quantity-per-unit: 750 cc per bottle
+unit-price: 18
+units-in-stock: 69
+units-on-order: 0
+reorder-level: 5
+discontinued: 0

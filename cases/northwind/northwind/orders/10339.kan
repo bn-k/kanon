@@ -1,0 +1,23 @@
+# Order 10339
+
+customer: [[../customers/merep]]
+employee: [[../employees/2]]
+order-date: 1996-10-28
+required-date: 1996-11-25
+shipped-date: 1996-11-04
+ship-via: [[../shippers/2]]
+freight: 15.66
+ship-name: Mère Paillarde
+ship-address: 43 rue St. Laurent
+ship-city: Montréal
+ship-region: Québec
+ship-postal-code: H1J 1C3
+ship-country: Canada
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 4 | [[../products/4]] | 17.6 | 10 | 0 |
+| 17 | [[../products/17]] | 31.2 | 70 | 0.05 |
+| 62 | [[../products/62]] | 39.4 | 28 | 0 |

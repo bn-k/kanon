@@ -1,0 +1,35 @@
+# Employee 7
+
+last-name: King
+first-name: Robert
+title: Sales Representative
+title-of-courtesy: Mr.
+birth-date: 1960-05-29
+hire-date: 1994-01-02
+city: London
+postal-code: RG1 9SP
+country: UK
+home-phone: (71) 555-5598
+extension: 465
+photo: [[7/photo.jpg]]
+notes: Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled "Selling in Europe," he was transferred to the London office in March 1993.
+reports-to: [[5]]
+photo-path: http://accweb/emmployees/davolio.bmp
+
+## Address
+
+Edgeham Hollow
+Winchester Way
+
+## Territories
+
+- [[../territories/60179]]
+- [[../territories/60601]]
+- [[../territories/80202]]
+- [[../territories/80909]]
+- [[../territories/90405]]
+- [[../territories/94025]]
+- [[../territories/94105]]
+- [[../territories/95008]]
+- [[../territories/95054]]
+- [[../territories/95060]]

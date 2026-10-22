@@ -1,0 +1,22 @@
+# Order 11053
+
+customer: [[../customers/picco]]
+employee: [[../employees/2]]
+order-date: 1998-04-27
+required-date: 1998-05-25
+shipped-date: 1998-04-29
+ship-via: [[../shippers/2]]
+freight: 53.05
+ship-name: Piccolo und mehr
+ship-address: Geislweg 14
+ship-city: Salzburg
+ship-postal-code: 5020
+ship-country: Austria
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 18 | [[../products/18]] | 62.5 | 35 | 0.2 |
+| 32 | [[../products/32]] | 32 | 20 | 0 |
+| 64 | [[../products/64]] | 33.25 | 25 | 0.2 |

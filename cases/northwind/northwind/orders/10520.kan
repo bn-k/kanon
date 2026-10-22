@@ -1,0 +1,21 @@
+# Order 10520
+
+customer: [[../customers/santg]]
+employee: [[../employees/7]]
+order-date: 1997-04-29
+required-date: 1997-05-27
+shipped-date: 1997-05-01
+ship-via: [[../shippers/1]]
+freight: 13.37
+ship-name: Santé Gourmet
+ship-address: Erling Skakkes gate 78
+ship-city: Stavern
+ship-postal-code: 4110
+ship-country: Norway
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 24 | [[../products/24]] | 4.5 | 8 | 0 |
+| 53 | [[../products/53]] | 32.8 | 5 | 0 |

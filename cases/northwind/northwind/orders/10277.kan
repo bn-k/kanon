@@ -1,0 +1,21 @@
+# Order 10277
+
+customer: [[../customers/morgk]]
+employee: [[../employees/2]]
+order-date: 1996-08-09
+required-date: 1996-09-06
+shipped-date: 1996-08-13
+ship-via: [[../shippers/3]]
+freight: 125.77
+ship-name: Morgenstern Gesundkost
+ship-address: Heerstr. 22
+ship-city: Leipzig
+ship-postal-code: 4179
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 28 | [[../products/28]] | 36.4 | 20 | 0 |
+| 62 | [[../products/62]] | 39.4 | 12 | 0 |

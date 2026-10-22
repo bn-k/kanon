@@ -1,0 +1,21 @@
+# Order 10265
+
+customer: [[../customers/blonp]]
+employee: [[../employees/2]]
+order-date: 1996-07-25
+required-date: 1996-08-22
+shipped-date: 1996-08-12
+ship-via: [[../shippers/1]]
+freight: 55.28
+ship-name: Blondel père et fils
+ship-address: 24, place Kléber
+ship-city: Strasbourg
+ship-postal-code: 67000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 17 | [[../products/17]] | 31.2 | 30 | 0 |
+| 70 | [[../products/70]] | 12 | 20 | 0 |

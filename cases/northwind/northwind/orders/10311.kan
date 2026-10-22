@@ -1,0 +1,21 @@
+# Order 10311
+
+customer: [[../customers/dumon]]
+employee: [[../employees/1]]
+order-date: 1996-09-20
+required-date: 1996-10-04
+shipped-date: 1996-09-26
+ship-via: [[../shippers/3]]
+freight: 24.69
+ship-name: Du monde entier
+ship-address: 67, rue des Cinquante Otages
+ship-city: Nantes
+ship-postal-code: 44000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 42 | [[../products/42]] | 11.2 | 6 | 0 |
+| 69 | [[../products/69]] | 28.8 | 7 | 0 |

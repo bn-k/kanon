@@ -1,0 +1,21 @@
+# Order 10726
+
+customer: [[../customers/eastc]]
+employee: [[../employees/4]]
+order-date: 1997-11-03
+required-date: 1997-11-17
+shipped-date: 1997-12-05
+ship-via: [[../shippers/1]]
+freight: 16.56
+ship-name: Eastern Connection
+ship-address: 35 King George
+ship-city: London
+ship-postal-code: WX3 6FW
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 4 | [[../products/4]] | 22 | 25 | 0 |
+| 11 | [[../products/11]] | 21 | 5 | 0 |

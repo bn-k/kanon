@@ -1,0 +1,11 @@
+# Product 36
+
+product-name: Inlagd Sill
+supplier: [[../suppliers/17]]
+category: [[../categories/8]]
+quantity-per-unit: 24 - 250 g  jars
+unit-price: 19
+units-in-stock: 112
+units-on-order: 0
+reorder-level: 20
+discontinued: 0

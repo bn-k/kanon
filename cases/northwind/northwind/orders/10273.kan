@@ -1,0 +1,24 @@
+# Order 10273
+
+customer: [[../customers/quick]]
+employee: [[../employees/3]]
+order-date: 1996-08-05
+required-date: 1996-09-02
+shipped-date: 1996-08-12
+ship-via: [[../shippers/3]]
+freight: 76.07
+ship-name: QUICK-Stop
+ship-address: Taucherstraße 10
+ship-city: Cunewalde
+ship-postal-code: 1307
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 10 | [[../products/10]] | 24.8 | 24 | 0.05 |
+| 31 | [[../products/31]] | 10 | 15 | 0.05 |
+| 33 | [[../products/33]] | 2 | 20 | 0 |
+| 40 | [[../products/40]] | 14.7 | 60 | 0.05 |
+| 76 | [[../products/76]] | 14.4 | 33 | 0.05 |

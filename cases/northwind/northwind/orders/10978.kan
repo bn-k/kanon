@@ -1,0 +1,23 @@
+# Order 10978
+
+customer: [[../customers/maisd]]
+employee: [[../employees/9]]
+order-date: 1998-03-26
+required-date: 1998-04-23
+shipped-date: 1998-04-23
+ship-via: [[../shippers/2]]
+freight: 32.82
+ship-name: Maison Dewey
+ship-address: Rue Joseph-Bens 532
+ship-city: Bruxelles
+ship-postal-code: B-1180
+ship-country: Belgium
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 8 | [[../products/8]] | 40 | 20 | 0.15 |
+| 21 | [[../products/21]] | 10 | 40 | 0.15 |
+| 40 | [[../products/40]] | 18.4 | 10 | 0 |
+| 44 | [[../products/44]] | 19.45 | 6 | 0.15 |

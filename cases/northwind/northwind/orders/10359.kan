@@ -1,0 +1,22 @@
+# Order 10359
+
+customer: [[../customers/seves]]
+employee: [[../employees/5]]
+order-date: 1996-11-21
+required-date: 1996-12-19
+shipped-date: 1996-11-26
+ship-via: [[../shippers/3]]
+freight: 288.43
+ship-name: Seven Seas Imports
+ship-address: 90 Wadhurst Rd.
+ship-city: London
+ship-postal-code: OX15 4NB
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 16 | [[../products/16]] | 13.9 | 56 | 0.05 |
+| 31 | [[../products/31]] | 10 | 70 | 0.05 |
+| 60 | [[../products/60]] | 27.2 | 80 | 0.05 |

@@ -1,0 +1,22 @@
+# Order 10310
+
+customer: [[../customers/thebi]]
+employee: [[../employees/8]]
+order-date: 1996-09-20
+required-date: 1996-10-18
+shipped-date: 1996-09-27
+ship-via: [[../shippers/2]]
+freight: 17.52
+ship-name: The Big Cheese
+ship-address: 89 Jefferson Way Suite 2
+ship-city: Portland
+ship-region: OR
+ship-postal-code: 97201
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 16 | [[../products/16]] | 13.9 | 10 | 0 |
+| 62 | [[../products/62]] | 39.4 | 5 | 0 |

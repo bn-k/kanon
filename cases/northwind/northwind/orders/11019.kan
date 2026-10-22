@@ -1,0 +1,20 @@
+# Order 11019
+
+customer: [[../customers/ranch]]
+employee: [[../employees/6]]
+order-date: 1998-04-13
+required-date: 1998-05-11
+ship-via: [[../shippers/3]]
+freight: 3.17
+ship-name: Rancho grande
+ship-address: Av. del Libertador 900
+ship-city: Buenos Aires
+ship-postal-code: 1010
+ship-country: Argentina
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 46 | [[../products/46]] | 12 | 3 | 0 |
+| 49 | [[../products/49]] | 20 | 2 | 0 |

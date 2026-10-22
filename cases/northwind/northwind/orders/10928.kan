@@ -1,0 +1,21 @@
+# Order 10928
+
+customer: [[../customers/galed]]
+employee: [[../employees/1]]
+order-date: 1998-03-05
+required-date: 1998-04-02
+shipped-date: 1998-03-18
+ship-via: [[../shippers/1]]
+freight: 1.36
+ship-name: Galería del gastronómo
+ship-address: Rambla de Cataluña, 23
+ship-city: Barcelona
+ship-postal-code: 8022
+ship-country: Spain
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 47 | [[../products/47]] | 9.5 | 5 | 0 |
+| 76 | [[../products/76]] | 18 | 5 | 0 |

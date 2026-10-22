@@ -1,0 +1,23 @@
+# Order 10990
+
+customer: [[../customers/ernsh]]
+employee: [[../employees/2]]
+order-date: 1998-04-01
+required-date: 1998-05-13
+shipped-date: 1998-04-07
+ship-via: [[../shippers/3]]
+freight: 117.61
+ship-name: Ernst Handel
+ship-address: Kirchgasse 6
+ship-city: Graz
+ship-postal-code: 8010
+ship-country: Austria
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 21 | [[../products/21]] | 10 | 65 | 0 |
+| 34 | [[../products/34]] | 14 | 60 | 0.15 |
+| 55 | [[../products/55]] | 24 | 65 | 0.15 |
+| 61 | [[../products/61]] | 28.5 | 66 | 0.15 |

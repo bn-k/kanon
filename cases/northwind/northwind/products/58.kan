@@ -1,0 +1,11 @@
+# Product 58
+
+product-name: Escargots de Bourgogne
+supplier: [[../suppliers/27]]
+category: [[../categories/8]]
+quantity-per-unit: 24 pieces
+unit-price: 13.25
+units-in-stock: 62
+units-on-order: 0
+reorder-level: 20
+discontinued: 0

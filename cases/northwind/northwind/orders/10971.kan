@@ -1,0 +1,20 @@
+# Order 10971
+
+customer: [[../customers/franr]]
+employee: [[../employees/2]]
+order-date: 1998-03-24
+required-date: 1998-04-21
+shipped-date: 1998-04-02
+ship-via: [[../shippers/2]]
+freight: 121.82
+ship-name: France restauration
+ship-address: 54, rue Royale
+ship-city: Nantes
+ship-postal-code: 44000
+ship-country: France
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 29 | [[../products/29]] | 123.79 | 14 | 0 |

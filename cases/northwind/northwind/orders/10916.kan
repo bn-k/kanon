@@ -1,0 +1,22 @@
+# Order 10916
+
+customer: [[../customers/ranch]]
+employee: [[../employees/1]]
+order-date: 1998-02-27
+required-date: 1998-03-27
+shipped-date: 1998-03-09
+ship-via: [[../shippers/2]]
+freight: 63.77
+ship-name: Rancho grande
+ship-address: Av. del Libertador 900
+ship-city: Buenos Aires
+ship-postal-code: 1010
+ship-country: Argentina
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 16 | [[../products/16]] | 17.45 | 6 | 0 |
+| 32 | [[../products/32]] | 32 | 6 | 0 |
+| 57 | [[../products/57]] | 19.5 | 20 | 0 |

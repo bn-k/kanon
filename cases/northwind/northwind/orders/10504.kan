@@ -1,0 +1,24 @@
+# Order 10504
+
+customer: [[../customers/whitc]]
+employee: [[../employees/4]]
+order-date: 1997-04-11
+required-date: 1997-05-09
+shipped-date: 1997-04-18
+ship-via: [[../shippers/3]]
+freight: 59.13
+ship-name: White Clover Markets
+ship-address: 1029 - 12th Ave. S.
+ship-city: Seattle
+ship-region: WA
+ship-postal-code: 98124
+ship-country: USA
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 2 | [[../products/2]] | 19 | 12 | 0 |
+| 21 | [[../products/21]] | 10 | 12 | 0 |
+| 53 | [[../products/53]] | 32.8 | 10 | 0 |
+| 61 | [[../products/61]] | 28.5 | 25 | 0 |

@@ -1,0 +1,22 @@
+# Order 10701
+
+customer: [[../customers/hungo]]
+employee: [[../employees/6]]
+order-date: 1997-10-13
+required-date: 1997-10-27
+shipped-date: 1997-10-15
+ship-via: [[../shippers/3]]
+freight: 220.31
+ship-name: Hungry Owl All-Night Grocers
+ship-address: 8 Johnstown Road
+ship-city: Cork
+ship-region: Co. Cork
+ship-country: Ireland
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 59 | [[../products/59]] | 55 | 42 | 0.15 |
+| 71 | [[../products/71]] | 21.5 | 20 | 0.15 |
+| 76 | [[../products/76]] | 18 | 35 | 0.15 |

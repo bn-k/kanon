@@ -1,0 +1,9 @@
+$ kan sql -q @revenue.sql ../northwind/schema.kanonarch ../northwind/northwind.kan
+customer                      orders    revenue
+----------------------------  ------  ---------
+QUICK-Stop                        28   110277.3
+Ernst Handel                      30  104874.98
+Save-a-lot Markets                31  104361.95
+Rattlesnake Canyon Grocery        18    51097.8
+Hungry Owl All-Night Grocers      19    49979.9
+5 rows

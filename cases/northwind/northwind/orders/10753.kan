@@ -1,0 +1,21 @@
+# Order 10753
+
+customer: [[../customers/frans]]
+employee: [[../employees/3]]
+order-date: 1997-11-25
+required-date: 1997-12-23
+shipped-date: 1997-11-27
+ship-via: [[../shippers/1]]
+freight: 7.7
+ship-name: Franchi S.p.A.
+ship-address: Via Monte Bianco 34
+ship-city: Torino
+ship-postal-code: 10100
+ship-country: Italy
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 45 | [[../products/45]] | 9.5 | 4 | 0 |
+| 74 | [[../products/74]] | 10 | 5 | 0 |

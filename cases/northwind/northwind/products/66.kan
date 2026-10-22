@@ -1,0 +1,11 @@
+# Product 66
+
+product-name: Louisiana Hot Spiced Okra
+supplier: [[../suppliers/2]]
+category: [[../categories/2]]
+quantity-per-unit: 24 - 8 oz jars
+unit-price: 17
+units-in-stock: 4
+units-on-order: 100
+reorder-level: 20
+discontinued: 0

@@ -1,0 +1,22 @@
+# Order 10435
+
+customer: [[../customers/consh]]
+employee: [[../employees/8]]
+order-date: 1997-02-04
+required-date: 1997-03-18
+shipped-date: 1997-02-07
+ship-via: [[../shippers/2]]
+freight: 9.21
+ship-name: Consolidated Holdings
+ship-address: Berkeley Gardens 12  Brewery
+ship-city: London
+ship-postal-code: WX1 6LT
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 2 | [[../products/2]] | 15.2 | 10 | 0 |
+| 22 | [[../products/22]] | 16.8 | 12 | 0 |
+| 72 | [[../products/72]] | 27.8 | 10 | 0 |

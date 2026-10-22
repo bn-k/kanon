@@ -1,0 +1,22 @@
+# Order 10688
+
+customer: [[../customers/vaffe]]
+employee: [[../employees/4]]
+order-date: 1997-10-01
+required-date: 1997-10-15
+shipped-date: 1997-10-07
+ship-via: [[../shippers/2]]
+freight: 299.09
+ship-name: Vaffeljernet
+ship-address: Smagsloget 45
+ship-city: Århus
+ship-postal-code: 8200
+ship-country: Denmark
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 10 | [[../products/10]] | 31 | 18 | 0.1 |
+| 28 | [[../products/28]] | 45.6 | 60 | 0.1 |
+| 34 | [[../products/34]] | 14 | 14 | 0 |

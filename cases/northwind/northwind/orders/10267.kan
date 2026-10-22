@@ -1,0 +1,22 @@
+# Order 10267
+
+customer: [[../customers/frank]]
+employee: [[../employees/4]]
+order-date: 1996-07-29
+required-date: 1996-08-26
+shipped-date: 1996-08-06
+ship-via: [[../shippers/1]]
+freight: 208.58
+ship-name: Frankenversand
+ship-address: Berliner Platz 43
+ship-city: München
+ship-postal-code: 80805
+ship-country: Germany
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 40 | [[../products/40]] | 14.7 | 50 | 0 |
+| 59 | [[../products/59]] | 44 | 70 | 0.15 |
+| 76 | [[../products/76]] | 14.4 | 15 | 0.15 |

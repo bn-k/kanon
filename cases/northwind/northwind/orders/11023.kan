@@ -1,0 +1,21 @@
+# Order 11023
+
+customer: [[../customers/bsbev]]
+employee: [[../employees/1]]
+order-date: 1998-04-14
+required-date: 1998-04-28
+shipped-date: 1998-04-24
+ship-via: [[../shippers/2]]
+freight: 123.83
+ship-name: B-s Beverages
+ship-address: Fauntleroy Circus
+ship-city: London
+ship-postal-code: EC2 5NT
+ship-country: UK
+
+## Order details
+
+| id | product | unit-price | quantity | discount |
+|---|---|---|---|---|
+| 7 | [[../products/7]] | 30 | 4 | 0 |
+| 43 | [[../products/43]] | 46 | 30 | 0 |

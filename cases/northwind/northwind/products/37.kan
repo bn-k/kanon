@@ -1,0 +1,11 @@
+# Product 37
+
+product-name: Gravad lax
+supplier: [[../suppliers/17]]
+category: [[../categories/8]]
+quantity-per-unit: 12 - 500 g pkgs.
+unit-price: 26
+units-in-stock: 11
+units-on-order: 50
+reorder-level: 25
+discontinued: 0
