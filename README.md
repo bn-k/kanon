@@ -142,7 +142,8 @@ refuses as the parser does. Then commit and push, set `rev` to that commit, and 
 extensions page.
 
 Obsidian reads `.kan` documents through the plugin in `editors/obsidian`: it opens them as Markdown and follows a
-`[[link]]` from the document's folder, with or without `.kan`. To install it in a vault, link the folder into the
+`[[link]]` from the document's folder, with or without `.kan`, showing only its name: `[[../customers/hanar]]`
+reads "hanar". To install it in a vault, link the folder into the
 vault's plugins and turn on community plugins:
 
 ```
