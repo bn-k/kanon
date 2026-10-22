@@ -1,0 +1,15 @@
+name = "Kanonarch"
+grammar = "kanonarch"
+path_suffixes = ["kanonarch"]
+line_comments = ["// "]
+tab_size = 2
+hard_tabs = false
+# A hyphen belongs to a name: total-ht is one word.
+word_characters = ["-"]
+autoclose_before = ";:.,=}])"
+brackets = [
+  { start = "{", end = "}", close = true, newline = true },
+  { start = "[", end = "]", close = true, newline = true },
+  { start = "(", end = ")", close = true, newline = true },
+  { start = "\"", end = "\"", close = true, newline = false, not_in = ["string", "comment"] },
+]
