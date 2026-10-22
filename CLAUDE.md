@@ -5,7 +5,7 @@ layout of the code are in `README.md`; the project's decisions and open question
 study that opened it in `docs/study.md`. Kanon is open source: every document of the project lives in this
 repository, none in a shared drive. A new decision goes into `docs/decisions.md`.
 
-The repository is local for now: no public repository and no push without approval.
+The repository is private for now, on GitHub at `bn-k/kanon`: nothing goes public without approval.
 
 ## Working here
 

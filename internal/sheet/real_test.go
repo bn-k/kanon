@@ -3,7 +3,7 @@ package sheet
 import (
 	"testing"
 
-	"github.com/func-it/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/diag"
 )
 
 // The workbooks in testdata were saved by Microsoft Excel and published on data.gouv.fr: see testdata/README.md.

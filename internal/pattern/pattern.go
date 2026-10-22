@@ -9,7 +9,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/func-it/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/names"
 )
 
 // Pattern is a parsed reads pattern.

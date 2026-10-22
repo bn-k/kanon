@@ -6,9 +6,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/names"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // scope holds the names an expression may use.

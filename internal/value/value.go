@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/func-it/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/names"
 )
 
 // Kind is a native type of Kanon.

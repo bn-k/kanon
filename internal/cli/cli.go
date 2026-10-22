@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/lint"
-	"github.com/func-it/kanon/internal/sqlexport"
-	"github.com/func-it/kanon/internal/sqlimport"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/lint"
+	"github.com/bn-k/kanon/internal/sqlexport"
+	"github.com/bn-k/kanon/internal/sqlimport"
 )
 
 const usage = `usage: kan lint [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>

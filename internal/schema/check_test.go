@@ -7,9 +7,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/pattern"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/pattern"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // check parses src, which must be valid, and checks it.

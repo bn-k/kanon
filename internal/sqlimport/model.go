@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/func-it/kanon/internal/names"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 type kind int

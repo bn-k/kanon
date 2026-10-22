@@ -7,7 +7,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 var units = value.NewUnits([]string{"pincee"})

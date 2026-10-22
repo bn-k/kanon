@@ -3,9 +3,9 @@ package eval
 import (
 	"testing"
 
-	"github.com/func-it/kanon/internal/model"
-	"github.com/func-it/kanon/internal/schema"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/model"
+	"github.com/bn-k/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // TestBugsPanic checks that a panic that is not an evaluation going wrong, a bug, is not taken for one.

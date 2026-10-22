@@ -11,10 +11,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/model"
-	"github.com/func-it/kanon/internal/schema"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/model"
+	"github.com/bn-k/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // val is a value in an expression: nil for none, a value.Value, an enumVal, an *obj, or a []val for an array.

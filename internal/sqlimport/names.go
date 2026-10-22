@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/func-it/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/names"
 )
 
 // words cuts a table or column name into lowercase ASCII words: at spaces and punctuation, before a capital that

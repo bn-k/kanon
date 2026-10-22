@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 func TestTypesOK(t *testing.T) {

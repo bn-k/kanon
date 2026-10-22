@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/func-it/kanon/internal/schema"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // arith returns x op y, for the operators + - * /, whose kinds the schema check has matched.

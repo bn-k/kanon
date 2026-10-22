@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/func-it/kanon/internal/eval"
-	"github.com/func-it/kanon/internal/lint"
-	"github.com/func-it/kanon/internal/model"
+	"github.com/bn-k/kanon/internal/eval"
+	"github.com/bn-k/kanon/internal/lint"
+	"github.com/bn-k/kanon/internal/model"
 )
 
 // today is the day the rules of these tests take as today.

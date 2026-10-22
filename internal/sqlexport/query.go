@@ -10,8 +10,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/names"
 )
 
 // Result is the rows a query gives: each value is nil (NULL), an int64, a float64, a string or a []byte.

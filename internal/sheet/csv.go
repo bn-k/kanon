@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/func-it/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/diag"
 )
 
 // bom is the byte order mark Excel writes at the start of a CSV file in UTF-8.

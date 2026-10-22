@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/func-it/kanon/internal/doc"
-	"github.com/func-it/kanon/internal/lint"
+	"github.com/bn-k/kanon/internal/doc"
+	"github.com/bn-k/kanon/internal/lint"
 )
 
 // TestLibrary imports the fixture testdata/library.sql and compares the result with testdata/library/, written by

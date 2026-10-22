@@ -9,7 +9,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/func-it/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/diag"
 )
 
 // Sheet is a table read from a spreadsheet: its first row holds the field names, every other row an object.

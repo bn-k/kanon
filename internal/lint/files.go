@@ -13,10 +13,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/names"
-	"github.com/func-it/kanon/internal/schema"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // sniffed is what a file holds, by its content: a media type such as image/jpeg, or why it can't be read.

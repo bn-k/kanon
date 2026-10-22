@@ -6,8 +6,8 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 ## Project
 
 - **Open source**, kept in this repository only: no shared drive, every document of the project lives here
-  (2026-10-22). Local git for now; no public repository and no push yet. The module path
-  `github.com/func-it/kanon`: the project belongs to the `func-it` organisation (2026-10-22).
+  (2026-10-22). A private repository for now, `bn-k/kanon` on GitHub, and the module path
+  `github.com/bn-k/kanon` (2026-10-22); nothing public yet.
 - **The cases are fictional** or public data with their licence (`source/README.md`): no real person, machine or
   address (2026-10-22).
 - **Workflow**: import a real use case (a database, a document, any format), write its schema, write the document

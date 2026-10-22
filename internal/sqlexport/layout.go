@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/schema"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // Layout is how the objects of a schema file are laid out in tables.

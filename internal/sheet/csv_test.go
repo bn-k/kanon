@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/func-it/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/diag"
 )
 
 // writeFile writes content to a file called name in a new folder and returns its path.

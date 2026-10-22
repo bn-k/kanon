@@ -3,7 +3,7 @@ package schema
 import (
 	"slices"
 
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // Methods are the methods of an array: xs.filter(x => …).

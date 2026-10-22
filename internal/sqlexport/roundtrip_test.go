@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/func-it/kanon/internal/sqlimport"
+	"github.com/bn-k/kanon/internal/sqlimport"
 )
 
 // nbsp is U+00A0, the non-breaking space, written so that the source stays ASCII.

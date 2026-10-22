@@ -4,8 +4,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/func-it/kanon/internal/schema"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // expr evaluates x in en. The schema check has made sure that x is well typed.

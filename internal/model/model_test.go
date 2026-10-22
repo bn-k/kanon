@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/func-it/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/schema"
 )
 
 func TestGet(t *testing.T) {

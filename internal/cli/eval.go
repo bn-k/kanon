@@ -6,9 +6,9 @@ import (
 	"io"
 	"time"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/eval"
-	"github.com/func-it/kanon/internal/lint"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/eval"
+	"github.com/bn-k/kanon/internal/lint"
 )
 
 // runEval lints a document, then prints the value of each of its computed fields, and what lint found. A document

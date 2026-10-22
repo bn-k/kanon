@@ -5,7 +5,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/func-it/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/diag"
 )
 
 type tokKind int

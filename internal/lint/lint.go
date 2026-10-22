@@ -10,13 +10,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/doc"
-	"github.com/func-it/kanon/internal/eval"
-	"github.com/func-it/kanon/internal/model"
-	"github.com/func-it/kanon/internal/names"
-	"github.com/func-it/kanon/internal/schema"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/doc"
+	"github.com/bn-k/kanon/internal/eval"
+	"github.com/bn-k/kanon/internal/model"
+	"github.com/bn-k/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // Result is what a lint run found.

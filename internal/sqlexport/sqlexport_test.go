@@ -14,7 +14,7 @@ import (
 	_ "modernc.org/sqlite"
 	sqlite "modernc.org/sqlite/lib"
 
-	"github.com/func-it/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/schema"
 )
 
 // lay parses and checks src, which must be valid, and lays it out.

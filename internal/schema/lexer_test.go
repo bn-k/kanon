@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/func-it/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/diag"
 )
 
 // render writes tokens back, a string quoted, separated by spaces.

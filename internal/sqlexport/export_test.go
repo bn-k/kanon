@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/lint"
-	"github.com/func-it/kanon/internal/model"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/lint"
+	"github.com/bn-k/kanon/internal/model"
 )
 
 // doc loads a document that lints without errors.

@@ -13,8 +13,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/names"
 )
 
 // The parts of a workbook Kanon reads. Tags name no namespace, so that Strict OOXML reads the same.

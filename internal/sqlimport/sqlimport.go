@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/func-it/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/names"
 )
 
 // Result is what an import wrote.

@@ -4,7 +4,7 @@ package main
 import (
 	"os"
 
-	"github.com/func-it/kanon/internal/cli"
+	"github.com/bn-k/kanon/internal/cli"
 )
 
 func main() {

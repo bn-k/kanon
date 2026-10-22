@@ -10,10 +10,10 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/names"
-	"github.com/func-it/kanon/internal/pattern"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/pattern"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // Load reads, parses and checks the .kanonarch file at path. A file that doesn't parse isn't checked.

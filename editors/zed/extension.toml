@@ -9,5 +9,5 @@ description = "Kanon documents (.kan) and schemas (.kanonarch)"
 # machine that reaches it over SSH; it becomes the public URL when there is one.
 [grammars.kanonarch]
 repository = "golem:project/kanon"
-rev = "92b46d528fb529c5c26c7c696fcc165ae2e5e3d5"
+rev = "98fb0c0a50e01a85c26bcec0185e624bc17050f6"
 path = "editors/tree-sitter-kanonarch"

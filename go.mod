@@ -1,4 +1,4 @@
-module github.com/func-it/kanon
+module github.com/bn-k/kanon
 
 go 1.26.8
 

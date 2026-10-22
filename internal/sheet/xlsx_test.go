@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/func-it/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/diag"
 )
 
 const (

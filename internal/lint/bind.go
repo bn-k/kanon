@@ -8,13 +8,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/doc"
-	"github.com/func-it/kanon/internal/model"
-	"github.com/func-it/kanon/internal/names"
-	"github.com/func-it/kanon/internal/schema"
-	"github.com/func-it/kanon/internal/sheet"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/doc"
+	"github.com/bn-k/kanon/internal/model"
+	"github.com/bn-k/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/schema"
+	"github.com/bn-k/kanon/internal/sheet"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // root binds a whole file to s: its title, its content, then the folders next to it. in is the field of parent

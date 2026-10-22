@@ -4,9 +4,9 @@ package schema
 import (
 	"slices"
 
-	"github.com/func-it/kanon/internal/diag"
-	"github.com/func-it/kanon/internal/pattern"
-	"github.com/func-it/kanon/internal/value"
+	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/pattern"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // File is a parsed .kanonarch file.

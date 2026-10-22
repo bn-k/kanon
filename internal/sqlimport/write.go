@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/func-it/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/names"
 )
 
 // A file is a file kan import writes, its path relative to the folder of the result.
