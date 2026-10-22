@@ -76,6 +76,18 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 - **`today` comes from the `-today YYYY-MM-DD` flag**, or the local date without it; a case that depends on the date
   writes the flag in its command (2026-10-22).
 
+## Editors
+
+- **Zed first, as an extension**, not a change to Zed. It lives in this repository: `editors/zed` for the
+  extension, `editors/tree-sitter-kanonarch` for the grammar of schemas (2026-10-22).
+- **The tree-sitter grammar follows the Go parser** of `internal/schema` and never contradicts it: what one reads,
+  the other reads. It checks no types, names or units; `kan lint` does (2026-10-22).
+- **The generated `src/parser.c` is committed**: Zed compiles it itself, from the commit named by `rev` (2026-10-22).
+- **The language of schemas is named "Kanonarch"** in the editor, after its extension; "Kanon" is the language of
+  documents (2026-10-22).
+- **The grammar's `repository` is the SSH address the repository is cloned from**, as long as there is no public
+  one; it becomes the public URL then (2026-10-22).
+
 ## Open questions
 
 - **A heading that looks like a field.** A clause titled "Dépôt de garantie" would match the label of

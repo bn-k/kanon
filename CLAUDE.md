@@ -17,6 +17,10 @@ The repository is local for now: no public repository and no push without approv
   hand before running the linter. `go test ./internal/cli -update` only after a deliberate change of output, and
   the diff is read.
 - Everything is English, except the content of a case.
+- `editors/tree-sitter-kanonarch` follows `internal/schema`: a change to the syntax of schemas goes to both, with a
+  test in `test/corpus/`. `tree-sitter generate` and `tree-sitter test` stay clean, and no case schema but
+  `cases/errors-schema/broken.kanonarch` parses with an error. Zed builds the grammar from the commit named by
+  `rev` in `editors/zed/extension.toml`: commit the grammar first, then update `rev`.
 
 ## Messages
 

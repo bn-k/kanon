@@ -105,6 +105,24 @@ QUICK-Stop              28
 - A mistake in the query is a diagnostic at its position, in the file of `@query.sql` or in `query`, with exit
   code 1: ``query:1:8: error: no such column `company_nam`; did you mean `company_name`?``.
 
+## Editors
+
+`editors/zed` is an extension for the Zed editor: it colours `.kanonarch` schemas, outlines their declarations
+and fields, and indents them. Its grammar is `editors/tree-sitter-kanonarch`, a tree-sitter grammar that follows
+the Go parser of `internal/schema`. To install it, open the command palette in Zed, run `zed: install dev
+extension` and choose the folder `editors/zed`.
+
+Zed builds the grammar from the repository named in `editors/zed/extension.toml`, at the commit `rev`, never
+from the working tree. After a change to the grammar:
+
+```
+$ cd editors/tree-sitter-kanonarch
+$ tree-sitter generate && tree-sitter test
+$ for f in $(find ../../cases -name '*.kanonarch'); do tree-sitter parse -q "$f"; done
+```
+
+then commit, set `rev` to that commit, and rebuild the extension from Zed's extensions page.
+
 ## Cases
 
 `cases/` holds real use cases, one folder each: a schema, documents, and `expected.txt`, the exact output of the
