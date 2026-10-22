@@ -70,7 +70,7 @@ func TestRelations(t *testing.T) {
 			schema: annonce,
 			doc:    "---\ntype: Annonce\n---\n# Maison\n\nprix: 250 000.00 EUR\n\n## Agent {#claire}\n\nnom: Claire\n",
 			want: []string{
-				`doc.kan:8:4: error: "Agent" is the label of ` + "`agent`, a link to an `Agent` written as a key line: agent: [[…]]",
+				`doc.kan:8:4: error: "Agent" names the field ` + "`agent`, a link to an `Agent` written as a key line: agent: [[…]]",
 			},
 		},
 		{

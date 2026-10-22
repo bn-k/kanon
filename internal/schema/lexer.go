@@ -3,6 +3,7 @@ package schema
 import (
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/func-it/kanon/internal/diag"
 )
@@ -194,6 +195,9 @@ func (l *lexer) punct(pos diag.Pos) {
 		}
 	}
 	r := l.advance()
+	if r >= utf8.RuneSelf {
+		return // reported by Parse: a schema is written in ASCII
+	}
 	if !strings.ContainsRune(puncts1, r) {
 		l.diags.Errorf(pos, "unexpected character %q", string(r))
 		return

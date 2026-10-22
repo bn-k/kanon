@@ -70,28 +70,32 @@ rule r(f: Facture) -> Bool = f.echeance <= f.date + 60 days
 Strings, escapes and placeholders
 ================================================================================
 
-unit u "a \"b\" \\ c"
-unit v "{ never closed"
-schema S reads fr "le dernier entretien « {op} » de {v.nom}" {}
+schema U reads "a \"b\" \\ c" {}
+schema V reads "{ never closed" {}
+schema S reads fr "le dernier entretien {op} de {v.nom}" {}
 
 --------------------------------------------------------------------------------
 
 (source_file
-  (unit_declaration
+  (schema_declaration
     (identifier)
-    (string
-      (string_content)
-      (escape_sequence)
-      (string_content)
-      (escape_sequence)
-      (string_content)
-      (escape_sequence)
-      (string_content)))
-  (unit_declaration
+    (reads_clause
+      (string
+        (string_content)
+        (escape_sequence)
+        (string_content)
+        (escape_sequence)
+        (string_content)
+        (escape_sequence)
+        (string_content)))
+    (schema_body))
+  (schema_declaration
     (identifier)
-    (string
-      (string_content)
-      (string_content)))
+    (reads_clause
+      (string
+        (string_content)
+        (string_content)))
+    (schema_body))
   (schema_declaration
     (identifier)
     (reads_clause
@@ -104,10 +108,10 @@ schema S reads fr "le dernier entretien « {op} » de {v.nom}" {}
     (schema_body)))
 
 ================================================================================
-Names with accents and digits
+Names with hyphens and digits
 ================================================================================
 
-enum Niveau { sous-sol, rez-de-chaussee "rez-de-chaussée", étage, x-1 }
+enum Niveau { sous-sol, rez-de-chaussee, etage, x-1 }
 
 --------------------------------------------------------------------------------
 
@@ -118,9 +122,7 @@ enum Niveau { sous-sol, rez-de-chaussee "rez-de-chaussée", étage, x-1 }
       (enum_value
         (identifier))
       (enum_value
-        (identifier)
-        (string
-          (string_content)))
+        (identifier))
       (enum_value
         (identifier))
       (enum_value

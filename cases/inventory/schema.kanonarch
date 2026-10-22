@@ -3,21 +3,21 @@
 enum Etat { bon, fragile, mort }
 
 schema Disque {
-  modele:   Text "Modèle"
-  capacite: Quantity? "Capacité"
-  etat:     Etat "État"
+  modele:   Text
+  capacite: Quantity?
+  etat:     Etat
   usage:    Text?
 }
 
 schema Machine {
   nom:             Text @heading
-  role:            Text "Rôle"
-  systeme:         Text "Système"
+  role:            Text
+  systeme:         Text
   processeur:      Text
   chiffrement:     Bool
-  memoire:         Quantity "Mémoire"
+  memoire:         Quantity
   carte-graphique: Text?
-  bios:            Version? "BIOS"
+  bios:            Version?
   disques:         [Disque]
   notes:           Prose?
 }
@@ -28,5 +28,5 @@ schema Parc {
 }
 
 rule bios-a-jour(m: Machine) -> Bool
-  reads fr "{m.nom} a un BIOS en version 2003 ou plus, qui corrige la faille du démarrage sécurisé"
+  reads fr "{m.nom} a un BIOS en version 2003 ou plus, qui corrige la faille du demarrage securise"
   = m.bios == none or m.bios >= 2003

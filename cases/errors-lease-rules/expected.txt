@@ -1,7 +1,7 @@
 $ kan lint ../lease/schema.kanonarch bail.kan
 bail.kan: error: `fin`: a date moves by whole days, not by 3 years 12 h
-bail.kan: error: `depot-plafonne` fails: "le dépôt de garantie ne dépasse pas un mois de loyer hors charges (art. 22)"; 1 700.00 EUR is more than 850.00 EUR
+bail.kan: error: `depot-plafonne` fails: "le depot de garantie ne depasse pas un mois de loyer hors charges (art. 22)"; 1 700.00 EUR is more than 850.00 EUR
 bail.kan: error: `duree-minimale` fails: "le bail dure au moins 3 ans, 6 ans si le bailleur est une personne morale (art. 10)"; 3 years 12 h is less than 6 years
-etat-des-lieux-entree.kan: error: `etat-des-lieux-date` fails: "l'état des lieux d'entrée est daté au plus tard du premier jour du bail"; 2026-09-05 is after 2026-09-01
+etat-des-lieux-entree.kan: error: `etat-des-lieux-date` fails: "l'etat des lieux d'entree est date au plus tard du premier jour du bail"; 2026-09-05 is after 2026-09-01
 4 errors
 [exit 1]

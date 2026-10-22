@@ -8,11 +8,11 @@ schema Personne {
   rang: Int = (parrain?.rang ?? 0) + 1
 }
 
-schema Depense "Dépense" {
+schema Depense {
   objet:        Text @heading
   montant:      Money
   le:           DateTime
-  paye-par:     -> Personne "Payé par"
+  paye-par:     -> Personne
   participants: [-> Personne]?
 
   part:   Money    = montant / count(participants)

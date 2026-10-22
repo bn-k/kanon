@@ -21,7 +21,7 @@ func (m *model) write() []file {
 	collection := schemaName(m.name)
 	files := []file{
 		{"schema.kanonarch", []byte(m.schema(collection))},
-		{m.name + ".kan", []byte("---\ntype: " + collection + "\n---\n\n# " + names.Label(m.name) + "\n")},
+		{m.name + ".kan", []byte("---\ntype: " + collection + "\n---\n\n# " + names.Heading(m.name) + "\n")},
 	}
 	for _, t := range m.tables {
 		if t.kind != entity {
@@ -95,13 +95,13 @@ func writeSchema(b *strings.Builder, name string, groups ...[]*field) {
 // lines, weak table and join table. It gives the files the document links to too.
 func (t *tbl) document(i int) (string, []file) {
 	id := t.ids[i]
-	blocks := []string{"# " + names.Label(kebab(t.schema)) + " " + id}
+	blocks := []string{"# " + names.Heading(kebab(t.schema)) + " " + id}
 	var keys, sections []string
 	var files []file
 	for _, f := range t.fields {
 		section := func(body string) {
 			if body != "" {
-				sections = append(sections, "## "+names.Label(f.name)+"\n\n"+body)
+				sections = append(sections, "## "+names.Heading(f.name)+"\n\n"+body)
 			}
 		}
 		switch {

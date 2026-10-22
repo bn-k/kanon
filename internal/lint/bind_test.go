@@ -66,7 +66,7 @@ func TestHeadings(t *testing.T) {
 			name:   "unknown heading with a suggestion",
 			schema: note,
 			doc:    "---\ntype: Note\n---\n# Hi\n\n## Corp\n",
-			want:   []string{`doc.kan:6:4: error: unknown heading "Corp"; did you mean "Corps"?`},
+			want:   []string{`doc.kan:6:4: error: unknown heading "Corp"; did you mean ` + "`corps`?"},
 		},
 		{
 			name:   "unknown heading, and the headings the schema takes",
@@ -87,10 +87,10 @@ func TestHeadings(t *testing.T) {
 			want:   []string{"doc.kan:6:12: error: only an object has an id, and `corps` is a `Prose`; remove {#c}"},
 		},
 		{
-			name:   "the label of a scalar field",
+			name:   "a heading that names a scalar field",
 			schema: note,
 			doc:    "---\ntype: Note\n---\n# Hi\n\n## Date\n",
-			want:   []string{"doc.kan:6:4: error: \"Date\" is the label of `date`, a `Date` written as a key line: date: 2026-10-22"},
+			want:   []string{"doc.kan:6:4: error: \"Date\" names the field `date`, a `Date` written as a key line: date: 2026-10-22"},
 		},
 	})
 }
@@ -487,15 +487,16 @@ schema Personne {
 }
 
 const bail = `
-enum Etat { neuf, bon, use "usé" }
+enum Etat { neuf, bon, use }
 
 schema Bail {
   titre:   Text @heading
-  cles:    Int "clés"
+  cles:    Int
   pieces:  Int?
   etat:    Etat?
   seul:    Seul?
   loyer:   Money?
+  depot-de-garantie: Money?
   corps:   Prose?
   lignes:  [Ligne]?
   clauses: [Clause] @sections
@@ -505,7 +506,7 @@ enum Seul { oui }
 
 schema Ligne {
   nom:   Text
-  cles:  Int "Clés"
+  cles:  Int
 }
 
 schema Clause {
@@ -528,11 +529,19 @@ func TestSections(t *testing.T) {
 			doc:    head,
 		},
 		{
-			name:   "the label of a scalar field",
+			name:   "a heading that names a scalar field",
 			schema: bail,
 			doc:    head + "## Loyer {#loyer}\n\nDu texte.\n",
 			want: []string{
-				`doc.kan:8:4: error: "Loyer" is the label of ` + "`loyer`, a `Money` written as a key line: loyer: 1 250.50 EUR; to start a section, give it another title",
+				`doc.kan:8:4: error: "Loyer" names the field ` + "`loyer`, a `Money` written as a key line: loyer: 1 250.50 EUR; to start a section, give it another title",
+			},
+		},
+		{
+			name:   "a heading with accents names a scalar field",
+			schema: bail,
+			doc:    head + "## Dépôt de  garantie {#depot}\n\nDu texte.\n",
+			want: []string{
+				`doc.kan:8:4: error: "Dépôt de  garantie" names the field ` + "`depot-de-garantie`, a `Money` written as a key line: depot-de-garantie: 1 250.50 EUR; to start a section, give it another title",
 			},
 		},
 		{
@@ -548,10 +557,10 @@ func TestNamesAndValues(t *testing.T) {
 	head := "---\ntype: Bail\n---\n# Bail\n\n"
 	runCases(t, []lintCase{
 		{
-			name:   "a label as a key",
+			name:   "a key with accents",
 			schema: bail,
 			doc:    head + "clés: 2\n",
-			want:   []string{`doc.kan:6:1: error: a key or a column is a name, not a label: write cles, not "clés"`},
+			want:   []string{`doc.kan:6:1: error: names are ASCII: write cles, not "clés"`},
 		},
 		{
 			name:   "a name with accents as a key",
@@ -569,10 +578,10 @@ func TestNamesAndValues(t *testing.T) {
 			},
 		},
 		{
-			name:   "a label as a column",
+			name:   "a title as a column",
 			schema: bail,
 			doc:    head + "cles: 2\n\n## Lignes\n\n| id | nom | Clés |\n|---|---|---|\n| a | Cuisine | 2 |\n",
-			want:   []string{`doc.kan:10:14: error: a key or a column is a name, not a label: write cles, not "Clés"`},
+			want:   []string{`doc.kan:10:14: error: names are ASCII: write cles, not "Clés"`},
 		},
 		{
 			name:   "enum values",

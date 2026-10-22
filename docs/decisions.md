@@ -33,6 +33,18 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 
 - **Names are ASCII alphanumeric slugs** only; no accents, no Unicode in names. Free text (content) stays Unicode
   (2026-10-22).
+- **A schema holds no labels** (2026-10-22). No string after a field type, a schema name, an enum value or a unit:
+  the parser reports it and says to remove it. A field, an enum value and a unit are known by their name alone, and
+  a message that names an enum value shows the name. `kan import` writes no labels. This drops the "label already
+  used" check: two names that differ cannot fold to the same heading.
+- **A `.kanonarch` file is ASCII** (2026-10-22), strings and comments included, so that a schema reads the same in
+  every editor and diff. The checker reports any other character at its position, one diagnostic per line, with the
+  letter to write when a plain one exists (`write "e", not "é"`). A `reads fr` sentence is written without accents,
+  « » become plain quotes or go, `n°` becomes `no`. The content of a case stays in its own language.
+- **A heading finds its field by name** (2026-10-22). The heading is folded (lowercase, accents removed, spaces,
+  hyphens and apostrophes alike) and compared with the field's name: "Dépôt de garantie" opens `depot-de-garantie`.
+  The folding is one function, `names.Slugify`. Keys, table headers and enum values stay exact names. A document
+  keeps its real French headings.
 - **Hyphen everywhere** (kebab-case) for ids, fields, enum values, rules and functions; subtraction needs spaces
   (2026-10-22).
 - **Every object has an `id`**, an ASCII alphanumeric slug. A UUID is valid, but meaningful slugs are encouraged
@@ -90,8 +102,10 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 
 ## Open questions
 
-- **A heading that looks like a field.** A clause titled "Dépôt de garantie" would match the label of
-  `depot-de-garantie` instead of becoming a clause. A neophyte will fall into this.
+- **A heading that looks like a field.** A clause titled "Dépôt de garantie" folds to the name
+  `depot-de-garantie` and opens that field instead of becoming a clause. The folding is looser than the old label
+  match (case and accents no longer tell them apart), so a neophyte will fall into this more often. The message
+  says to give the section another title.
 - **A single sub-object as a file**: `clio/carte-grise.kan` would be named after a field, not an id. Allowed, or
   arrays only?
 - **Where schemas live**: for now the schema is given on the command line. A same-folder convention, an explicit

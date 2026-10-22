@@ -25,7 +25,7 @@ func check(t *testing.T, src string) (*File, []string) {
 func TestCheckOK(t *testing.T) {
 	tests := []string{
 		"unit pincee\nfn f() -> Quantity = 2 pincee",
-		"unit tasse \"tasse\"\nunit kWatt",
+		"unit tasse\nunit kWatt",
 		"fn f() -> Quantity = 2 kg + 300 g * 3\nfn g() -> Duration = 3 years + 0 min\nfn h() -> Percent = 20 %",
 		"enum E { aa, bb }\nrule r(x: E) -> Bool = x == aa or x == bb",
 		"rule r() = today == today and yes or no",
@@ -101,11 +101,11 @@ func TestCheckErrors(t *testing.T) {
 		{"unit pincee\nfn pincee() -> Int = 1", []string{"2:4: `pincee` is already declared on line 1"}},
 		{"schema Text {}", []string{"1:8: `Text` is a native type; choose another name"}},
 		{"schema etat-des-lieux {}", []string{`1:8: type names are PascalCase: write EtatDesLieux, not "etat-des-lieux"`}},
-		{"enum Pièce { a }", []string{`1:6: type names are PascalCase: write Piece, not "Pièce"`}},
+		{"enum Piece_x { a }", []string{`1:6: type names are PascalCase: write PieceX, not "Piece_x"`}},
 		{"schema _ {}", []string{`1:8: "_" is not a type name: use ASCII PascalCase, such as EtatDesLieux`}},
 		{"unit g", []string{"1:6: `g` is a built-in unit"}},
 		{"unit days", []string{"1:6: `days` is a duration unit"}},
-		{"unit pincée", []string{`1:6: write pincee, not "pincée"`}},
+		{"unit pince_e", []string{`1:6: write pincee, not "pince_e"`}},
 		{"unit _", []string{`1:6: "_" is not a unit name: use ASCII letters and digits, starting with a letter`}},
 		{"enum E { a, a }", []string{"1:13: `a` is already a value of `E`"}},
 		{"enum E { Bon }", []string{`1:10: write bon, not "Bon"`}},
@@ -114,8 +114,6 @@ func TestCheckErrors(t *testing.T) {
 		// Fields.
 		{"schema S { id: Text }", []string{"1:12: `id` is reserved: every object has one"}},
 		{"schema S { a: Text a: Int }", []string{"1:20: `a` is already a field of `S`"}},
-		{`schema S { a: Text "X" b: Text "X" }`, []string{"1:24: the label \"X\" is already used by `a`"}},
-		{`schema S { zone-tendue: Bool zt: Bool "Zone tendue" }`, []string{"1:30: the label \"Zone tendue\" is already used by `zone-tendue`"}},
 		{"schema S { prix_unitaire: Money }", []string{`1:12: write prix-unitaire, not "prix_unitaire"`}},
 
 		// Types.
@@ -292,15 +290,13 @@ func TestHelpers(t *testing.T) {
 	switch {
 	case !f.Declares("Bail") || !f.Declares("depot-plafonne") || f.Declares("Nope"):
 		t.Errorf("Declares: %v", f.DeclNames())
-	case bail.FieldByLabel("Début") != bail.Field("debut") || bail.FieldByLabel("Debut") != nil:
-		t.Errorf("FieldByLabel")
 	case bail.Annotated("heading") != bail.Field("titre") || bail.Annotated("body") != nil:
 		t.Errorf("Annotated")
-	case !slices.Contains(bail.Labels(), "Zone tendue") || len(bail.Labels()) != len(bail.Fields):
-		t.Errorf("Labels: %q", bail.Labels())
+	case !slices.Contains(bail.FieldNames(), "zone-tendue") || len(bail.FieldNames()) != len(bail.Fields):
+		t.Errorf("FieldNames: %q", bail.FieldNames())
 	case !bail.Field("clauses").Has("sections") || bail.Field("titre").Has("sections"):
 		t.Errorf("Has")
-	case etat.Value("use").Label != "usé" || etat.Value("nope") != nil:
+	case etat.Value("use") == nil || etat.Value("use").Name != "use" || etat.Value("nope") != nil:
 		t.Errorf("Value")
 	case !slices.Contains(etat.ValueNames(), "use") || len(etat.ValueNames()) != len(etat.Values):
 		t.Errorf("ValueNames: %q", etat.ValueNames())

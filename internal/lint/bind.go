@@ -119,7 +119,7 @@ func (l *linter) stray(b doc.Block, o *object) {
 	var prose []string
 	for _, f := range o.schema.Fields {
 		if !f.Computed() && !f.Type.Array && f.Type.Native && f.Type.Kind == value.Prose {
-			prose = append(prose, o.under(f.Label))
+			prose = append(prose, o.under(f))
 		}
 	}
 	if len(prose) > 0 {
@@ -129,10 +129,12 @@ func (l *linter) stray(b doc.Block, o *object) {
 	l.diags.Errorf(b.At(), "this text fills no field: `%s` has no field for free text", o.schema.Name)
 }
 
-// heading binds a heading under o: the field it names by its label, or else an entry of o's @sections.
+// heading binds a heading under o: the field it names, or else an entry of o's @sections. A heading names a field
+// when its text, folded, is the field's name: "Dépôt de garantie" names depot-de-garantie.
 func (l *linter) heading(c *doc.Section, o *object) {
 	h := c.Heading
-	if f := o.schema.FieldByLabel(h.Text); f != nil {
+	slug := names.Slugify(h.Text)
+	if f := o.schema.Field(slug); f != nil {
 		l.field(c, f, o)
 		return
 	}
@@ -144,8 +146,8 @@ func (l *linter) heading(c *doc.Section, o *object) {
 		return
 	}
 	msg := fmt.Sprintf("unknown heading \"%s\"", h.Text)
-	if c := names.Closest(h.Text, o.schema.Labels()); c != "" {
-		msg += fmt.Sprintf("; did you mean \"%s\"?", c)
+	if c := names.Closest(slug, o.schema.FieldNames()); c != "" {
+		msg += fmt.Sprintf("; did you mean `%s`?", c)
 	} else if hs := headings(o); len(hs) > 0 {
 		msg += fmt.Sprintf("; `%s` takes %s", o.schema.Name, strings.Join(hs, ", "))
 	}
@@ -157,7 +159,7 @@ func headings(o *object) []string {
 	var hs []string
 	for _, f := range o.schema.Fields {
 		if !f.Computed() && !scalar(f.Type) {
-			hs = append(hs, o.under(f.Label))
+			hs = append(hs, o.under(f))
 		}
 	}
 	return hs
@@ -188,7 +190,7 @@ func (l *linter) field(c *doc.Section, f *schema.Field, o *object) {
 		l.diags.Errorf(h.TextPos, "%s", inverse(f))
 		return
 	case scalar(t):
-		msg := fmt.Sprintf("\"%s\" is the label of `%s`, %s written as a key line: %s: %s", h.Text, f.Name, kind(t), f.Name, example(t))
+		msg := fmt.Sprintf("\"%s\" names the field `%s`, %s written as a key line: %s: %s", h.Text, f.Name, kind(t), f.Name, example(t))
 		if o.schema.Annotated("sections") != nil {
 			msg += "; to start a section, give it another title"
 		}
@@ -593,14 +595,14 @@ func (l *linter) keyLine(k *doc.KeyLine, o *object) {
 		target, _ := linkValue(k.Value)
 		l.spreadsheet(target, k.ValuePos, f, o, o.level+2)
 	case f.Type.Array && !f.Type.Link && !fileKind(f.Type):
-		msg := fmt.Sprintf("`%s` is a list: write it under its heading, %s", f.Name, o.under(f.Label))
+		msg := fmt.Sprintf("`%s` is a list: write it under its heading, %s", f.Name, o.under(f))
 		if owned(f.Type) {
 			msg += fmt.Sprintf(", or link to a spreadsheet, as in %s: [[%s.csv]]", f.Name, f.Name)
 		}
 		l.diags.Errorf(k.Pos, "%s", msg)
 		reported(o, f)
 	case owned(f.Type):
-		l.diags.Errorf(k.Pos, "`%s` holds its own `%s`, not a link: write it under %s {#id}", f.Name, f.Type.Name, o.under(f.Label))
+		l.diags.Errorf(k.Pos, "`%s` holds its own `%s`, not a link: write it under %s {#id}", f.Name, f.Type.Name, o.under(f))
 		reported(o, f)
 	case k.Value == "":
 		l.mark(o, f, k.Pos)
@@ -644,13 +646,10 @@ func split(s string, pos diag.Pos) []piece {
 }
 
 // unknownField is the message for a key, a column or a folder that names no field of s. When the name plainly
-// stands for a field, its label or its name with accents, meant is that field.
+// stands for a field, its name with accents or capitals, meant is that field.
 func unknownField(name string, s *schema.Schema) (msg string, meant *schema.Field) {
 	if name == "id" {
 		return "an object's id is written in its heading ({#id}) or its file name, not as a key", nil
-	}
-	if f := s.FieldByLabel(name); f != nil {
-		return fmt.Sprintf("a key or a column is a name, not a label: write %s, not \"%s\"", f.Name, name), f
 	}
 	if f := s.Field(names.Slugify(name)); f != nil && !names.IsName(name) {
 		return fmt.Sprintf("names are ASCII: write %s, not \"%s\"", f.Name, name), f
@@ -758,7 +757,7 @@ func sheetLink(s string) bool {
 // enumError is the message for a value that isn't one of the enum's.
 func enumError(e *schema.Enum, s string) string {
 	for _, v := range e.Values {
-		if v.Label != "" && names.Fold(v.Label) == names.Fold(s) {
+		if names.Slugify(s) == v.Name {
 			return fmt.Sprintf("write %s, not \"%s\"", v.Name, s)
 		}
 	}
@@ -926,9 +925,9 @@ func modelField(m *model.Object, f *schema.Field, pos diag.Pos) *model.Field {
 	return mf
 }
 
-// under is the heading of a field of o labeled label: one level below o's own.
-func (o *object) under(label string) string {
-	return atLevel(o.level+1, label)
+// under is the heading of the field f of o: one level below o's own.
+func (o *object) under(f *schema.Field) string {
+	return atLevel(o.level+1, names.Heading(f.Name))
 }
 
 // atLevel is a heading of the given level: ### Notes.
@@ -1003,13 +1002,13 @@ func howTo(f *schema.Field, o *object) string {
 	case f.Has("body"):
 		return "write it as text under the heading"
 	case t.Array && (owned(t) || fileKind(t)) && o.pos.Line == 0:
-		return fmt.Sprintf("write it under %s, or as the folder %s/%s/", o.under(f.Label), o.id, f.Name)
+		return fmt.Sprintf("write it under %s, or as the folder %s/%s/", o.under(f), o.id, f.Name)
 	case t.Array && !t.Link, t.Native && t.Kind == value.Prose:
-		return fmt.Sprintf("write it under %s", o.under(f.Label))
+		return fmt.Sprintf("write it under %s", o.under(f))
 	case owned(t):
-		return fmt.Sprintf("write it under %s {#id}", o.under(f.Label))
+		return fmt.Sprintf("write it under %s {#id}", o.under(f))
 	case t.Native && t.Kind == value.Code:
-		return fmt.Sprintf("write it under %s as a code block, or link to its file: %s: [[%s]]", o.under(f.Label), f.Name, fileExamples[t.Kind])
+		return fmt.Sprintf("write it under %s as a code block, or link to its file: %s: [[%s]]", o.under(f), f.Name, fileExamples[t.Kind])
 	}
 	return fmt.Sprintf("write %s: %s", f.Name, example(t))
 }

@@ -126,7 +126,7 @@ func TestLexErrors(t *testing.T) {
 	}{
 		{"a # b", "a b", []string{`1:3: unexpected character "#"`}},
 		{"l'eau", "l eau", []string{`1:2: unexpected character "'"`}},
-		{"a" + nbsp + "b", "a b", []string{"1:2: unexpected character " + strconv.Quote(nbsp)}},
+		{"a" + nbsp + "b", "a b", nil}, // Parse reports it: a schema is written in ASCII
 		{`"abc`, `"abc"`, []string{"1:1: unterminated string"}},
 		{"x \"abc\ny", `x "abc" y`, []string{"1:3: unterminated string"}},
 		{`"abc\`, `"abc\\"`, []string{"1:1: unterminated string"}},

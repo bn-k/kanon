@@ -1,22 +1,22 @@
 // Working material: cooking recipes.
 
-unit pincee "pincée"
+unit pincee
 
 schema Recette {
   titre:       Text @heading
   portions:    Int
-  preparation: Duration "Préparation"
+  preparation: Duration
   repos:       Duration?
   cuisson:     Duration?
-  ingredients: [Ingredient] "Ingrédients"
-  etapes:      [Prose] "Étapes"
+  ingredients: [Ingredient]
+  etapes:      [Prose]
 
-  duree-totale: Duration "Durée totale" = preparation + (repos ?? 0 min) + (cuisson ?? 0 min)
+  duree-totale: Duration = preparation + (repos ?? 0 min) + (cuisson ?? 0 min)
 }
 
 // A list item such as "250 g de farine {#farine}" is read through this pattern; [de] is optional.
-schema Ingredient "Ingrédient" reads "{quantite} [de] {nom}" {
-  quantite: Quantity "Quantité"
+schema Ingredient reads "{quantite} [de] {nom}" {
+  quantite: Quantity
   nom:      Text
 }
 

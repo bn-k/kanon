@@ -228,7 +228,7 @@ schema T {
 		{
 			name: "comparisons, logic and none",
 			schema: `
-enum Etat { neuf, bon, use "usé" }
+enum Etat { neuf, bon, use }
 
 schema T {
   a:    Int
@@ -444,7 +444,7 @@ func TestRules(t *testing.T) {
 		{
 			name: "rules that fail",
 			schema: `
-enum Etat { neuf, bon, use "usé" }
+enum Etat { neuf, bon, use }
 
 schema Ligne {
   n: Int
@@ -494,9 +494,9 @@ rule ligne(l: Ligne) -> Bool
 			want: []string{
 				"doc.kan: error: `plus` fails: \"1 is more than 1\"; 1 is not more than 1",
 				"doc.kan: error: `both` fails; 3 is not less than 1",
-				"doc.kan: error: `dates` fails: \"l1, l2 a, b none neuf, usé {t.nope} {t.a.b} doc\"; 2026-10-01 is before 2026-10-22",
+				"doc.kan: error: `dates` fails: \"l1, l2 a, b none neuf, use {t.nope} {t.a.b} doc\"; 2026-10-01 is before 2026-10-22",
 				"doc.kan: error: `silent` fails",
-				"doc.kan:15:1: error: `ligne` fails: \"usé 2\"; usé is equal to usé and 2 is not more than 100",
+				"doc.kan:15:1: error: `ligne` fails: \"use 2\"; use is equal to use and 2 is not more than 100",
 			},
 		},
 		{

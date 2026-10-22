@@ -1,0 +1,12 @@
+// Working material: a schema that still writes labels. A schema holds none: a document writes the name of a
+// field as its heading, and the name of an enum value or of a unit as it is.
+
+unit pincee "pincee"
+
+enum Etat { neuf, bon, use "use" }
+
+schema Piece "Piece" {
+  piece: Text @heading
+  etat:  Etat "Etat"
+  note:  Text "Note" "Remarque"
+}

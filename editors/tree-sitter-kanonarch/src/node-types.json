@@ -265,16 +265,6 @@
     "type": "enum_value",
     "named": true,
     "fields": {
-      "label": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "string",
-            "named": true
-          }
-        ]
-      },
       "name": {
         "multiple": false,
         "required": true,
@@ -291,16 +281,6 @@
     "type": "field_declaration",
     "named": true,
     "fields": {
-      "label": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "string",
-            "named": true
-          }
-        ]
-      },
       "name": {
         "multiple": false,
         "required": true,
@@ -729,16 +709,6 @@
           }
         ]
       },
-      "label": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "string",
-            "named": true
-          }
-        ]
-      },
       "name": {
         "multiple": false,
         "required": true,
@@ -865,16 +835,6 @@
     "type": "unit_declaration",
     "named": true,
     "fields": {
-      "label": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "string",
-            "named": true
-          }
-        ]
-      },
       "name": {
         "multiple": false,
         "required": true,

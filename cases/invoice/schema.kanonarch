@@ -3,32 +3,32 @@
 schema Partie {
   nom:       Text
   adresse:   Text
-  tva-intra: Text? "TVA intracommunautaire"
+  tva-intra: Text?
 }
 
 schema Ligne {
-  designation:   Text "Désignation"
-  quantite:      Number "Quantité"
+  designation:   Text
+  quantite:      Number
   prix-unitaire: Money
 
   montant: Money = prix-unitaire * quantite
 }
 
 schema Facture {
-  numero:     Text "Numéro"
+  numero:     Text
   date:       Date
-  echeance:   Date "Échéance"
-  emetteur:   Partie "Émetteur"
+  echeance:   Date
+  emetteur:   Partie
   client:     -> Partie
   lignes:     [Ligne]
-  taux-tva:   Percent "Taux de TVA"
+  taux-tva:   Percent
   conditions: Prose
 
-  total-ht:  Money "Total HT"  = sum(lignes.montant)
-  tva:       Money "TVA"       = round(total-ht * taux-tva, 0.01)
-  total-ttc: Money "Total TTC" = total-ht + tva
+  total-ht:  Money = sum(lignes.montant)
+  tva:       Money = round(total-ht * taux-tva, 0.01)
+  total-ttc: Money = total-ht + tva
 }
 
 rule echeance-legale(f: Facture) -> Bool
-  reads fr "le paiement est dû au plus tard 60 jours après la date de la facture (Code de commerce, art. L441-10)"
+  reads fr "le paiement est du au plus tard 60 jours apres la date de la facture (Code de commerce, art. L441-10)"
   = f.echeance <= f.date + 60 days

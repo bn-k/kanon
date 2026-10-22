@@ -1,7 +1,10 @@
-// Package names holds Kanon's rules for names and ids: ASCII slugs, default labels, and suggestions for typos.
+// Package names holds Kanon's rules for names and ids: ASCII slugs, the headings that find them, and suggestions for typos.
 package names
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+)
 
 // IsSlug reports whether s is an ASCII slug: lowercase letters and digits, single hyphens between them.
 // Ids are slugs: crepes, f-2026-031, 2025-06-10-vidange.
@@ -39,8 +42,9 @@ func IsTypeName(s string) bool {
 	return true
 }
 
-// Label returns what a reader sees for a name that has no label: zone-tendue reads "Zone tendue".
-func Label(name string) string {
+// Heading returns the heading that opens the field of a name: zone-tendue is "Zone tendue". Slugify turns it
+// back into the name.
+func Heading(name string) string {
 	if name == "" {
 		return ""
 	}
@@ -76,7 +80,24 @@ func Fold(s string) string {
 	return b.String()
 }
 
+// punctuation holds the plain ASCII a few signs are written with.
+var punctuation = map[rune]string{'°': "o", '’': "'", '‘': "'", '–': "-", '—': "-"}
+
+// Transliterate returns the plain ASCII that stands for r: "e" for "é", "E" for "É", "o" for "°". It reports
+// false when there is none.
+func Transliterate(r rune) (string, bool) {
+	if s, ok := punctuation[r]; ok {
+		return s, true
+	}
+	s, ok := accents[unicode.ToLower(r)]
+	if ok && unicode.IsUpper(r) {
+		s = strings.ToUpper(s[:1]) + s[1:]
+	}
+	return s, ok
+}
+
 // Slugify proposes a slug for s: "Durée du bail" becomes duree-du-bail, prix_unitaire becomes prix-unitaire.
+// It is also how a heading finds its field: "Dépôt de garantie" opens depot-de-garantie, "L'état" opens l-etat.
 func Slugify(s string) string {
 	var b strings.Builder
 	cut := false

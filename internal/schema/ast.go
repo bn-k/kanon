@@ -18,32 +18,29 @@ type File struct {
 	Fns     []*Fn
 }
 
-// Unit is a unit a Quantity may carry, beyond the built-in ones: unit pincee "pincée".
+// Unit is a unit a Quantity may carry, beyond the built-in ones: unit pincee.
 type Unit struct {
-	Pos   diag.Pos
-	Name  string
-	Label string
+	Pos  diag.Pos
+	Name string
 }
 
-// Enum is a closed set of names: enum Etat { neuf, bon, use "usé" }.
+// Enum is a closed set of names: enum Etat { neuf, bon, use }.
 type Enum struct {
 	Pos    diag.Pos
 	Name   string
 	Values []*EnumValue
 }
 
-// EnumValue is one name of an Enum; Label is "" when none is written.
+// EnumValue is one name of an Enum.
 type EnumValue struct {
-	Pos   diag.Pos
-	Name  string
-	Label string
+	Pos  diag.Pos
+	Name string
 }
 
-// Schema describes an object: its fields, its label, and the patterns a list item is read through.
+// Schema describes an object: its fields and the patterns a list item is read through.
 type Schema struct {
 	Pos      diag.Pos
 	Name     string
-	Label    string
 	Reads    []*Reads
 	Patterns []*pattern.Pattern // one per Reads, set by Check
 	Fields   []*Field
@@ -64,7 +61,6 @@ type Field struct {
 	Type       *Type
 	Inverse    string // orders: [Order] <- employee: the field of Type that links here, or ""
 	InversePos diag.Pos
-	Label      string // as written, or the default label
 	Annots     []*Annot
 	Expr       Expr
 }
@@ -258,16 +254,6 @@ func (s *Schema) Field(name string) *Field {
 	return nil
 }
 
-// FieldByLabel returns the field whose label is exactly label, or nil.
-func (s *Schema) FieldByLabel(label string) *Field {
-	for _, f := range s.Fields {
-		if f.Label == label {
-			return f
-		}
-	}
-	return nil
-}
-
 // Annotated returns the field marked @name, or nil.
 func (s *Schema) Annotated(name string) *Field {
 	for _, f := range s.Fields {
@@ -285,15 +271,6 @@ func (s *Schema) FieldNames() []string {
 		ns = append(ns, f.Name)
 	}
 	return ns
-}
-
-// Labels returns the labels of the fields.
-func (s *Schema) Labels() []string {
-	var ls []string
-	for _, f := range s.Fields {
-		ls = append(ls, f.Label)
-	}
-	return ls
 }
 
 // Computed reports whether f is computed rather than written: from an expression, or as an inverse.

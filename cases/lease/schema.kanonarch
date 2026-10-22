@@ -1,7 +1,7 @@
-// Working material: French unfurnished residential leases (loi n° 89-462 du 6 juillet 1989).
+// Working material: French unfurnished residential leases (loi no 89-462 du 6 juillet 1989).
 
 enum TypePersonne { physique, morale }
-enum Etat { neuf, bon, use "usé", degrade "dégradé" }
+enum Etat { neuf, bon, use, degrade }
 
 schema Personne {
   nom:     Text
@@ -12,7 +12,7 @@ schema Personne {
 schema Logement {
   adresse: Text
   surface: Quantity
-  pieces:  Int "Pièces"
+  pieces:  Int
 }
 
 schema Clause {
@@ -25,33 +25,33 @@ schema Bail {
   bailleur:          Personne
   locataire:         Personne
   logement:          Logement
-  debut:             Date "Début"
-  duree:             Duration "Durée"
-  loyer-hc:          Money "Loyer hors charges"
+  debut:             Date
+  duree:             Duration
+  loyer-hc:          Money
   charges:           Money
-  depot-de-garantie: Money "Dépôt de garantie"
+  depot-de-garantie: Money
   zone-tendue:       Bool
   clauses:           [Clause] @sections
 
   fin:               Date = debut + duree
-  preavis-locataire: Duration "Préavis du locataire" = if zone-tendue then 1 month else 3 months
+  preavis-locataire: Duration = if zone-tendue then 1 month else 3 months
 }
 
-schema Piece "Pièce" {
-  piece:     Text "Pièce"
-  etat:      Etat "État"
+schema Piece {
+  piece:     Text
+  etat:      Etat
   remarques: Text?
 }
 
-schema EtatDesLieux "État des lieux" {
+schema EtatDesLieux {
   bail:   -> Bail
   date:   Date
-  cles:   Int "Clés"
-  pieces: [Piece] "Pièces"
+  cles:   Int
+  pieces: [Piece]
 }
 
 rule depot-plafonne(b: Bail) -> Bool
-  reads fr "le dépôt de garantie ne dépasse pas un mois de loyer hors charges (art. 22)"
+  reads fr "le depot de garantie ne depasse pas un mois de loyer hors charges (art. 22)"
   = b.depot-de-garantie <= b.loyer-hc
 
 rule duree-minimale(b: Bail) -> Bool
@@ -59,5 +59,5 @@ rule duree-minimale(b: Bail) -> Bool
   = b.duree >= (if b.bailleur.type == morale then 6 years else 3 years)
 
 rule etat-des-lieux-date(e: EtatDesLieux) -> Bool
-  reads fr "l'état des lieux d'entrée est daté au plus tard du premier jour du bail"
+  reads fr "l'etat des lieux d'entree est date au plus tard du premier jour du bail"
   = e.date <= e.bail.debut

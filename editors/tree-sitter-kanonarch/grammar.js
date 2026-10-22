@@ -52,14 +52,13 @@ module.exports = grammar({
       $.rule_declaration,
     ),
 
-    // unit pincee "pincée"
+    // unit pincee
     unit_declaration: $ => seq(
       'unit',
       field('name', $.identifier),
-      optional(field('label', $.string)),
     ),
 
-    // enum Etat { neuf, bon, use "usé" }
+    // enum Etat { neuf, bon, use }
     enum_declaration: $ => seq(
       'enum',
       field('name', $.identifier),
@@ -70,35 +69,33 @@ module.exports = grammar({
 
     enum_value: $ => seq(
       field('name', $.identifier),
-      optional(field('label', $.string)),
       optional(','),
     ),
 
-    // schema Ingredient "Ingrédient" reads "{quantite} [de] {nom}" { … }
+    // schema Ingredient reads "{quantite} [de] {nom}" { … }
     schema_declaration: $ => seq(
       'schema',
       field('name', $.identifier),
-      optional(field('label', $.string)),
       repeat($.reads_clause),
       field('body', $.schema_body),
     ),
 
     schema_body: $ => seq('{', repeat($.field_declaration), '}'),
 
-    // reads fr "{m.nom} a un BIOS à jour"
+    // reads fr "{m.nom} a un BIOS a jour"
     reads_clause: $ => seq(
       'reads',
       optional(field('language', $.identifier)),
       field('text', $.string),
     ),
 
-    // total-ht: Money "Total HT" @heading = sum(lignes.montant),
+    // total-ht: Money @heading = sum(lignes.montant),
     field_declaration: $ => seq(
       field('name', $.identifier),
       ':',
       field('type', $.type),
       optional($.inverse),
-      repeat(choice(field('label', $.string), $.annotation)),
+      repeat($.annotation),
       optional(seq('=', field('value', $._expression))),
       optional(','),
     ),

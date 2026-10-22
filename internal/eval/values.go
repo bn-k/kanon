@@ -436,15 +436,12 @@ func group(t string) string {
 	return b.String()
 }
 
-// show writes v in a message: none, the label of an enum value, the id of an object, the items of an array.
+// show writes v in a message: none, the name of an enum value, the id of an object, the items of an array.
 func show(v val) string {
 	switch v := v.(type) {
 	case nil:
 		return "none"
 	case enumVal:
-		if ev := v.e.Value(v.name); ev.Label != "" {
-			return ev.Label
-		}
 		return v.name
 	case *obj:
 		return v.m.ID

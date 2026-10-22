@@ -65,7 +65,7 @@ func TestIsTypeName(t *testing.T) {
 	}
 }
 
-func TestLabel(t *testing.T) {
+func TestHeading(t *testing.T) {
 	tests := []struct{ name, want string }{
 		{"zone-tendue", "Zone tendue"},
 		{"nom", "Nom"},
@@ -73,8 +73,37 @@ func TestLabel(t *testing.T) {
 		{"", ""},
 	}
 	for _, tt := range tests {
-		if got := Label(tt.name); got != tt.want {
-			t.Errorf("Label(%q) = %q, want %q", tt.name, got, tt.want)
+		got := Heading(tt.name)
+		if got != tt.want {
+			t.Errorf("Heading(%q) = %q, want %q", tt.name, got, tt.want)
+		}
+		if tt.name != "" && Slugify(got) != tt.name {
+			t.Errorf("Slugify(%q) = %q, want %q: a heading finds its field", got, Slugify(got), tt.name)
+		}
+	}
+}
+
+func TestTransliterate(t *testing.T) {
+	tests := []struct {
+		r    rune
+		want string
+		ok   bool
+	}{
+		{'é', "e", true},
+		{'É', "E", true},
+		{'œ', "oe", true},
+		{'Œ', "Oe", true},
+		{'ß', "ss", true},
+		{'°', "o", true},
+		{'’', "'", true},
+		{'–', "-", true},
+		{'«', "", false},
+		{'€', "", false},
+	}
+	for _, tt := range tests {
+		got, ok := Transliterate(tt.r)
+		if got != tt.want || ok != tt.ok {
+			t.Errorf("Transliterate(%q) = %q, %v, want %q, %v", tt.r, got, ok, tt.want, tt.ok)
 		}
 	}
 }
@@ -111,6 +140,11 @@ func TestSlugify(t *testing.T) {
 		{"Durée du bail", "duree-du-bail"},
 		{"prix_unitaire", "prix-unitaire"},
 		{"  État  des lieux ", "etat-des-lieux"},
+		{"Dépôt de garantie", "depot-de-garantie"},
+		{"Émetteur", "emetteur"},
+		{"L'état des lieux", "l-etat-des-lieux"},
+		{"L’état-des lieux", "l-etat-des-lieux"},
+		{"Zone tendue", "zone-tendue"},
 		{"F-2026/031", "f-2026-031"},
 		{"!!", ""},
 	}

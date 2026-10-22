@@ -6,9 +6,9 @@ schema Calendrier {
   jours:  [JourFerie]
 }
 
-schema JourFerie "Jour férié" {
+schema JourFerie {
   date:  Date
-  annee: Int "Année"
+  annee: Int
   zone:  Text
   nom:   Text
 }

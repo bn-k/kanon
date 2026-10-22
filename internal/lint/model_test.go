@@ -232,7 +232,7 @@ Agent lea-morel agents/lea-morel.kan
 
 func TestModelFolder(t *testing.T) {
 	d, dir := load(t, "car", "clio.kan", "../../cases/car/clio.kan: error: `vidange-a-jour` fails: "+
-		"\"Renault Clio a roulé moins de 15 000 km depuis sa dernière vidange\"; 15 250 km is not less than 15 000 km")
+		"\"Renault Clio a roule moins de 15 000 km depuis sa derniere vidange\"; 15 250 km is not less than 15 000 km")
 	es := d.Root.Get("entretiens")
 	if es == nil || len(es.Objects) != 5 {
 		t.Fatalf("entretiens = %v", es)
@@ -313,7 +313,7 @@ Personne claire claire.kan
 }
 
 const carnetModel = `
-enum Etat { neuf, use "usé" }
+enum Etat { neuf, use }
 
 schema Carnet {
   titre:       Text @heading

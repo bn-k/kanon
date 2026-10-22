@@ -73,31 +73,22 @@ func readsString(rs []*Reads) string {
 	return b.String()
 }
 
-// fileString writes f back in a canonical form, with every label, default or not.
+// fileString writes f back in a canonical form.
 func fileString(f *File) string {
 	var b strings.Builder
 	for _, u := range f.Units {
-		fmt.Fprintf(&b, "unit %s %q\n", u.Name, u.Label)
+		fmt.Fprintf(&b, "unit %s\n", u.Name)
 	}
 	for _, e := range f.Enums {
-		var vs []string
-		for _, v := range e.Values {
-			if v.Label != "" {
-				vs = append(vs, v.Name+" "+strconv.Quote(v.Label))
-			} else {
-				vs = append(vs, v.Name)
-			}
-		}
-		fmt.Fprintf(&b, "enum %s { %s }\n", e.Name, strings.Join(vs, ", "))
+		fmt.Fprintf(&b, "enum %s { %s }\n", e.Name, strings.Join(e.ValueNames(), ", "))
 	}
 	for _, s := range f.Schemas {
-		fmt.Fprintf(&b, "schema %s %q%s {\n", s.Name, s.Label, readsString(s.Reads))
+		fmt.Fprintf(&b, "schema %s%s {\n", s.Name, readsString(s.Reads))
 		for _, fd := range s.Fields {
 			fmt.Fprintf(&b, "  %s: %s", fd.Name, fd.Type)
 			if fd.Inverse != "" {
 				b.WriteString(" <- " + fd.Inverse)
 			}
-			fmt.Fprintf(&b, " %q", fd.Label)
 			for _, a := range fd.Annots {
 				b.WriteString(" @" + a.Name)
 			}
@@ -202,13 +193,13 @@ func TestParseExpr(t *testing.T) {
 
 func TestParseDecls(t *testing.T) {
 	src := `// A comment.
-unit pincee "pincée"
+unit pincee
 unit tasse
-enum Etat { neuf, bon use "usé", degrade "dégradé", }
-schema Ingredient "Ingrédient" reads "{quantite} [de] {nom}" reads fr "{nom}" {
-  quantite: Quantity "Quantité"
+enum Etat { neuf, bon use, degrade, }
+schema Ingredient reads "{quantite} [de] {nom}" reads fr "{nom}" {
+  quantite: Quantity
   nom:      Text @heading
-  notes:    [Prose]? @body "Notes libres" @sections,
+  notes:    [Prose]? @body @sections,
   total:    Money = a * b
 }
 schema Dce { rc: Rc  ae: Ae }
@@ -218,7 +209,7 @@ schema L {
   c: [-> A]
   d: [-> A]?
   e: [A] <- f
-  g: A? <- h "Gé"
+  g: A? <- h
 }
 schema Q {
   a: Int = 2 b: Int
@@ -230,33 +221,33 @@ fn pour(r: Recette, n: Int = 2,) -> Recette reads fr "{r.titre}" = r with { port
 rule ok(v: V) = yes
 rule ok2() -> Bool reads "x" reads en "y" = no
 `
-	want := `unit pincee "pincée"
-unit tasse ""
-enum Etat { neuf, bon, use "usé", degrade "dégradé" }
-schema Ingredient "Ingrédient" reads "{quantite} [de] {nom}" reads fr "{nom}" {
-  quantite: Quantity "Quantité"
-  nom: Text "Nom" @heading
-  notes: [Prose]? "Notes libres" @body @sections
-  total: Money "Total" = (a * b)
+	want := `unit pincee
+unit tasse
+enum Etat { neuf, bon, use, degrade }
+schema Ingredient reads "{quantite} [de] {nom}" reads fr "{nom}" {
+  quantite: Quantity
+  nom: Text @heading
+  notes: [Prose]? @body @sections
+  total: Money = (a * b)
 }
-schema Dce "Dce" {
-  rc: Rc "Rc"
-  ae: Ae "Ae"
+schema Dce {
+  rc: Rc
+  ae: Ae
 }
-schema L "L" {
-  a: -> A "A"
-  b: -> A? "B"
-  c: [-> A] "C"
-  d: [-> A]? "D"
-  e: [A] <- f "E"
-  g: A? <- h "Gé"
+schema L {
+  a: -> A
+  b: -> A?
+  c: [-> A]
+  d: [-> A]?
+  e: [A] <- f
+  g: A? <- h
 }
-schema Q "Q" {
-  a: Int "A" = 2
-  b: Int "B"
-  c: Quantity "C" = 2 kg
-  d: Int "D" = 2
-  kg: Int "Kg"
+schema Q {
+  a: Int = 2
+  b: Int
+  c: Quantity = 2 kg
+  d: Int = 2
+  kg: Int
 }
 fn pour(r: Recette, n: Int = 2) -> Recette reads fr "{r.titre}" = (r with {portions: n})
 rule ok(v: V) = yes
@@ -332,7 +323,15 @@ func TestParseErrors(t *testing.T) {
 	}{
 		{"schema S { a Text }", []string{"1:14: expected `:`, found `Text`"}},
 		{"schema S { a: [Text?] }", []string{"1:20: an array holds values; write [Text]? for an optional array"}},
-		{`schema S { a: Text "A" "B" }`, []string{"1:24: `a` already has a label"}},
+		{`schema S { a: Text "A" "B" }`, []string{
+			"1:20: a field holds no label: remove \"A\"; a heading in the document finds the field by its name, `a`",
+			"1:24: a field holds no label: remove \"B\"; a heading in the document finds the field by its name, `a`",
+		}},
+		{`schema S { a: Text "É" }`, []string{
+			"1:20: a field holds no label: remove \"É\"; a heading in the document finds the field by its name, `a`",
+		}},
+		{`schema S "S" {}`, []string{"1:10: a schema holds no label: remove \"S\"; a document writes `type: S`"}},
+		{`unit u "u"`, []string{"1:8: a unit holds no label: remove \"u\"; the document writes `u`"}},
 		{"schema S { a: }", []string{"1:15: expected a type, found `}`"}},
 		{"schema S { a: -> }", []string{"1:18: expected a type, found `}`"}},
 		{"schema S { a: [A] <- }", []string{"1:22: expected a name, found `}`"}},
@@ -342,7 +341,11 @@ func TestParseErrors(t *testing.T) {
 		{"schema S { 12 }", []string{"1:12: expected a field or `}`, found `12`"}},
 		{"foo", []string{"1:1: expected a declaration (unit, enum, schema, fn or rule), found `foo`"}},
 		{`"x"`, []string{"1:1: expected a declaration (unit, enum, schema, fn or rule), found a string"}},
-		{"enum E { a \"A\" \"B\" }", []string{"1:16: expected a value or `}`, found a string"}},
+		{"enum E { a \"A\" \"B\" }", []string{
+			"1:12: an enum value holds no label: remove \"A\"; the document writes `a`",
+			"1:16: an enum value holds no label: remove \"B\"; the document writes `a`",
+		}},
+		{"enum E { \"A\" }", []string{"1:10: expected a value or `}`, found a string"}},
 		{"enum E { a", []string{"1:11: expected a value or `}`, found end of file"}},
 		{"unit", []string{"1:5: expected a name, found end of file"}},
 		{"fn f() = 1", []string{"1:8: expected `->` and the result type, found `=`"}},
@@ -376,6 +379,42 @@ func TestParseErrors(t *testing.T) {
 	}
 }
 
+// TestParseASCII: a schema is written in ASCII, in its strings and comments too; one diagnostic per line at most,
+// and none where a label already is the mistake.
+func TestParseASCII(t *testing.T) {
+	tests := []struct {
+		src  string
+		want []string
+	}{
+		{"schema S { é: Text }", []string{`1:12: a schema is written in ASCII: write "e", not "é"`}},
+		{"// Ça\nunit u", []string{`1:4: a schema is written in ASCII: write "C", not "Ç"`}},
+		{"rule r() -> Bool reads \"n°\" = yes", []string{`1:26: a schema is written in ASCII: write "o", not "°"`}},
+		{"// « x »", []string{`1:4: a schema is written in ASCII: rewrite without "«"`}},
+		{"// éé\n// ü", []string{
+			`1:4: a schema is written in ASCII: write "e", not "é"`,
+			`2:4: a schema is written in ASCII: write "u", not "ü"`,
+		}},
+		{"// éa ü", []string{`1:4: a schema is written in ASCII: write "e", not "é"`}},
+		{"schema S { a: Text « }", []string{`1:20: a schema is written in ASCII: rewrite without "«"`}},
+		{"schema S { a Tèxt }", []string{
+			"1:14: expected `:`, found `Tèxt`",
+			`1:15: a schema is written in ASCII: write "e", not "è"`,
+		}},
+		{"schema S { a: Text \"é\" }", []string{
+			"1:20: a field holds no label: remove \"é\"; a heading in the document finds the field by its name, `a`",
+		}},
+		{"schema S { a: Text }\n// à", []string{`2:4: a schema is written in ASCII: write "a", not "à"`}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.src, func(t *testing.T) {
+			_, diags := Parse("t", tt.src)
+			if got := diagStrings(diags); !slices.Equal(got, tt.want) {
+				t.Errorf("got %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestParseRecovery(t *testing.T) {
 	tests := []struct {
 		src   string
@@ -385,17 +424,17 @@ func TestParseRecovery(t *testing.T) {
 		{
 			"schema A { a Text }\nschema B { b: }\nunit u",
 			[]string{"1:14: expected `:`, found `Text`", "2:15: expected a type, found `}`"},
-			"unit u \"\"\n",
+			"unit u\n",
 		},
 		{
 			"schema A {\n  a: Text\nschema B { b: Text }",
 			[]string{"3:1: expected a field or `}`, found `schema`"},
-			"schema B \"B\" {\n  b: Text \"B\"\n}\n",
+			"schema B {\n  b: Text\n}\n",
 		},
 		{
 			"foo schema A {}\nunit u",
 			[]string{"1:1: expected a declaration (unit, enum, schema, fn or rule), found `foo`"},
-			"unit u \"\"\n",
+			"unit u\n",
 		},
 		{
 			"a # b\nfn f() -> Int = (\nrule r() = yes",
@@ -407,12 +446,12 @@ func TestParseRecovery(t *testing.T) {
 			"rule r() = yes\n",
 		},
 		{
-			"schema A { a: [Text?] b: Text \"B\" \"C\" }",
+			"schema A { a: [Text?] b: Text \"B\" }",
 			[]string{
 				"1:20: an array holds values; write [Text]? for an optional array",
-				"1:35: `b` already has a label",
+				"1:31: a field holds no label: remove \"B\"; a heading in the document finds the field by its name, `b`",
 			},
-			"schema A \"A\" {\n  a: [Text] \"A\"\n  b: Text \"B\"\n}\n",
+			"schema A {\n  a: [Text]\n  b: Text\n}\n",
 		},
 	}
 	for _, tt := range tests {

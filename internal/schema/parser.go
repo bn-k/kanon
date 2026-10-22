@@ -1,6 +1,10 @@
 package schema
 
 import (
+	"fmt"
+	"strings"
+	"unicode/utf8"
+
 	"github.com/func-it/kanon/internal/diag"
 	"github.com/func-it/kanon/internal/names"
 	"github.com/func-it/kanon/internal/value"
@@ -10,19 +14,46 @@ import (
 // that every error is reported; the declarations it skipped are left out of the File.
 func Parse(path, src string) (*File, diag.List) {
 	toks, diags := lex(path, src)
-	p := &parser{toks: toks, diags: diags}
+	p := &parser{toks: toks, diags: diags, labelled: map[int]bool{}}
 	f := &File{Path: path}
 	for p.tok().kind != tEOF {
 		p.decl(f)
 	}
+	p.ascii(path, src)
 	p.diags.Sort()
 	return f, p.diags
 }
 
 type parser struct {
-	toks  []token
-	i     int
-	diags diag.List
+	toks     []token
+	i        int
+	diags    diag.List
+	labelled map[int]bool // the lines where a label was reported
+}
+
+// ascii reports the non-ASCII characters of src, in a name, a string or a comment alike: a schema is written in
+// ASCII. It reports the first of each line, and none on a line whose label is already reported: the label is the
+// mistake.
+func (p *parser) ascii(path, src string) {
+	for i, line := range strings.Split(src, "\n") {
+		if p.labelled[i+1] {
+			continue
+		}
+		col := 0
+		for _, r := range line {
+			col++
+			if r < utf8.RuneSelf {
+				continue
+			}
+			pos := diag.Pos{File: path, Line: i + 1, Col: col}
+			if plain, ok := names.Transliterate(r); ok {
+				p.errorf(pos, "%s", fmt.Sprintf("a schema is written in ASCII: write \"%s\", not \"%c\"", plain, r))
+			} else {
+				p.errorf(pos, "%s", fmt.Sprintf("a schema is written in ASCII: rewrite without \"%c\"", r))
+			}
+			break
+		}
+	}
 }
 
 // bail is what a syntax error panics with, to unwind to the declaration being parsed.
@@ -128,11 +159,18 @@ func (p *parser) decl(f *File) {
 func (p *parser) unit() *Unit {
 	p.advance()
 	n := p.name()
-	u := &Unit{Pos: n.pos, Name: n.text}
-	if p.tok().kind == tString {
-		u.Label = p.advance().text
+	p.noLabels("a unit", fmt.Sprintf("the document writes `%s`", n.text))
+	return &Unit{Pos: n.pos, Name: n.text}
+}
+
+// noLabels reports the strings that follow what a declaration or a field names: a schema holds no label, the
+// document writes the name. advice says what the document writes instead.
+func (p *parser) noLabels(what, advice string) {
+	for p.tok().kind == tString {
+		t := p.advance()
+		p.labelled[t.pos.Line] = true
+		p.errorf(t.pos, "%s", fmt.Sprintf("%s holds no label: remove \"%s\"; %s", what, t.text, advice))
 	}
-	return u
 }
 
 func (p *parser) enum() *Enum {
@@ -146,12 +184,9 @@ func (p *parser) enum() *Enum {
 			panic(p.fail(t.pos, "expected a value or `}`, found %s", desc(t)))
 		}
 		p.advance()
-		v := &EnumValue{Pos: t.pos, Name: t.text}
-		if p.tok().kind == tString {
-			v.Label = p.advance().text
-		}
+		p.noLabels("an enum value", fmt.Sprintf("the document writes `%s`", t.text))
 		p.accept(",")
-		e.Values = append(e.Values, v)
+		e.Values = append(e.Values, &EnumValue{Pos: t.pos, Name: t.text})
 	}
 	return e
 }
@@ -159,10 +194,8 @@ func (p *parser) enum() *Enum {
 func (p *parser) schema() *Schema {
 	p.advance()
 	n := p.name()
-	s := &Schema{Pos: n.pos, Name: n.text, Label: n.text}
-	if p.tok().kind == tString {
-		s.Label = p.advance().text
-	}
+	s := &Schema{Pos: n.pos, Name: n.text}
+	p.noLabels("a schema", fmt.Sprintf("a document writes `type: %s`", n.text))
 	s.Reads = p.reads()
 	p.expect("{")
 	for !p.accept("}") {
@@ -197,22 +230,16 @@ func (p *parser) field() *Field {
 		panic(p.fail(t.pos, "expected a field or `}`, found %s", desc(t)))
 	}
 	p.advance()
-	f := &Field{Pos: t.pos, Name: t.text, Label: names.Label(t.text)}
+	f := &Field{Pos: t.pos, Name: t.text}
 	p.expect(":")
 	f.Type = p.typ()
 	if p.accept("<-") {
 		n := p.name()
 		f.Inverse, f.InversePos = n.text, n.pos
 	}
-	labelled := false
 	for {
-		if l := p.tok(); l.kind == tString {
-			p.advance()
-			if labelled {
-				p.errorf(l.pos, "`%s` already has a label", f.Name)
-			} else {
-				f.Label, labelled = l.text, true
-			}
+		if p.tok().kind == tString {
+			p.noLabels("a field", fmt.Sprintf("a heading in the document finds the field by its name, `%s`", f.Name))
 		} else if at := p.tok(); at.isPunct("@") {
 			p.advance()
 			n := p.tok()

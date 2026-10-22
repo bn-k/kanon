@@ -200,7 +200,6 @@ func (c *checker) enum(e *Enum) {
 func (c *checker) schema(s *Schema) {
 	c.typeName(s.Pos, s.Name)
 	byName := map[string]bool{}
-	byLabel := map[string]*Field{}
 	annotated := map[string]*Field{}
 	for _, f := range s.Fields {
 		c.name(f.Pos, f.Name)
@@ -209,10 +208,6 @@ func (c *checker) schema(s *Schema) {
 			c.errorf(f.Pos, "`id` is reserved: every object has one")
 		case byName[f.Name]:
 			c.errorf(f.Pos, "`%s` is already a field of `%s`", f.Name, s.Name)
-		case byLabel[f.Label] != nil:
-			c.errorf(f.Pos, "the label %q is already used by `%s`", f.Label, byLabel[f.Label].Name)
-		default:
-			byLabel[f.Label] = f
 		}
 		byName[f.Name] = true
 		c.resolve(f.Type)

@@ -1,29 +1,29 @@
-// Working material: a property listing (annonce immobilière), with its photos and floor plan, the agents who sell
+// Working material: a property listing (annonce immobiliere), with its photos and floor plan, the agents who sell
 // the property and its seller, each in a document of their own.
 
 enum TypeBien { appartement, maison, terrain }
 enum Classe { a, b, c, d, e, f, g }
-enum Niveau { sous-sol, rez-de-chaussee "rez-de-chaussée", etage "étage" }
+enum Niveau { sous-sol, rez-de-chaussee, etage }
 
 schema Annonce {
   titre:            Text @heading
-  reference:        Text "Référence"
+  reference:        Text
   bien:             TypeBien
   prix:             Money
   surface:          Quantity
   terrain:          Quantity?
   chambres:         Int
-  dpe:              Classe "DPE"
-  visite:           DateTime "Prochaine visite"
+  dpe:              Classe
+  visite:           DateTime
   agent:            -> Agent
-  co-mandataires:   [-> Agent]? "Co-mandataires"
+  co-mandataires:   [-> Agent]?
   vendeur:          -> Vendeur
   localisation:     Localisation
   plan:           File
   photos:           [Image]
   description:      Prose @body
-  pieces:           [Piece] "Pièces"
-  visite-virtuelle: Code? "Visite virtuelle"
+  pieces:           [Piece]
+  visite-virtuelle: Code?
 }
 
 schema Localisation {
@@ -32,7 +32,7 @@ schema Localisation {
   quartier:    Text?
 }
 
-schema Piece "Pièce" {
+schema Piece {
   nom:     Text
   niveau:  Niveau
   surface: Quantity
@@ -41,7 +41,7 @@ schema Piece "Pièce" {
 schema Agent {
   nom:        Text @heading
   agence:     Text
-  telephone:  Text "Téléphone"
+  telephone:  Text
   email:      Text
   portrait:   Image?
   mandats:    [Annonce] <- agent

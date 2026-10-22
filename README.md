@@ -18,7 +18,7 @@ misused.
 
 ```
 f-2026-032.kan:8:7: error: write a date as YYYY-MM-DD (2026-10-22), not "22/10/2026"
-f-2026-032.kan:20:8: error: a key or a column is a name, not a label: write designation, not "Désignation"
+f-2026-032.kan:20:8: error: names are ASCII: write designation, not "Désignation"
 f-2026-032.kan:27:44: error: {total-tc} inserts no field; did you mean {total-ttc}?
 ```
 
@@ -28,7 +28,7 @@ the object, in the words of its `reads` sentence when it has one:
 
 ```
 f-2026-033.kan:12:1: error: `total-ttc` is 9 504.00 EUR, not "9 500.00 EUR"
-clio.kan: error: `vidange-a-jour` fails: "Renault Clio a roulé moins de 15 000 km depuis sa dernière vidange"; 15 250 km is not less than 15 000 km
+clio.kan: error: `vidange-a-jour` fails: "Renault Clio a roule moins de 15 000 km depuis sa derniere vidange"; 15 250 km is not less than 15 000 km
 ```
 
 ## Computed fields and rules
@@ -121,7 +121,8 @@ $ tree-sitter generate && tree-sitter test
 $ for f in $(find ../../cases -name '*.kanonarch'); do tree-sitter parse -q "$f"; done
 ```
 
-then commit, set `rev` to that commit, and rebuild the extension from Zed's extensions page.
+The loop reports `cases/errors-schema-label/broken.kanonarch` only: it holds labels on purpose, which the grammar
+refuses as the parser does. Then commit, set `rev` to that commit, and rebuild the extension from Zed's extensions page.
 
 ## Cases
 
@@ -143,12 +144,14 @@ that belongs to the language is English.
 | `jours-feries/` | an array as a CSV file: the public holidays of France, Etalab's open data |
 | `errors-*/` | the same schemas with mistakes, and what `kan lint` says about them; `errors-eval/` and `errors-schema/`, mistakes in computations, when a document is evaluated and when its schema is checked; `errors-northwind-query*/`, mistakes in a query |
 
-## Names, ids and labels
+## Names and ids
 
 1. **Names** are ASCII slugs: lowercase letters, digits and hyphens (`prix-unitaire`, `controle-technique`). This
    covers fields, enum values, rules, functions and methods (`max-by`). Type names are PascalCase ASCII
    (`EtatDesLieux`). Because a hyphen belongs to the name, subtraction needs spaces: `total-ht` is a name,
-   `total - ht` is a subtraction.
+   `total - ht` is a subtraction. A `.kanonarch` file is ASCII from end to end, strings and comments included:
+   `reads fr "le depot de garantie ne depasse pas un mois de loyer"`, not "dépôt". A character outside ASCII is
+   reported at its position, with the letter to write.
 2. **Every object has an id**, a slug of the same shape. A UUID is valid; a meaningful slug is better. Plain values
    (the steps of a recipe) are not objects and have no id.
 3. An id is **always written**, never derived from a title:
@@ -164,11 +167,12 @@ that belongs to the language is English.
    their ids share its namespace, and a link in a cell is relative to its folder. An entry of a folder is a file
    of its own, linked to by its path (`[[clio/entretiens/2025-06-10-vidange]]`), so `categories/1.kan` and
    `employees/1.kan` don't clash.
-4. **Labels** are what a reader sees: free Unicode text, given in the schema after the type
-   (`echeance: Date "Échéance"`, `schema Piece "Pièce"`). Without one, the label is the name with hyphens turned
-   into spaces and the first letter uppercased: `zone-tendue` reads "Zone tendue".
-5. In a document, **headings match labels**; **keys, table headers and enum values use names** (`etat: use` is
-   shown as "usé"). Names are matched exactly, with no tolerance for case or accents.
+4. **A schema holds no label.** A field, a schema, an enum value or a unit is known by its name alone; a string
+   after one is an error that says to remove it. Wherever a message names an enum value, it shows the name.
+5. In a document, **a heading finds its field by name**: its text is folded (lowercase, accents removed, spaces,
+   hyphens and apostrophes alike) and compared with the field's name, so "Dépôt de garantie" opens
+   `depot-de-garantie`. **Keys, table headers and enum values are the names themselves** (`etat: use`), matched
+   exactly, with no tolerance for case or accents.
 
 ## Files and folders
 
@@ -188,7 +192,7 @@ that belongs to the language is English.
 ## How a document is read
 
 11. A `key: value` line fills a field of the current object.
-12. A heading whose text matches a field's label opens that field: a sub-object (with its own key lines and an
+12. A heading whose folded text equals a field's name (rule 5) opens that field: a sub-object (with its own key lines and an
     id), a list, a table or prose. A field that holds a single value is always a key line.
 13. Under a field heading, a table fills an array of objects (one column per field, plus `id`); a list fills an
     array of values, or of objects when their schema has a `reads` pattern; paragraphs fill a `Prose` field. The
@@ -255,5 +259,5 @@ Go, standard library only, except the pure Go SQLite driver `modernc.org/sqlite`
 | `internal/sheet` | CSV files and xlsx sheets, read as rows of cells in the canonical format |
 | `internal/pattern` | `reads` patterns such as `"{quantite} [de] {nom}"` |
 | `internal/value` | literals: numbers, money, percentages, quantities, dates and times, durations, versions |
-| `internal/names` | slugs, labels, and "did you mean" suggestions |
+| `internal/names` | slugs, the folding of a heading to a name, and "did you mean" suggestions |
 | `internal/diag` | diagnostics |

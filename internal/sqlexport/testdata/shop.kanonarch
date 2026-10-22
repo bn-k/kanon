@@ -1,4 +1,4 @@
-// Every row of the table of docs/data.md §4, as kan sql lays it out.
+// Every row of the table of docs/data.md section 4, as kan sql lays it out.
 
 enum Condition { new, good, worn }
 

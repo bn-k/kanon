@@ -5,7 +5,7 @@ maison-caluire.kan:14:9: error: write a date and time as YYYY-MM-DD HH:MM (2026-
 maison-caluire.kan:16:1: error: `localisation` holds its own `Localisation`, not a link: write it under ## Localisation {#id}
 maison-caluire.kan:17:7: error: no file `maison-caluire/plan-rez.pdf`; did you mean `maison-caluire/plan-rdc.pdf`?
 maison-caluire.kan:24:1: error: no file `maison-caluire/photos/04-terrasse.jpg`
-maison-caluire.kan:28:4: error: "Agent" is the label of `agent`, a link to an `Agent` written as a key line: agent: [[…]]
+maison-caluire.kan:28:4: error: "Agent" names the field `agent`, a link to an `Agent` written as a key line: agent: [[…]]
 maison-caluire.kan:36:3: error: this field holds an `Agent`; [[vendeurs/famille-roux]] is a `Vendeur`
 maison-caluire.kan:44:3: error: the id `cuisine` is already used, at line 43
 maison-caluire.kan:52:1: error: `visite-virtuelle` holds one code block; merge this one into the block at line 48

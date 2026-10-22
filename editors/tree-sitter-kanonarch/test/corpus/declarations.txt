@@ -3,13 +3,13 @@ Units, enums and schemas
 ================================================================================
 
 // A comment.
-unit pincee "pincée"
+unit pincee
 unit tasse
-enum Etat { neuf, bon use "usé", degrade "dégradé", }
-schema Ingredient "Ingrédient" reads "{quantite} [de] {nom}" reads fr "{nom}" {
-  quantite: Quantity "Quantité"
+enum Etat { neuf, bon use, degrade, }
+schema Ingredient reads "{quantite} [de] {nom}" reads fr "{nom}" {
+  quantite: Quantity
   nom:      Text @heading
-  notes:    [Prose]? @body "Notes libres" @sections,
+  notes:    [Prose]? @body @sections,
   total:    Money = a * b
 }
 schema Dce { rc: Rc  ae: Ae }
@@ -19,9 +19,7 @@ schema Dce { rc: Rc  ae: Ae }
 (source_file
   (comment)
   (unit_declaration
-    name: (identifier)
-    label: (string
-      (string_content)))
+    name: (identifier))
   (unit_declaration
     name: (identifier))
   (enum_declaration
@@ -32,17 +30,11 @@ schema Dce { rc: Rc  ae: Ae }
       (enum_value
         name: (identifier))
       (enum_value
-        name: (identifier)
-        label: (string
-          (string_content)))
+        name: (identifier))
       (enum_value
-        name: (identifier)
-        label: (string
-          (string_content)))))
+        name: (identifier))))
   (schema_declaration
     name: (identifier)
-    label: (string
-      (string_content))
     (reads_clause
       text: (string
         (placeholder)
@@ -56,9 +48,7 @@ schema Dce { rc: Rc  ae: Ae }
       (field_declaration
         name: (identifier)
         type: (type
-          name: (identifier))
-        label: (string
-          (string_content)))
+          name: (identifier)))
       (field_declaration
         name: (identifier)
         type: (type
@@ -71,8 +61,6 @@ schema Dce { rc: Rc  ae: Ae }
           name: (identifier))
         (annotation
           name: (identifier))
-        label: (string
-          (string_content))
         (annotation
           name: (identifier)))
       (field_declaration
@@ -104,7 +92,7 @@ schema L {
   c: [-> A]
   d: [-> A]?
   e: [A] <- f
-  g: A? <- h "Gé"
+  g: A? <- h
 }
 
 --------------------------------------------------------------------------------
@@ -140,9 +128,7 @@ schema L {
         type: (type
           name: (identifier))
         (inverse
-          field: (identifier))
-        label: (string
-          (string_content))))))
+          field: (identifier))))))
 
 ================================================================================
 A number followed by the next field is no quantity

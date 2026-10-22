@@ -70,7 +70,7 @@ mesures: [[maison/mesures.csv]]
 produits: [[catalogue.xlsx#produits]]     // #sheet; without it, the first sheet
 ```
 
-- The first row holds field names (names, not labels: the same rule as a table's header) and the `id` column; every
+- The first row holds field names (the names themselves, exactly: the same rule as a table's header) and the `id` column; every
   other row is an object, checked like a row of a table.
 - Cells are written in the canonical format. An xlsx cell typed by Excel is first turned into its canonical text: a
   number into a decimal (`1250.5`), a date into `2026-10-22` (or a `DateTime`), a boolean into `yes`/`no`, a
