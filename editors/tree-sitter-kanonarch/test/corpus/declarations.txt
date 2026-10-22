@@ -1,0 +1,245 @@
+================================================================================
+Units, enums and schemas
+================================================================================
+
+// A comment.
+unit pincee "pincée"
+unit tasse
+enum Etat { neuf, bon use "usé", degrade "dégradé", }
+schema Ingredient "Ingrédient" reads "{quantite} [de] {nom}" reads fr "{nom}" {
+  quantite: Quantity "Quantité"
+  nom:      Text @heading
+  notes:    [Prose]? @body "Notes libres" @sections,
+  total:    Money = a * b
+}
+schema Dce { rc: Rc  ae: Ae }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (unit_declaration
+    name: (identifier)
+    label: (string
+      (string_content)))
+  (unit_declaration
+    name: (identifier))
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_value
+        name: (identifier))
+      (enum_value
+        name: (identifier))
+      (enum_value
+        name: (identifier)
+        label: (string
+          (string_content)))
+      (enum_value
+        name: (identifier)
+        label: (string
+          (string_content)))))
+  (schema_declaration
+    name: (identifier)
+    label: (string
+      (string_content))
+    (reads_clause
+      text: (string
+        (placeholder)
+        (string_content)
+        (placeholder)))
+    (reads_clause
+      language: (identifier)
+      text: (string
+        (placeholder)))
+    body: (schema_body
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        label: (string
+          (string_content)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        (annotation
+          name: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        (annotation
+          name: (identifier))
+        label: (string
+          (string_content))
+        (annotation
+          name: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        value: (binary_expression
+          left: (identifier)
+          right: (identifier)))))
+  (schema_declaration
+    name: (identifier)
+    body: (schema_body
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))))))
+
+================================================================================
+Links, arrays and inverses
+================================================================================
+
+schema L {
+  a: -> A
+  b: -> A?
+  c: [-> A]
+  d: [-> A]?
+  e: [A] <- f
+  g: A? <- h "Gé"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (schema_declaration
+    name: (identifier)
+    body: (schema_body
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        (inverse
+          field: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        (inverse
+          field: (identifier))
+        label: (string
+          (string_content))))))
+
+================================================================================
+A number followed by the next field is no quantity
+================================================================================
+
+schema Q {
+  a: Int = 2 b: Int
+  c: Quantity = 2 kg
+  d: Int = 2
+  kg: Int
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (schema_declaration
+    name: (identifier)
+    body: (schema_body
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        value: (number))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        value: (quantity
+          value: (number)
+          unit: (unit
+            (identifier))))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        value: (number))
+      (field_declaration
+        name: (identifier)
+        type: (type
+          name: (identifier))))))
+
+================================================================================
+Functions and rules
+================================================================================
+
+fn pour(r: Recette, n: Int = 2,) -> Recette reads fr "{r.titre}" = r with { portions: n }
+rule ok(v: V) = yes
+rule ok2() -> Bool reads "x" reads en "y" = no
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (type
+          name: (identifier)))
+      (parameter
+        name: (identifier)
+        type: (type
+          name: (identifier))
+        default: (number)))
+    result: (type
+      name: (identifier))
+    (reads_clause
+      language: (identifier)
+      text: (string
+        (placeholder)))
+    body: (with_expression
+      object: (identifier)
+      (with_field
+        name: (identifier)
+        value: (identifier))))
+  (rule_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (type
+          name: (identifier))))
+    body: (identifier))
+  (rule_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    result: (type
+      name: (identifier))
+    (reads_clause
+      text: (string
+        (string_content)))
+    (reads_clause
+      language: (identifier)
+      text: (string
+        (string_content)))
+    body: (identifier)))

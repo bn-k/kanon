@@ -1,0 +1,388 @@
+================================================================================
+Products bind tighter than sums
+================================================================================
+
+fn t() -> Int = a + b * c
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))))
+
+================================================================================
+Parentheses
+================================================================================
+
+fn t() -> Int = (a + b) * c
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (parenthesized_expression
+        (binary_expression
+          (identifier)
+          (identifier)))
+      (identifier))))
+
+================================================================================
+Operators are left-associative
+================================================================================
+
+fn t() -> Int = a - b - c
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (binary_expression
+        (identifier)
+        (identifier))
+      (identifier))))
+
+================================================================================
+?? binds loosest
+================================================================================
+
+fn t() -> Int = a ?? b or c
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))))
+
+================================================================================
+and binds tighter than or, comparisons tighter than and
+================================================================================
+
+fn t() -> Int = a or b and c == d
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (identifier)
+      (binary_expression
+        (identifier)
+        (binary_expression
+          (identifier)
+          (identifier))))))
+
+================================================================================
+Comparisons chain to the left
+================================================================================
+
+fn t() -> Int = a <= b != c
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (binary_expression
+        (identifier)
+        (identifier))
+      (identifier))))
+
+================================================================================
+A minus applies to an operand
+================================================================================
+
+fn t() -> Int = -a * - b.c
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (unary_expression
+        (identifier))
+      (unary_expression
+        (member_expression
+          (identifier)
+          (identifier))))))
+
+================================================================================
+not applies to a comparison
+================================================================================
+
+fn t() -> Int = not a == b
+fn u() -> Int = not a and b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (unary_expression
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (unary_expression
+        (identifier))
+      (identifier))))
+
+================================================================================
+Members and calls
+================================================================================
+
+fn t() -> Int = a.b?.c(d, e,)
+fn u() -> Int = f(g(x))(y)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (call_expression
+      (member_expression
+        (member_expression
+          (identifier)
+          (identifier))
+        (identifier))
+      (argument_list
+        (identifier)
+        (identifier))))
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (call_expression
+      (call_expression
+        (identifier)
+        (argument_list
+          (call_expression
+            (identifier)
+            (argument_list
+              (identifier)))))
+      (argument_list
+        (identifier)))))
+
+================================================================================
+with binds tighter than operators
+================================================================================
+
+fn t() -> Int = x with { a: 1, b: 2, }
+fn u() -> Int = a + b with { c: d }
+fn v() -> Int = x with {}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (with_expression
+      (identifier)
+      (with_field
+        (identifier)
+        (number))
+      (with_field
+        (identifier)
+        (number))))
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (identifier)
+      (with_expression
+        (identifier)
+        (with_field
+          (identifier)
+          (identifier)))))
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (with_expression
+      (identifier))))
+
+================================================================================
+Functions as arguments
+================================================================================
+
+fn t() -> Int = v.entretiens.filter(e => e.operation == op).max-by(e => e.date)
+fn u() -> Int = f((a, b) => a + b, () => 1)
+fn v() -> Int = (a) + b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (call_expression
+      (member_expression
+        (call_expression
+          (member_expression
+            (member_expression
+              (identifier)
+              (identifier))
+            (identifier))
+          (argument_list
+            (lambda
+              (identifier)
+              (binary_expression
+                (member_expression
+                  (identifier)
+                  (identifier))
+                (identifier)))))
+        (identifier))
+      (argument_list
+        (lambda
+          (identifier)
+          (member_expression
+            (identifier)
+            (identifier))))))
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (call_expression
+      (identifier)
+      (argument_list
+        (lambda
+          (lambda_parameters
+            (identifier)
+            (identifier))
+          (binary_expression
+            (identifier)
+            (identifier)))
+        (lambda
+          (lambda_parameters)
+          (number)))))
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (parenthesized_expression
+        (identifier))
+      (identifier))))
+
+================================================================================
+The else branch goes as far as it can
+================================================================================
+
+fn t() -> Int = if c then a else b + 1
+fn u(p: Int) -> Int = if p then (q, r) => s with { z: 1 } else -1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (if_expression
+      (identifier)
+      (identifier)
+      (binary_expression
+        (identifier)
+        (number))))
+  (function_declaration
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (type
+          (identifier))))
+    (type
+      (identifier))
+    (if_expression
+      (identifier)
+      (lambda
+        (lambda_parameters
+          (identifier)
+          (identifier))
+        (with_expression
+          (identifier)
+          (with_field
+            (identifier)
+            (number))))
+      (unary_expression
+        (number)))))
+
+================================================================================
+A hyphen inside a name, a minus between spaces
+================================================================================
+
+fn t() -> Int = total-ht - ht * taux-tva
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))))

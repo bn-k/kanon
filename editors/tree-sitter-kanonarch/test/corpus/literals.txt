@@ -1,0 +1,127 @@
+================================================================================
+Numbers grouped by spaces, quantities, amounts and percentages
+================================================================================
+
+fn t() -> Int = 1 250.50 EUR + 15 000 km + 20 % + 3 years + 0.01 + 1 250
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameter_list)
+    (type
+      (identifier))
+    (binary_expression
+      (binary_expression
+        (binary_expression
+          (binary_expression
+            (binary_expression
+              (quantity
+                (number)
+                (unit
+                  (identifier)))
+              (quantity
+                (number)
+                (unit
+                  (identifier))))
+            (quantity
+              (number)
+              (unit)))
+          (quantity
+            (number)
+            (unit
+              (identifier))))
+        (number))
+      (number))))
+
+================================================================================
+A dated duration
+================================================================================
+
+rule r(f: Facture) -> Bool = f.echeance <= f.date + 60 days
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (rule_declaration
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (type
+          (identifier))))
+    (type
+      (identifier))
+    (binary_expression
+      (member_expression
+        (identifier)
+        (identifier))
+      (binary_expression
+        (member_expression
+          (identifier)
+          (identifier))
+        (quantity
+          (number)
+          (unit
+            (identifier)))))))
+
+================================================================================
+Strings, escapes and placeholders
+================================================================================
+
+unit u "a \"b\" \\ c"
+unit v "{ never closed"
+schema S reads fr "le dernier entretien « {op} » de {v.nom}" {}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (unit_declaration
+    (identifier)
+    (string
+      (string_content)
+      (escape_sequence)
+      (string_content)
+      (escape_sequence)
+      (string_content)
+      (escape_sequence)
+      (string_content)))
+  (unit_declaration
+    (identifier)
+    (string
+      (string_content)
+      (string_content)))
+  (schema_declaration
+    (identifier)
+    (reads_clause
+      (identifier)
+      (string
+        (string_content)
+        (placeholder)
+        (string_content)
+        (placeholder)))
+    (schema_body)))
+
+================================================================================
+Names with accents and digits
+================================================================================
+
+enum Niveau { sous-sol, rez-de-chaussee "rez-de-chaussée", étage, x-1 }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (enum_declaration
+    (identifier)
+    (enum_body
+      (enum_value
+        (identifier))
+      (enum_value
+        (identifier)
+        (string
+          (string_content)))
+      (enum_value
+        (identifier))
+      (enum_value
+        (identifier)))))

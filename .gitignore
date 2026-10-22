@@ -1,2 +1,5 @@
 /kan
 *.out
+# Built by Zed when it installs the dev extension.
+/editors/zed/grammars/
+/editors/zed/extension.wasm
