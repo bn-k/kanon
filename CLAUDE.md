@@ -1,8 +1,9 @@
 # CLAUDE.md
 
-The Kanon toolchain: `kan lint`, `kan eval`, `kan import` and `kan sql`. The language, the reading rules and the
-layout of the code are in `README.md`; the project's decisions and open questions in `docs/decisions.md`; the
-study that opened it in `docs/study.md`. Kanon is open source: every document of the project lives in this
+The Kanon toolchain: `kan lint`, `kan eval`, `kan write`, `kan import`, `kan sql` and `kan lsp`. `README.md` is the
+front page, kept short; the language and its reading rules are in `docs/language.md`, the commands in
+`docs/kan.md`, the layout of the code and the checks in `CONTRIBUTING.md`; the project's decisions and open
+questions in `docs/decisions.md`; the study that opened it in `docs/study.md`. Kanon is open source: every document of the project lives in this
 repository, none in a shared drive. A new decision goes into `docs/decisions.md`.
 
 The repository is public, on GitHub at `bn-k/kanon`, under the MIT licence (`LICENSE`): whatever is pushed is

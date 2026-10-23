@@ -1,6 +1,6 @@
 # Decisions
 
-What has been decided about Kanon, and when. The language as it stands is in `README.md`, the design of data and SQL
+What has been decided about Kanon, and when. The language as it stands is in `docs/language.md`, the design of data and SQL
 in `docs/data.md`, the study that opened the project in `docs/study.md`.
 
 ## Project
@@ -16,6 +16,14 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   `cases/`, their sources included.
 - **Compiler, parser and linter in Go**, for now (2026-10-22). Standard library only, except the pure Go SQLite
   driver `modernc.org/sqlite`, allowed in the SQL packages only.
+- **The language is defined in one place, `docs/language.md`** (2026-10-23), rule by rule, with numbers that
+  stay; the commands are in `docs/kan.md`. The README is the front page: what Kanon is for, one example run as a
+  case (`cases/board`), how to install it, where it stands. It links to the rules and defines none.
+- **The example of the front page holds whatever the date** (2026-10-23): its rule doesn't read `today`, so that
+  the board stays valid and its query still runs a year later. A task that is late is not an invalid board.
+- **Releases are tags `vX.Y.Z`**, built for Linux and macOS, their notes taken from `CHANGELOG.md` (2026-10-23).
+  Before 1.0 a minor version may change the language, and the changelog says how to update documents. Windows
+  waits for issue #1.
 
 ## Language
 

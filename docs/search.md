@@ -228,7 +228,7 @@ excludes before ranking, the limit and the offset hold, an empty query and an un
 - **Local by default.** Without `.kanon/embed` nothing is embedded and nothing leaves the machine. With a local server,
   the text goes to loopback only. A remote host needs `remote: yes`, written in the config of that folder.
 - **What leaves, if remote:** the chunks to index (context line, keys and body) and the query. Never a file, never a
-  binary. Personal documents belong with a local model; this is said in the README, once.
+  binary. Personal documents belong with a local model; this is said once, where `kan search` is documented.
 - **The index holds the text** (FTS5 stores it, to build excerpts): it is as private as the documents, gitignored, and
   deleted with `.kanon/`. No secret belongs in a document anyway (the project rule).
 - **Cost is printed before and after** every embedding run, on stderr: `embedding 412 chunks (about 21 000 tokens,

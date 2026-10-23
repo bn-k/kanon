@@ -1,4 +1,4 @@
-$ kan write -n -today 2026-10-23 schema.kanonarch board/tasks/2026-10-28-release-notes.kan=release-notes.txt
+$ kan write -n schema.kanonarch board/tasks/2026-10-28-release-notes.kan=release-notes.txt
 board/tasks/2026-10-28-release-notes.kan:3:9: error: "in progress" is not a `Status`: write todo, doing or done
 board/tasks/2026-10-28-release-notes.kan:4:8: error: unknown id `anna` in board.kan; did you mean `ana`?
 board/tasks/2026-10-28-release-notes.kan:5:6: error: write a date as YYYY-MM-DD (2026-10-22), not "30/10/2026"

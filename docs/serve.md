@@ -120,7 +120,7 @@ folder.
 
 ### 4.1 Order lists
 
-A folder is in the order of its file names (rule 9 of the README). An array that `kan serve` must keep in another
+A folder is in the order of its file names (rule 9 of `docs/language.md`). An array that `kan serve` must keep in another
 order gets an **order list**: under the field's heading, in the document that owns the folder, a list of links to
 its entries.
 
@@ -171,7 +171,7 @@ when a relative path would need `..`; a person writes whichever reads better.
 People and models edit the files directly; each of them lints after each change, so a mistake is seen where it was
 made and not by the next program that reads the folder.
 
-- **Zed** lints as one types, through `kan lsp` (README, Editors).
+- **Zed** lints as one types, through `kan lsp` (`docs/kan.md`, Zed).
 - **Obsidian**: the plugin in `editors/obsidian` runs `kan lint` when a `.kan` file is saved and shows the
   diagnostics in a notice and in the gutter of the line.
 - **Language models**: the folder holds an `AGENTS.md` (or `CLAUDE.md`) that says how the documents are written

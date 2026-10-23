@@ -5,6 +5,7 @@ enum Status { todo, doing, done }
 schema Person {
   name:  Text
   email: Text
+  tasks: [Task] <- owner
 }
 
 schema Task {
@@ -21,7 +22,7 @@ schema Board {
   tasks:  [Task]
 }
 
-// today is supplied by the tool, so the rule stays pure.
-rule on-time(t: Task, on: Date = today) -> Bool
-  reads en "{t.title} is done, or due on {on} or later"
-  = t.status == done or t.due >= on
+// The rule holds across documents: the tasks of a person are the files of board/tasks that name them as owner.
+rule one-at-a-time(p: Person) -> Bool
+  reads en "{p.name} works on one task at a time"
+  = count(p.tasks, t => t.status == doing) <= 1

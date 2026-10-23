@@ -1,7 +1,7 @@
 # Kanon — initial study (2026-10-22)
 
 The study that opened the project, kept as written but for its links. What has been decided since is in
-`docs/decisions.md`; the language as it stands is in `README.md`.
+`docs/decisions.md`; the language as it stands is in `docs/language.md`.
 
 **Kanon** (`.kan`) is a language for documents as code. It describes any structured document (a contract, a
 company profile, a quality system, an equipment inventory, a balance sheet, a database) as typed code: schema,
@@ -83,7 +83,7 @@ The compiler speaks to both. For a document author, an error reads "the field *c
 
 ## Names, ids and files
 
-Decided on 2026-10-22; the reading rules are in `README.md`, the examples in `cases/`.
+Decided on 2026-10-22; the reading rules are in `docs/language.md`, the examples in `cases/`.
 
 - **Names are ASCII slugs in kebab-case**: fields, enum values, rules, functions, units and standard methods
   (`prix-unitaire`, `controle-technique`, `less-than`, `max-by`). Type names are PascalCase ASCII (`EtatDesLieux`).
@@ -162,7 +162,7 @@ Par jour de retard, le titulaire paie {penalite-jour}, dans la limite de {plafon
 
 If `#delais` doesn't exist in the CCTP, compilation fails; renaming the id `penalites` updates every link.
 
-How headings and paragraphs map onto schema objects is answered by the reading rules in `README.md` (`@sections`,
+How headings and paragraphs map onto schema objects is answered by the reading rules in `docs/language.md` (`@sections`,
 `@heading`, `@body`). Still open: writing `## 4.2 Pénalités de retard` and splitting it into `numero` and `titre`,
 which would take a `reads` pattern on the heading.
 
