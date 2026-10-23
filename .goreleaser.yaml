@@ -19,6 +19,5 @@ archives:
 checksum:
   name_template: checksums.txt
 
-# The notes are the section of CHANGELOG.md, given by the workflow.
-changelog:
-  disable: true
+# The notes are the section of CHANGELOG.md, given by the workflow with --release-notes. No changelog.disable:
+# it would ignore them too, and publish empty notes.
