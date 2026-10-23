@@ -81,7 +81,8 @@ Launch email  Sam Lee    2026-11-06
 $ go install github.com/bn-k/kanon/cmd/kan@latest
 ```
 
-or take a binary for Linux or macOS from the [releases](https://github.com/bn-k/kanon/releases). Windows is not
+or take a binary for Linux or macOS from the [releases](https://github.com/bn-k/kanon/releases); macOS holds back a
+binary downloaded with a browser until `xattr -d com.apple.quarantine kan`. Windows is not
 supported yet ([#1](https://github.com/bn-k/kanon/issues/1)); the Linux binary runs in WSL. Then try the board:
 
 ```
