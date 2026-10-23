@@ -6,8 +6,9 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 ## Project
 
 - **Open source**, kept in this repository only: no shared drive, every document of the project lives here
-  (2026-10-22). A private repository for now, `bn-k/kanon` on GitHub, and the module path
-  `github.com/bn-k/kanon` (2026-10-22); nothing public yet.
+  (2026-10-22). The repository `bn-k/kanon` on GitHub, and the module path `github.com/bn-k/kanon`
+  (2026-10-22); public under the MIT licence since 2026-10-23, its history first cleaned of the real tender of
+  `appel-offres`.
 - **The cases are fictional** or public data with their licence (`source/README.md`): no real person, machine or
   address (2026-10-22).
 - **Workflow**: import a real use case (a database, a document, any format), write its schema, write the document
@@ -98,8 +99,7 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 - **The language of schemas is named "Kanonarch"** in the editor, after its extension; "Kanon" is the language of
   documents (2026-10-22).
 - **The grammar's `repository` is the GitHub repository**, `https://github.com/bn-k/kanon`: Zed fetches the
-  commit `rev` from there, so a grammar change is seen once it is pushed. While the repository is private, the
-  machine that runs Zed needs git credentials for GitHub (2026-10-22).
+  commit `rev` from there, so a grammar change is seen once it is pushed (2026-10-22).
 - **Navigation and live diagnostics come from a language server, `kan lsp`**, in `internal/lsp`: the editor gets
   what `kan lint` knows, through one protocol any editor speaks. The extension only starts it; it runs the `kan` on
   the `PATH`, or the one named by `lsp.kan.binary.path` in Zed's settings (2026-10-22).

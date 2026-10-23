@@ -7,8 +7,7 @@ repository = "https://github.com/bn-k/kanon"
 description = "Kanon documents (.kan) and schemas (.kanonarch): highlighting, diagnostics and navigation"
 
 # Zed clones the grammar from this repository at this commit, even for a dev extension: a change to the grammar
-# is seen once it is pushed and rev names the new commit. While the repository is private, Zed's git needs
-# credentials for GitHub.
+# is seen once it is pushed and rev names the new commit.
 [grammars.kanonarch]
 repository = "https://github.com/bn-k/kanon"
 rev = "98fb0c0a50e01a85c26bcec0185e624bc17050f6"

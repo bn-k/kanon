@@ -288,3 +288,7 @@ Go, standard library only, except the pure Go SQLite driver `modernc.org/sqlite`
 | `internal/value` | literals: numbers, money, percentages, quantities, dates and times, durations, versions |
 | `internal/names` | slugs, the folding of a heading to a name, and "did you mean" suggestions |
 | `internal/diag` | diagnostics |
+
+## Licence
+
+MIT, in `LICENSE`. The data of a case keeps its own licence, given in its `source/README.md`.
