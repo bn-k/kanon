@@ -1,0 +1,60 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: gofmt
+        if: runner.os == 'Linux'
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - name: vet
+        run: go vet ./...
+      - name: test
+        if: runner.os != 'Linux'
+        run: go test ./...
+      - name: test, with the race detector and 95% coverage per package
+        if: runner.os == 'Linux'
+        run: |
+          go test -race -cover ./... | tee test.out
+          awk '/^ok/ && match($0, /coverage: [0-9.]+%/) {
+            c = substr($0, RSTART + 10, RLENGTH - 11)
+            if (c + 0 < 95) { print "coverage of " $2 " is " c "%, under 95%"; bad = 1 }
+          } END { exit bad }' test.out
+
+  grammar:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: editors/tree-sitter-kanonarch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install -g tree-sitter-cli@0.27.1
+      - name: generate, and the parser committed is the one generated
+        run: tree-sitter generate && git diff --exit-code -- src
+      - run: tree-sitter test
+      - name: every schema of cases/ parses, but the one that holds labels on purpose
+        run: |
+          failed=""
+          for f in $(find ../../cases -name '*.kanonarch' | sort); do
+            tree-sitter parse -q "$f" > /dev/null || failed="$failed $f"
+          done
+          test "$failed" = " ../../cases/errors-schema-label/broken.kanonarch" || { echo "parse errors in:$failed"; exit 1; }
