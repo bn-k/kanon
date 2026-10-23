@@ -1,0 +1,19 @@
+// Working material: a training course whose modules are files, in the order their order lists give, linking to
+// the trainers from the root folder.
+
+schema Formation {
+  titre:      Text @heading
+  formateurs: [Formateur]
+  modules:    [Module]
+}
+
+schema Formateur {
+  nom: Text
+}
+
+schema Module {
+  titre:     Text @heading
+  duree:     Duration
+  formateur: -> Formateur
+  modules:   [Module]?
+}

@@ -2,6 +2,7 @@ package sheet
 
 import (
 	"archive/zip"
+	"bytes"
 	"encoding/xml"
 	"errors"
 	"fmt"
@@ -120,9 +121,13 @@ func (c *counter) Read(p []byte) (int, error) {
 	return n, err
 }
 
-func readXLSX(file, name string, diags *diag.List) *Sheet {
+func readXLSX(file, name string, read func(string) ([]byte, error), diags *diag.List) *Sheet {
 	at := diag.Pos{File: file}
-	z, err := zip.OpenReader(file)
+	data, err := read(file)
+	var z *zip.Reader
+	if err == nil {
+		z, err = zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	}
 	if err != nil {
 		if errors.Is(err, zip.ErrFormat) {
 			diags.Errorf(at, "not an xlsx workbook: save it from Excel or LibreOffice as .xlsx")
@@ -131,8 +136,7 @@ func readXLSX(file, name string, diags *diag.List) *Sheet {
 		}
 		return nil
 	}
-	defer z.Close()
-	wb := &workbook{zip: &z.Reader, path: file, diags: diags}
+	wb := &workbook{zip: z, path: file, diags: diags}
 	s, err := wb.read(name)
 	if err != nil {
 		diags.Errorf(at, "%s", err)

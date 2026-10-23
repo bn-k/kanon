@@ -104,7 +104,7 @@ func TestRelations(t *testing.T) {
 			doc:    annonceDoc + "\n## Pieces\n\n- [[pieces/salon]]\n- [[pieces/cuisine]]\n",
 			more:   agents,
 			want: []string{
-				"doc.kan:11:1: error: `pieces` holds its own `Piece` objects, not links: write each one here, as a table, a list or one section per entry",
+				"doc.kan:11:1: error: `pieces` holds its own `Piece` objects, not links: write each one here, as a table, a list or one section per entry, or as a file of doc/pieces/ that this list orders",
 			},
 		},
 		{

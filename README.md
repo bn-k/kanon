@@ -236,8 +236,10 @@ that belongs to the language is English.
    column and field names; every other row is an entry, its cells in the canonical format, checked like a table.
 8. A file inside such a folder needs no front matter: its position gives its type (`Vehicule.entretiens` is
    `[Entretien]`). Its id is its file name.
-9. Entries of a folder are ordered by id, in lexical order: prefix ids with a date (`2025-06-10-vidange`) or a
-   number (`-001`) to control the order.
+9. Entries of a folder are ordered by id, in lexical order, unless the object's file gives the order: **an order
+   list**, a list of links alone under the field's heading, one link per entry of the folder
+   (`- [[formation/modules/accueil]]`). It links to whole files, lists each entry once and leaves none out.
+   Without one, prefix ids with a date (`2025-06-10-vidange`) or a number (`-001`) to control the order.
 10. A field is written in one place only: inline, as a folder or as a spreadsheet, never two of them.
 
 ## How a document is read
@@ -255,7 +257,8 @@ that belongs to the language is English.
     matter comes before it.
 16. `{field}` inserts a value into prose, looked up in the current object, then in the objects that hold it.
     `[[path#id]]` links to a document, an object or a declaration of a schema; `[[path.ext]]` links to a file and
-    `![[path.ext]]` embeds one. The path is relative to the document's folder, without `.kan`. Markdown links
+    `![[path.ext]]` embeds one. The path is relative to the document's folder, without `.kan`; a path that starts
+    with `/` starts from the schema's folder (`[[/formation#durand]]`), the same from every document. Markdown links
     with a relative path, `[text](path)` and `![alt](path)`, are checked the same way, and `![alt](path)` must be
     an image; links to another site (`https:`, `mailto:`) or within the page (`#top`) are not checked.
 17. Computed fields (`= …` in the schema) need not be written. When one is, it must hold its computed
@@ -270,7 +273,7 @@ that belongs to the language is English.
 
 20. A field whose type is a schema **holds its own object** (`localisation: Localisation`): it is written here,
     under the field's heading with its id (`## Localisation {#impasse-des-vergers}`), and `[T]` as a table, a list,
-    sections or a folder. A link there is an error.
+    sections or a folder. A link there is an error, except in the order list of a folder (rule 9).
 21. `-> T` is a **link** to an object written elsewhere, as a key line: `agent: [[agents/sophie-bernard]]`, or
     `[[bail#garantie]]` for an object inside a document. The target must be a `T`. `[-> T]` is a list of links:
     one per item under the field's heading (`- [[agents/marc-petit]]`, with no id), or separated by commas on a

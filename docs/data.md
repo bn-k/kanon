@@ -17,7 +17,8 @@ The principle stays the same: a `.kan` file is text anyone edits; whatever is no
 | `DateTime` | `2026-10-22 14:30`, `2026-10-22 14:30:05`, optionally ` UTC` or ` +02:00` | a real date and time |
 
 - A **file link** is a link whose last segment has an extension other than `.kan` and `.kanonarch`. Its path is
-  relative to the document's folder, like any link; every segment is an id and the extension is lowercase ASCII
+  relative to the document's folder, like any link, or to the schema's folder when it starts with `/`
+  (`[[/logos/marque.svg]]`); every segment is an id and the extension is lowercase ASCII
   letters and digits (`photo.jpg`, `plan-rdc.pdf`, `rapport-2026.xlsx`). A file named `Plan RDC.pdf` is reported with
   the name to give it: `name the file plan-rdc.pdf, not "Plan RDC.pdf"`.
 - The content decides what a file is, not its extension: `net/http.DetectContentType` on its first 512 bytes, plus

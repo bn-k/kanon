@@ -81,7 +81,7 @@ func (l *linter) file(name, path string, pos diag.Pos, k value.Kind) bool {
 	got, err := l.sniff(path)
 	switch {
 	case errors.Is(err, fs.ErrNotExist):
-		l.diags.Errorf(pos, "%s", noFile(name, path))
+		l.diags.Errorf(pos, "%s", l.noFile(name, path))
 		return false
 	case err != nil:
 		l.diags.Errorf(pos, "cannot read %s: %v", name, err)
@@ -115,7 +115,7 @@ func (l *linter) sniff(path string) (string, error) {
 	if s, ok := l.sniffed[path]; ok {
 		return s.media, s.err
 	}
-	got, err := sniff(path)
+	got, err := sniff(path, l.fs)
 	l.sniffed[path] = sniffed{got, err}
 	if err == nil {
 		l.files = append(l.files, path)
@@ -123,19 +123,29 @@ func (l *linter) sniff(path string) (string, error) {
 	return got, err
 }
 
-// sniff tells what a file holds from its first 512 bytes, as net/http does, and recognizes SVG images.
-func sniff(path string) (string, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return "", unwrap(err)
+// sniff tells what a file holds from its first 512 bytes, as net/http does, and recognizes SVG images. On the disk
+// it reads only them.
+func sniff(path string, fsys FS) (string, error) {
+	var head []byte
+	if fsys == Disk {
+		f, err := os.Open(path)
+		if err != nil {
+			return "", unwrap(err)
+		}
+		defer f.Close()
+		head = make([]byte, 512)
+		n, err := io.ReadFull(f, head)
+		if err != nil && err != io.EOF && err != io.ErrUnexpectedEOF {
+			return "", unwrap(err)
+		}
+		head = head[:n]
+	} else {
+		data, err := fsys.ReadFile(path)
+		if err != nil {
+			return "", unwrap(err)
+		}
+		head = data[:min(len(data), 512)]
 	}
-	defer f.Close()
-	head := make([]byte, 512)
-	n, err := io.ReadFull(f, head)
-	if err != nil && err != io.EOF && err != io.ErrUnexpectedEOF {
-		return "", unwrap(err)
-	}
-	head = head[:n]
 	if filepath.Ext(path) == ".svg" && bytes.Contains(head, []byte("<svg")) {
 		return "image/svg+xml", nil
 	}
@@ -144,9 +154,9 @@ func sniff(path string) (string, error) {
 }
 
 // noFile is the message for a link to a file that doesn't exist, with the nearest one in its folder.
-func noFile(name, path string) string {
+func (l *linter) noFile(name, path string) string {
 	msg := fmt.Sprintf("no file `%s`", name)
-	entries, _ := os.ReadDir(filepath.Dir(path))
+	entries, _ := l.fs.ReadDir(filepath.Dir(path))
 	var files []string
 	for _, e := range entries {
 		if !e.IsDir() {
@@ -161,7 +171,7 @@ func noFile(name, path string) string {
 
 // fileEntries checks the files of a folder that holds the array of files f of o, in the order of their names.
 func (l *linter) fileEntries(o *object, f *schema.Field, dir string) {
-	entries, err := os.ReadDir(dir)
+	entries, err := l.fs.ReadDir(dir)
 	if err != nil {
 		l.diags.Errorf(diag.Pos{File: dir}, "cannot read the folder: %v", unwrap(err))
 		return

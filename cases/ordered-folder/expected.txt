@@ -1,0 +1,9 @@
+$ kan sql -q "SELECT id, titre, duree, formateur_id AS formateur FROM module" schema.kanonarch formation.kan
+id            titre                      duree   formateur
+------------  -------------------------  ------  ---------
+accueil       Accueil                    30 min  durand
+securite      Sécurité                   3 h     petit
+epi           Équipements de protection  1 h     petit
+consignation  Consignation               2 h     petit
+bilan         Bilan                      1 h     durand
+5 rows

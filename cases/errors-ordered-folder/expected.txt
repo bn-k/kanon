@@ -1,0 +1,11 @@
+$ kan lint schema.kanonarch formation.kan
+formation.kan:15:1: error: the order list of `modules` leaves out `pause`: add - [[formation/modules/pause]] where it goes
+formation.kan:16:3: error: [[formation/modules/pauze]] is not an entry of `modules`; did you mean [[formation/modules/pause]]?
+formation.kan:17:3: error: [[formation/modules/accueil]] is already listed, at line 15; list each entry once
+formation.kan:18:3: error: an order list links to whole files: write [[formation/modules/bilan]], not "[[formation/modules/bilan#conclusion]]"
+formation/modules/accueil.kan:4:12: error: no document `/formations`; did you mean `/formation`?
+formation/modules/accueil.kan:8:1: error: `modules` holds its own `Module` objects, not links: write each one here, as a table, a list or one section per entry, or as a file of accueil/modules/ that this list orders
+formation/modules/bilan.kan:8:3: error: every item of an order list links to an entry of `modules`: write - [[bilan/modules/synthese]]
+formation/modules/pause.kan:4:12: error: a link path is made of ids: write [[/formation#durand]], not "[[/Formation#durand]]"
+8 errors
+[exit 1]

@@ -3,7 +3,9 @@ package lint
 
 import (
 	"cmp"
+	"errors"
 	"fmt"
+	"io/fs"
 	"maps"
 	"os"
 	"path/filepath"
@@ -31,8 +33,25 @@ type Result struct {
 // Options change how a lint run sees the world.
 type Options struct {
 	Today    time.Time                    // the date of today for the rules
-	ReadFile func(string) ([]byte, error) // reads the schema and the documents; os.ReadFile when nil
+	FS       FS                           // reads the files and the folders; Disk when nil
+	ReadFile func(string) ([]byte, error) // reads the schema and the documents, an editor's unsaved texts; FS when nil
 }
+
+// FS is what a lint run reads: the disk, or the disk with edits in front of it that are not written yet.
+type FS interface {
+	ReadFile(name string) ([]byte, error)
+	ReadDir(name string) ([]fs.DirEntry, error)
+	Stat(name string) (fs.FileInfo, error)
+}
+
+// Disk is the FS of the files on disk.
+var Disk FS = disk{}
+
+type disk struct{}
+
+func (disk) ReadFile(name string) ([]byte, error)       { return os.ReadFile(name) }
+func (disk) ReadDir(name string) ([]fs.DirEntry, error) { return os.ReadDir(name) }
+func (disk) Stat(name string) (fs.FileInfo, error)      { return os.Stat(name) }
 
 // Run checks the document at docPath, and every document it links to or holds in folders, against the schema at
 // schemaPath. Its rules take the local date as today.
@@ -56,14 +75,18 @@ func LoadOn(schemaPath, docPath string, today time.Time) (*model.Doc, Result) {
 func LoadWith(schemaPath, docPath string, opts Options) (*model.Doc, Result) {
 	l := &linter{
 		schemaPath: filepath.Clean(schemaPath),
+		fs:         opts.FS,
 		read:       opts.ReadFile,
 		docs:       map[string]*file{},
 		schemas:    map[string]*schema.File{},
 		sniffed:    map[string]sniffed{},
 		placed:     map[slot]link{},
 	}
+	if l.fs == nil {
+		l.fs = Disk
+	}
 	if l.read == nil {
-		l.read = os.ReadFile
+		l.read = l.fs.ReadFile
 	}
 	l.files = append(l.files, l.schemaPath)
 	s, ds := schema.LoadFrom(l.schemaPath, l.read)
@@ -140,6 +163,7 @@ func (l *linter) back(src *model.Object, mf *model.Field, o *model.Object, k lin
 type linter struct {
 	schema     *schema.File
 	schemaPath string
+	fs         FS
 	read       func(string) ([]byte, error)
 	units      value.Units
 	diags      diag.List
@@ -172,12 +196,13 @@ type object struct {
 	schema *schema.Schema
 	file   *file
 	id     string
-	idPos  diag.Pos            // where its id is written; zero for a whole file, whose id is its name
-	pos    diag.Pos            // where it starts: its heading, row or item; Line 0 for a whole file
-	level  int                 // the level of its heading, 1 for a whole file; its fields go one level below
-	parent *object             // the object that holds it; {field} looks there when its own schema has no such field
-	filled map[string]diag.Pos // the fields written so far, and where
-	m      *model.Object       // what is read of it
+	idPos  diag.Pos             // where its id is written; zero for a whole file, whose id is its name
+	pos    diag.Pos             // where it starts: its heading, row or item; Line 0 for a whole file
+	level  int                  // the level of its heading, 1 for a whole file; its fields go one level below
+	parent *object              // the object that holds it; {field} looks there when its own schema has no such field
+	filled map[string]diag.Pos  // the fields written so far, and where
+	orders map[string]*doc.List // the order lists of its folders, by field, until the folder is read
+	m      *model.Object        // what is read of it
 }
 
 // link is a [[path#id]] waiting to be resolved, written at pos and width runes wide; want is the schema its field
@@ -300,7 +325,7 @@ func (l *linter) resolve(k link) {
 			l.diags.Errorf(k.pos, "this field holds %s; [[%s]] is a file", names.Article(k.want.Name), k.target)
 			return
 		}
-		l.fileRef(path, filepath.Join(filepath.Dir(k.from.path), filepath.FromSlash(path)), k.pos, k.width, value.File)
+		l.fileRef(path, l.at(k.from.path, path), k.pos, k.width, value.File)
 		return
 	}
 	if hasID && !names.IsSlug(id) {
@@ -313,15 +338,15 @@ func (l *linter) resolve(k link) {
 			l.diags.Errorf(k.pos, "a link path is made of ids: write [[%s]], not \"[[%s]]\"", slugPath(k.target), k.target)
 			return
 		}
-		base := filepath.Join(filepath.Dir(k.from.path), filepath.FromSlash(path))
+		base := l.at(k.from.path, path)
 		switch {
-		case exists(base + ".kan"):
+		case l.exists(base + ".kan"):
 			f = l.load(base+".kan", nil, nil)
-		case exists(base + ".kanonarch"):
+		case l.exists(base + ".kanonarch"):
 			l.resolveDecl(base+".kanonarch", id, k)
 			return
 		default:
-			l.diags.Errorf(k.pos, "%s", noDocument(path, base))
+			l.diags.Errorf(k.pos, "%s", l.noDocument(path, base))
 			return
 		}
 	}
@@ -378,9 +403,18 @@ func (l *linter) resolveDecl(path, id string, k link) {
 	}
 }
 
-// linkPath reports whether every segment of a link path is an id or "..".
+// at is where the path of a link written in the file from leads: from the folder of from, or from the root folder,
+// the schema's, when it starts with /.
+func (l *linter) at(from, path string) string {
+	if rest, ok := strings.CutPrefix(path, "/"); ok {
+		return filepath.Join(filepath.Dir(l.schemaPath), filepath.FromSlash(rest))
+	}
+	return filepath.Join(filepath.Dir(from), filepath.FromSlash(path))
+}
+
+// linkPath reports whether every segment of a link path is an id or "..", after the / of the root folder.
 func linkPath(path string) bool {
-	for _, seg := range strings.Split(path, "/") {
+	for _, seg := range strings.Split(strings.TrimPrefix(path, "/"), "/") {
 		if seg != ".." && !names.IsSlug(seg) {
 			return false
 		}
@@ -405,9 +439,9 @@ func slugPath(target string) string {
 }
 
 // noDocument is the message for a link to a document that doesn't exist, with the nearest one in its folder.
-func noDocument(path, base string) string {
+func (l *linter) noDocument(path, base string) string {
 	msg := fmt.Sprintf("no document `%s`", path)
-	entries, _ := os.ReadDir(filepath.Dir(base))
+	entries, _ := l.fs.ReadDir(filepath.Dir(base))
 	var docs []string
 	for _, e := range entries {
 		if n, ok := strings.CutSuffix(e.Name(), ".kan"); ok && !e.IsDir() {
@@ -415,9 +449,8 @@ func noDocument(path, base string) string {
 		}
 	}
 	if c := names.Closest(filepath.Base(base), docs); c != "" {
-		dir := filepath.ToSlash(filepath.Dir(path))
-		if dir != "." {
-			c = dir + "/" + c
+		if i := strings.LastIndex(path, "/"); i >= 0 {
+			c = path[:i+1] + c
 		}
 		msg += fmt.Sprintf("; did you mean `%s`?", c)
 	}
@@ -437,12 +470,22 @@ func unknown(what, name, in string, candidates []string) string {
 	return msg
 }
 
-func exists(path string) bool {
-	info, err := os.Stat(path)
+// exists reports whether there is a file at path.
+func (l *linter) exists(path string) bool {
+	info, err := l.fs.Stat(path)
 	return err == nil && !info.IsDir()
+}
+
+// isDir reports whether there is a folder at path.
+func (l *linter) isDir(path string) bool {
+	info, err := l.fs.Stat(path)
+	return err == nil && info.IsDir()
 }
 
 // unwrap drops the path from a file error, which the diagnostic already shows.
 func unwrap(err error) error {
-	return err.(*os.PathError).Err
+	if pe, ok := errors.AsType[*fs.PathError](err); ok {
+		return pe.Err
+	}
+	return err
 }

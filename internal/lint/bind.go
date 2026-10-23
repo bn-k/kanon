@@ -2,7 +2,7 @@ package lint
 
 import (
 	"fmt"
-	"os"
+	"maps"
 	"path/filepath"
 	"regexp"
 	"slices"
@@ -35,7 +35,16 @@ func (l *linter) root(f *file, s *schema.Schema, in *schema.Field, parent *objec
 	}
 	sec := l.title(f.doc, o)
 	l.object(sec, o)
-	l.folder(o, strings.TrimSuffix(f.path, ".kan"))
+	dir := strings.TrimSuffix(f.path, ".kan")
+	l.folder(o, dir)
+	for _, name := range slices.Sorted(maps.Keys(o.orders)) { // the order lists of folders that don't exist
+		if f := o.schema.Field(name); !l.isDir(filepath.Join(dir, name)) {
+			l.diags.Errorf(o.orders[name].Pos, "`%s` holds its own `%s` objects, not links: write each one here, as a "+
+				"table, a list or one section per entry, or as a file of %s/%s/ that this list orders", name,
+				f.Type.Schema.Name, id, name)
+			reported(o, f)
+		}
+	}
 	l.require(o)
 }
 
@@ -200,6 +209,17 @@ func (l *linter) field(c *doc.Section, f *schema.Field, o *object) {
 		reported(o, f)
 		return
 	}
+	if list := l.orderList(c, f, o); list != nil {
+		if prev, ok := o.orders[f.Name]; ok {
+			l.diags.Errorf(list.Pos, "`%s` is already written%s", f.Name, where(prev.Pos, list.Pos))
+			return
+		}
+		if o.orders == nil {
+			o.orders = map[string]*doc.List{}
+		}
+		o.orders[f.Name] = list
+		return
+	}
 	l.mark(o, f, h.TextPos)
 	if h.ID != "" && (t.Array || !owned(t)) {
 		l.diags.Errorf(h.IDPos, "only an object has an id, and `%s` is %s; remove {#%s}", f.Name, kind(t), h.ID)
@@ -226,6 +246,80 @@ func (l *linter) field(c *doc.Section, f *schema.Field, o *object) {
 			l.diags.Errorf(sub.Heading.Pos, "`%s` is prose and has no sections; use a list or bold text instead", f.Name)
 		}
 	}
+}
+
+// orderList returns the list c holds when it is the order list of the folder of f (§4.1 of docs/serve.md): f is an
+// array of objects of a whole file o, and c holds one list alone, of links or next to the folder.
+func (l *linter) orderList(c *doc.Section, f *schema.Field, o *object) *doc.List {
+	if !f.Type.Array || !owned(f.Type) || o.pos.Line != 0 || len(c.Keys)+len(c.Children) > 0 || len(c.Blocks) != 1 {
+		return nil
+	}
+	list, ok := c.Blocks[0].(*doc.List)
+	if !ok {
+		return nil
+	}
+	if _, link := linkValue(list.Items[0].Text()); !link && !l.isDir(filepath.Join(strings.TrimSuffix(o.file.path, ".kan"), f.Name)) {
+		return nil
+	}
+	return list
+}
+
+// ordered checks the order list of the folder dir, which holds the entries of the array f of o, and returns the
+// ids of the entries, files, in its order. The entries it leaves out come last, in the order of their names.
+func (l *linter) ordered(list *doc.List, f *schema.Field, o *object, dir string, files []string) []string {
+	rel, _ := filepath.Rel(filepath.Dir(o.file.path), dir)
+	link := func(id string) string { return filepath.ToSlash(rel) + "/" + id } // to an entry, from o's file
+	listed := map[string]diag.Pos{}
+	var order []string
+	add := func(id string, pos diag.Pos) {
+		listed[id] = pos
+		order = append(order, id)
+	}
+	for _, it := range list.Items {
+		pos, text := it.Lines[0].Pos, it.Text()
+		target, ok := linkValue(text)
+		if !ok {
+			guess := names.Slugify(text)
+			l.diags.Errorf(pos, "every item of an order list links to an entry of `%s`: write - [[%s]]", f.Name, link(guess))
+			if _, seen := listed[guess]; !seen && slices.Contains(files, guess) {
+				add(guess, pos)
+			}
+			continue
+		}
+		path, _, hasID := strings.Cut(target, "#")
+		if !linkPath(path) {
+			l.diags.Errorf(pos, "a link path is made of ids: write [[%s]], not \"[[%s]]\"", slugPath(target), target)
+			continue
+		}
+		file := l.at(o.file.path, path) + ".kan"
+		id := strings.TrimSuffix(filepath.Base(file), ".kan")
+		prev, seen := listed[id]
+		switch {
+		case filepath.Dir(file) != dir || !slices.Contains(files, id):
+			msg := fmt.Sprintf("[[%s]] is not an entry of `%s`", target, f.Name)
+			if c := names.Closest(id, files); c != "" {
+				msg += fmt.Sprintf("; did you mean [[%s]]?", link(c))
+			} else {
+				msg += fmt.Sprintf(": link to a .kan file of %s/", filepath.ToSlash(rel))
+			}
+			l.diags.Errorf(pos, "%s", msg)
+		case seen:
+			l.diags.Errorf(pos, "[[%s]] is already listed%s; list each entry once", target, where(prev, pos))
+		case hasID:
+			l.diags.Errorf(pos, "an order list links to whole files: write [[%s]], not \"[[%s]]\"", path, target)
+			add(id, pos)
+		default:
+			add(id, pos)
+			l.span(pos, utf8.RuneCountInString(text), diag.Pos{File: file})
+		}
+	}
+	for _, id := range files {
+		if _, ok := listed[id]; !ok {
+			l.diags.Errorf(list.Pos, "the order list of `%s` leaves out `%s`: add - [[%s]] where it goes", f.Name, id, link(id))
+			order = append(order, id)
+		}
+	}
+	return order
 }
 
 // code binds the section of the Code field f of o: one fenced block, whose info string names its language.
@@ -329,11 +423,11 @@ func (l *linter) spreadsheet(target string, pos diag.Pos, in *schema.Field, pare
 		l.diags.Errorf(pos, "link `%s` to a .csv or .xlsx file, not to %s", in.Name, name)
 		return
 	}
-	path := filepath.Join(filepath.Dir(parent.file.path), filepath.FromSlash(name))
+	path := l.at(parent.file.path, name)
 	if !l.fileRef(name, path, pos, utf8.RuneCountInString(target)+len("[[]]"), value.File) {
 		return
 	}
-	s, ds := sheet.Read(path, sheetName)
+	s, ds := sheet.ReadFrom(path, sheetName, l.fs.ReadFile)
 	l.diags = append(l.diags, ds...)
 	switch {
 	case s == nil: // reported
@@ -735,14 +829,14 @@ func (l *linter) fileValue(f *schema.Field, s string, pos diag.Pos, o *object) {
 	case !fileLink(target):
 		l.diags.Errorf(pos, "this field holds %s: link to a file, with its extension, as in [[%s]]", names.Article(t.Name), fileExamples[t.Kind])
 	default:
-		path := filepath.Join(filepath.Dir(o.file.path), filepath.FromSlash(target))
+		path := l.at(o.file.path, target)
 		l.fileRef(target, path, pos, utf8.RuneCountInString(s), t.Kind)
 		mf := o.put(f, pos)
 		if t.Kind != value.Code {
 			mf.Files = append(mf.Files, path)
 			return
 		}
-		src, _ := os.ReadFile(path) // an unreadable file is reported
+		src, _ := l.fs.ReadFile(path) // an unreadable file is reported
 		mf.Text = string(src)
 		mf.Lang = strings.TrimPrefix(filepath.Ext(path), ".")
 	}
@@ -873,7 +967,7 @@ func (l *linter) target(target string, pos diag.Pos, width int, image bool, o *o
 		if image {
 			k = value.Image
 		}
-		l.fileRef(path, filepath.Join(filepath.Dir(o.file.path), filepath.FromSlash(path)), pos, width, k)
+		l.fileRef(path, l.at(o.file.path, path), pos, width, k)
 	case hasID:
 		l.queue(strings.TrimSuffix(path, ".kan")+"#"+id, pos, width, o.file)
 	default:
@@ -1080,7 +1174,7 @@ func kind(t *schema.Type) string {
 // folder binds the folder next to a file object: one subfolder per array of objects, holding one file per entry,
 // or per array of files, holding the files. Other files, such as the ones its fields link to, are left alone.
 func (l *linter) folder(o *object, dir string) {
-	entries, err := os.ReadDir(dir)
+	entries, err := l.fs.ReadDir(dir)
 	if err != nil {
 		return
 	}
@@ -1128,10 +1222,11 @@ func lists(o *object, dir, name string) string {
 	return fmt.Sprintf("`%s` has no list of objects", o.schema.Name)
 }
 
-// entries binds the files of a folder that holds the array f of o, in the order of their ids. Each entry is a file
-// of its own: its id may be used in another folder, or in o's file.
+// entries binds the files of a folder that holds the array f of o, in the order of their ids, or of the order list
+// of the folder when o's file has one. Each entry is a file of its own: its id may be used in another folder, or in
+// o's file.
 func (l *linter) entries(o *object, f *schema.Field, dir string) {
-	entries, err := os.ReadDir(dir)
+	entries, err := l.fs.ReadDir(dir)
 	if err != nil {
 		l.diags.Errorf(diag.Pos{File: dir}, "cannot read the folder: %v", unwrap(err))
 		return
@@ -1152,6 +1247,10 @@ func (l *linter) entries(o *object, f *schema.Field, dir string) {
 		}
 	}
 	slices.Sort(files)
+	if list, ok := o.orders[f.Name]; ok {
+		delete(o.orders, f.Name)
+		files = l.ordered(list, f, o, dir, files)
+	}
 	for _, id := range files {
 		l.load(filepath.Join(dir, id+".kan"), f, o)
 	}

@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"errors"
 	"io"
-	"os"
 	"strings"
 	"unicode/utf8"
 
@@ -18,8 +17,8 @@ const quotesMsg = `write a double quote inside a cell as two, with the cell in d
 
 // readCSV reads a CSV file in UTF-8. Its cells are separated by commas, or by semicolons when its first line holds
 // semicolons and no comma, as French spreadsheets write them.
-func readCSV(path string, diags *diag.List) *Sheet {
-	data, err := os.ReadFile(path)
+func readCSV(path string, read func(string) ([]byte, error), diags *diag.List) *Sheet {
+	data, err := read(path)
 	if err != nil {
 		diags.Errorf(diag.Pos{File: path}, "%s", cannotRead(err))
 		return nil

@@ -5,6 +5,7 @@ package sheet
 import (
 	"errors"
 	"io/fs"
+	"os"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -41,6 +42,14 @@ func (s *Sheet) Pos() diag.Pos {
 // is "". It returns nil when the file can't be read at all; a cell that can't be read is reported, marked Err and
 // kept.
 func Read(path, name string) (*Sheet, diag.List) {
+	return ReadFrom(path, name, nil)
+}
+
+// ReadFrom is Read that reads the file with read, or from the disk when read is nil.
+func ReadFrom(path, name string, read func(string) ([]byte, error)) (*Sheet, diag.List) {
+	if read == nil {
+		read = os.ReadFile
+	}
 	var diags diag.List
 	at := diag.Pos{File: path}
 	base := filepath.Base(path)
@@ -50,9 +59,9 @@ func Read(path, name string) (*Sheet, diag.List) {
 			diags.Errorf(at, "a CSV file holds one sheet: write %s, not %q", base, base+"#"+name)
 			return nil, diags
 		}
-		return readCSV(path, &diags), diags
+		return readCSV(path, read, &diags), diags
 	case ".xlsx", ".xlsm":
-		return readXLSX(path, name, &diags), diags
+		return readXLSX(path, name, read, &diags), diags
 	}
 	diags.Errorf(at, "read a spreadsheet as .csv or .xlsx: save %s as .xlsx", base)
 	return nil, diags
