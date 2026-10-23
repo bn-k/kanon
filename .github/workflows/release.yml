@@ -1,0 +1,31 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go test ./...
+      - name: the notes are the section of CHANGELOG.md for this version
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="[$v]" '/^## / { p = index($0, v) > 0; next } /^\[/ { next } p' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          grep -q . "$RUNNER_TEMP/notes.md" || { echo "CHANGELOG.md has no section for $v"; exit 1; }
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "~> v2"
+          args: release --clean --release-notes ${{ runner.temp }}/notes.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

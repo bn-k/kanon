@@ -1,0 +1,29 @@
+# Changelog
+
+The changes of `kan` and of the language, newest first, in the format of [Keep a Changelog](https://keepachangelog.com).
+Versions follow [Semantic Versioning](https://semver.org); before 1.0, a minor version may break documents and
+schemas, and its entry says how.
+
+## [Unreleased]
+
+## [0.1.0] - 2026-10-23
+
+The first release: a folder of `.kan` documents, checked against a `.kanonarch` schema, that people, language
+models and programs can share.
+
+### Added
+
+- `kan lint`: the structure of a document, of every document it links to and of its folders, then its computed
+  fields and rules, reported as `file:line:col: error: message` in words that say what to write.
+- `kan eval`: the value of every computed field, where its object is written.
+- `kan write`: new texts of documents linted in place, with the documents that link to them, and written only when
+  nothing breaks; `-n` to check only, `-format json` for a program.
+- `kan import`: a schema and a tree of documents from a SQLite database or a SQL dump.
+- `kan sql`: a document as a SQL script or a SQLite database; `kan sql -q` runs a read-only query over it.
+- `kan lsp`: a language server with diagnostics, definition, references, hover and symbols.
+- `kan version`.
+- Spreadsheets as arrays (CSV, xlsx), folders as arrays, files and images, code blocks.
+- An extension for Zed, its tree-sitter grammar of `.kanonarch`, and a plugin for Obsidian, all in `editors/`.
+
+[Unreleased]: https://github.com/bn-k/kanon/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/bn-k/kanon/releases/tag/v0.1.0

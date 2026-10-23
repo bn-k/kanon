@@ -1,5 +1,7 @@
 /kan
 *.out
+# Built by GoReleaser.
+/dist/
 # Built by Zed when it installs the dev extension.
 /editors/zed/grammars/
 /editors/zed/extension.wasm

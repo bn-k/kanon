@@ -1,0 +1,24 @@
+# The release of kan, built by .github/workflows/release.yml when a tag v* is pushed.
+version: 2
+project_name: kan
+
+builds:
+  - main: ./cmd/kan
+    binary: kan
+    env: [CGO_ENABLED=0]
+    flags: [-trimpath]
+    ldflags: ["-s -w -X github.com/bn-k/kanon/internal/cli.version={{ .Version }}"]
+    # Not Windows yet: issue #1.
+    goos: [linux, darwin]
+    goarch: [amd64, arm64]
+
+archives:
+  - formats: [tar.gz]
+    files: [LICENSE, README.md, CHANGELOG.md]
+
+checksum:
+  name_template: checksums.txt
+
+# The notes are the section of CHANGELOG.md, given by the workflow.
+changelog:
+  disable: true
