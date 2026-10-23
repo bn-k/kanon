@@ -1,0 +1,12 @@
+---
+type: Liste
+---
+
+# Lectures de l'automne
+
+## Livres
+
+| id | titre | auteur |
+|---|---|---|
+| dune-messie | Le Messie de Dune | Frank Herbert |
+| fondation | Fondation | Isaac Asimov |

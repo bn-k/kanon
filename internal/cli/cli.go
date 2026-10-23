@@ -19,16 +19,18 @@ import (
 
 const usage = `usage: kan lint [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>
        kan eval [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>
+       kan write [-n] [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>[=<new.txt>]...
        kan import <database.sqlite|dump.sql> <out-dir>
        kan sql <schema.kanonarch> <document.kan> [-o out.sql|out.sqlite|out.db]
        kan sql -q <query|@query.sql> [-format table|csv] <schema.kanonarch> <document.kan>
        kan lsp`
 
-// stdin is what kan lsp reads the editor's messages from.
+// stdin is what kan lsp reads the editor's messages from, and kan write the new text of a document.
 var stdin io.Reader = os.Stdin
 
 // Run runs kan with args, without the program name, and returns its exit code: 0 when the documents are valid, or
-// the import or the SQL is written; 1 when they have errors, or the import or the SQL fails; 2 when kan is misused.
+// the import, the SQL or the documents are written; 1 when they have errors, or the import or the SQL fails; 2 when
+// kan is misused.
 func Run(args []string, stdout, stderr io.Writer) int {
 	if len(args) > 0 {
 		switch args[0] {
@@ -36,6 +38,8 @@ func Run(args []string, stdout, stderr io.Writer) int {
 			return runLint(args[1:], stdout, stderr)
 		case "eval":
 			return runEval(args[1:], stdout, stderr)
+		case "write":
+			return runWrite(args[1:], stdout, stderr)
 		case "import":
 			return runImport(args[1:], stdout, stderr)
 		case "sql":

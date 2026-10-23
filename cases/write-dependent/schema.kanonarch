@@ -1,0 +1,17 @@
+// Working material: a book club's reading list and a review that links one of its books, fictional.
+
+schema Livre {
+  titre:  Text
+  auteur: Text
+}
+
+schema Liste {
+  nom:    Text @heading
+  livres: [Livre]
+}
+
+schema Critique {
+  titre: Text @heading
+  livre: -> Livre
+  avis:  Prose?
+}

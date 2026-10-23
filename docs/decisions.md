@@ -150,6 +150,12 @@ Design in `docs/serve.md`.
   names, as before; ids stay stable when an entry moves.
 - **A link path starting with `/` is read from the folder of the schema** (2026-10-23): `[[/pipeline#moa]]` from
   any document below it, instead of `[[../../../pipeline#moa]]`.
+- **`kan write` writes whole documents as `kan serve` writes rows** (2026-10-23), for a program that edits the text
+  itself: an agent that drafts a section, an editor that saves a block. It lints the new texts from memory, with
+  every typed document of the schema's folder that links to one of them, and writes them (a temporary file renamed
+  over each) only when that finds no error the folder didn't already have; `-n` checks only, `-format json` is for
+  programs. Several documents are checked together, so a renamed id and the links to it move at once. Found
+  building an app that keeps its tender answers in Kanon, where each program had grown its own lint-then-write.
 
 ## Open questions
 
@@ -164,7 +170,23 @@ Design in `docs/serve.md`.
   project file better?
 - **`reads` patterns** both parse and render a line (`250 g de farine`). How far can they go before they become a
   grammar of their own?
-- **Severity**: an oil change that's due is a warning, an illegal deposit is an error. `rule … warn`?
+- **Severity**: an oil change that's due is a warning, an illegal deposit is an error. `rule … warn`? A document
+  written in parts asks the same: a rule that every criterion has its chapter is right for the finished answer, but
+  refuses every save of a draft, so a program cannot write it chapter by chapter. A rule could say it holds when the
+  document is final (`rule … final`), and be a warning before.
+- **Where a rule fails**: a rule that fails is reported at the document (`clio.kan: error: …`), without the objects
+  that make it fail. For `count(xs, x => …) == 0`, naming each `x` that counts, with its line, would let an editor
+  or a program point at it.
+- **Escaping in prose**: `{x}` inserts a field, `[[x]]` is a checked link, a line starting with `#` opens a
+  section, `key: value` fills a field. A program that stores free text (a chat message, an excerpt pasted from a
+  PDF) must escape them, and today guesses how: a backslash before `{`, `[[`, `#` and `key:` reads. The rule should
+  be written down, and a block whose content is never read (a fence ` ```text `?) may be simpler.
+- **Every heading of `@sections` is an object**: a chapter cut into `### 3.1 …` parts needs an id on each part, or
+  lint refuses it. Parts that are only prose could stay prose: an id derived from the title, or a depth beyond
+  which headings are text (`@sections(depth: 1)`).
+- **The path of a file in a query**: a `File` column holds the bytes (`<blob N bytes>` in `kan sql -q`), not the
+  path a program needs to serve the file. A column `x_path`, as `Money` has `x_currency`, would give it, and let
+  `kan import` name the files it writes back.
 - **An exact SQL round trip for any schema**: today it holds for the types `kan import` writes; embedding the schema
   in the database would make it hold for `Duration`, `Money`, `Quantity`, enums and `Code`.
 - **Canonical values in query results**: `kan sql -q` prints a `Money` as `x` and `x_currency`, a `Quantity` as `x`

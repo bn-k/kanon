@@ -1,0 +1,4 @@
+$ kan write -n schema.kanonarch liste.kan=liste-renommee.txt
+critique.kan:7:8: error: unknown id `dune` in liste.kan; did you mean `dune-messie`?
+1 error
+[exit 1]

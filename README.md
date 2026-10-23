@@ -66,6 +66,30 @@ output stays the same.
 - A function (`fn`) may give its parameters defaults. A field computed from itself, through the objects it links
   to, is an error, and so is a division by zero.
 
+## Writing a document
+
+A program that edits documents (a server, an agent) writes them with `kan write`, so that a folder of valid
+documents stays valid, as a database keeps its constraints:
+
+```
+$ kan write -n schema.kanonarch liste.kan=liste-renommee.txt
+critique.kan:7:8: error: unknown id `dune` in liste.kan; did you mean `dune-messie`?
+1 error
+```
+
+`kan write` lints the new text of each document in its place, with every document of the schema's folder that
+links to one of them, and writes them only when that finds no error: none in the new texts, and none in a document
+that links to them which it didn't have before. Each document is written through a file renamed over it, so that a
+reader never sees half of it.
+
+- `liste.kan=liste-renommee.txt` reads the new text from a file; one document at most goes without `=`, and reads
+  it from stdin. Several documents are checked together: a book renamed with the review that links it.
+- `-n` checks and writes nothing: an editor's lint of an unsaved text, with what it would break elsewhere.
+- `-format json` prints `{"ok", "written", "checked", "diagnostics"}` for a program, each diagnostic as
+  `{"file", "line", "col", "severity", "message"}`.
+- It exits with 0 when it wrote (or, with `-n`, would write), 1 when it found an error or could not write, 2 when it
+  is misused. Hidden folders are not searched for documents.
+
 ## SQL
 
 ```
@@ -168,6 +192,7 @@ that belongs to the language is English.
 | `northwind/` | the Northwind database, as `kan import` writes it from `create.sql` |
 | `northwind-query/`, `northwind-query-join/` | `kan sql -q` over Northwind: a revenue per customer read from a file, a join through a link column |
 | `jours-feries/` | an array as a CSV file: the public holidays of France, Etalab's open data |
+| `write-dependent/` | `kan write -n` refusing a reading list whose new text breaks the review that links it |
 | `errors-*/` | the same schemas with mistakes, and what `kan lint` says about them; `errors-eval/` and `errors-schema/`, mistakes in computations, when a document is evaluated and when its schema is checked; `errors-northwind-query*/`, mistakes in a query |
 
 ## Names and ids

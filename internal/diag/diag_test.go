@@ -1,6 +1,7 @@
 package diag
 
 import (
+	"encoding/json"
 	"slices"
 	"testing"
 )
@@ -16,6 +17,24 @@ func TestString(t *testing.T) {
 	for _, tt := range tests {
 		if got := tt.d.String(); got != tt.want {
 			t.Errorf("String() = %q, want %q", got, tt.want)
+		}
+	}
+}
+
+func TestJSON(t *testing.T) {
+	tests := []struct {
+		d    Diagnostic
+		want string
+	}{
+		{Diagnostic{Pos{"crepes.kan", 4, 12}, Error, "unknown unit"},
+			`{"file":"crepes.kan","line":4,"col":12,"severity":"error","message":"unknown unit"}`},
+		{Diagnostic{Pos{"clio/notes.txt", 0, 0}, Warning, "not a .kan file"},
+			`{"file":"clio/notes.txt","severity":"warning","message":"not a .kan file"}`},
+	}
+	for _, tt := range tests {
+		got, err := json.Marshal(tt.d)
+		if err != nil || string(got) != tt.want {
+			t.Errorf("json.Marshal(%v) = %s, %v, want %s", tt.d, got, err, tt.want)
 		}
 	}
 }

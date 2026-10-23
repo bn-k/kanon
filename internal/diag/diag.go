@@ -3,6 +3,7 @@ package diag
 
 import (
 	"cmp"
+	"encoding/json"
 	"fmt"
 	"slices"
 )
@@ -45,6 +46,18 @@ type Diagnostic struct {
 
 func (d Diagnostic) String() string {
 	return fmt.Sprintf("%s: %s: %s", d.Pos, d.Severity, d.Msg)
+}
+
+// MarshalJSON writes d for a program: {"file", "line", "col", "severity", "message"}, without line and col when it
+// stands for a whole file.
+func (d Diagnostic) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		File     string `json:"file"`
+		Line     int    `json:"line,omitempty"`
+		Col      int    `json:"col,omitempty"`
+		Severity string `json:"severity"`
+		Message  string `json:"message"`
+	}{d.Pos.File, d.Pos.Line, d.Pos.Col, d.Severity.String(), d.Msg})
 }
 
 // List collects diagnostics.
