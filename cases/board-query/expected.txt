@@ -1,0 +1,6 @@
+$ kan sql -q "SELECT t.title, p.name AS owner, t.due FROM task t JOIN person p ON p.id = t.owner_id WHERE t.status != 'done' ORDER BY t.due" ../board/schema.kanonarch ../board/board.kan
+title         owner      due
+------------  ---------  ----------
+Pricing page  Ana Silva  2026-10-30
+Launch email  Sam Lee    2026-11-06
+2 rows

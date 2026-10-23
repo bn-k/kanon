@@ -79,16 +79,11 @@ func runWrite(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
-// checkWrite lints the new texts of o, then the documents of the schema's folder that link to them, and returns
-// what it found, and those documents.
+// checkWrite lints the new texts of o, an entry of a folder through the document that owns the folder, then the
+// documents of the schema's folder that link to them, and returns what it found, and the documents it checked
+// besides the new texts.
 func checkWrite(o writeOptions) (diag.List, []string) {
-	read := func(path string) ([]byte, error) {
-		if text, ok := o.texts[abs(path)]; ok {
-			return text, nil
-		}
-		return os.ReadFile(path)
-	}
-	after := lint.Options{Today: o.today, ReadFile: read}
+	after := lint.Options{Today: o.today, FS: edited(o.texts)}
 	var diags diag.List
 	seen := map[string]bool{}
 	add := func(ds diag.List, skip map[string]bool) {
@@ -99,29 +94,135 @@ func checkWrite(o writeOptions) (diag.List, []string) {
 			}
 		}
 	}
-	for _, path := range o.docs {
-		_, r := lint.LoadWith(o.schema, path, after)
-		add(r.Diags, nil)
-	}
 	var dependents []string
+	for _, path := range o.docs {
+		root := owner(path, after.FS)
+		if root == path {
+			_, r := lint.LoadWith(o.schema, path, after)
+			add(r.Diags, nil)
+			continue
+		}
+		if slices.Contains(dependents, root) {
+			continue
+		}
+		dependents = append(dependents, root)
+		_, r := lint.LoadWith(o.schema, root, after)
+		add(r.Diags, known(o, root, r.Diags))
+	}
 	for _, path := range linking(o) {
+		if slices.Contains(dependents, path) {
+			continue
+		}
 		_, r := lint.LoadWith(o.schema, path, after)
 		if !slices.ContainsFunc(r.Files, func(f string) bool { _, ok := o.texts[abs(f)]; return ok }) {
 			continue // it names a document, but its links lead elsewhere
 		}
 		dependents = append(dependents, path)
-		if r.Diags.Count(diag.Error) == 0 {
-			continue
-		}
-		_, before := lint.LoadWith(o.schema, path, lint.Options{Today: o.today})
-		known := map[string]bool{}
-		for _, d := range before.Diags {
-			known[d.String()] = true
-		}
-		add(r.Diags, known)
+		add(r.Diags, known(o, path, r.Diags))
 	}
 	diags.Sort()
 	return diags, dependents
+}
+
+// known returns the diagnostics the document at path had before the write, when the write leaves it with errors:
+// they are not the write's doing, unless they are in a document it writes.
+func known(o writeOptions, path string, after diag.List) map[string]bool {
+	k := map[string]bool{}
+	if after.Count(diag.Error) == 0 {
+		return k
+	}
+	_, before := lint.LoadWith(o.schema, path, lint.Options{Today: o.today})
+	for _, d := range before.Diags {
+		if _, written := o.texts[abs(d.Pos.File)]; !written {
+			k[d.String()] = true
+		}
+	}
+	return k
+}
+
+// owner returns the document to lint for the document at path: itself when its front matter names its type, or
+// else the nearest document that owns a folder it lies in, as board.kan owns board/tasks/brief.kan.
+func owner(path string, fsys lint.FS) string {
+	if text, _ := fsys.ReadFile(path); typed(string(text)) {
+		return path
+	}
+	for dir := filepath.Dir(path); filepath.Dir(dir) != dir; dir = filepath.Dir(dir) {
+		if text, err := fsys.ReadFile(dir + ".kan"); err == nil && typed(string(text)) {
+			return dir + ".kan"
+		}
+	}
+	return path
+}
+
+// edited is the disk with the new texts of a write in front of it, by absolute path: a new document is in its
+// folder, and so is a new folder that holds one.
+type edited map[string][]byte
+
+func (e edited) ReadFile(name string) ([]byte, error) {
+	if text, ok := e[abs(name)]; ok {
+		return text, nil
+	}
+	return os.ReadFile(name)
+}
+
+func (e edited) Stat(name string) (fs.FileInfo, error) {
+	if text, ok := e[abs(name)]; ok {
+		return entry{name: filepath.Base(name), size: int64(len(text))}, nil
+	}
+	info, err := os.Stat(name)
+	if err != nil && e.holds(abs(name)) {
+		return entry{name: filepath.Base(name), dir: true}, nil
+	}
+	return info, err
+}
+
+func (e edited) ReadDir(name string) ([]fs.DirEntry, error) {
+	entries, err := os.ReadDir(name)
+	prefix := abs(name) + string(filepath.Separator)
+	for path := range e {
+		rel, ok := strings.CutPrefix(path, prefix)
+		if !ok {
+			continue
+		}
+		first, _, deeper := strings.Cut(rel, string(filepath.Separator))
+		if !slices.ContainsFunc(entries, func(d fs.DirEntry) bool { return d.Name() == first }) {
+			entries, err = append(entries, entry{name: first, dir: deeper}), nil
+		}
+	}
+	slices.SortFunc(entries, func(a, b fs.DirEntry) int { return strings.Compare(a.Name(), b.Name()) })
+	return entries, err
+}
+
+// holds reports whether a new text lies inside the folder at dir, an absolute path.
+func (e edited) holds(dir string) bool {
+	for path := range e {
+		if strings.HasPrefix(path, dir+string(filepath.Separator)) {
+			return true
+		}
+	}
+	return false
+}
+
+// entry is a file or a folder that a write adds, as its folder lists it and as Stat describes it.
+type entry struct {
+	name string
+	dir  bool
+	size int64
+}
+
+func (e entry) Name() string               { return e.name }
+func (e entry) IsDir() bool                { return e.dir }
+func (e entry) Type() fs.FileMode          { return e.Mode().Type() }
+func (e entry) Info() (fs.FileInfo, error) { return e, nil }
+func (e entry) Size() int64                { return e.size }
+func (e entry) ModTime() time.Time         { return time.Time{} }
+func (e entry) Sys() any                   { return nil }
+
+func (e entry) Mode() fs.FileMode {
+	if e.dir {
+		return fs.ModeDir | 0o755
+	}
+	return 0o644
 }
 
 // linking returns the documents of the schema's folder, other than those o writes, whose text links to a document

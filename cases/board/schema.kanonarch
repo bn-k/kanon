@@ -1,0 +1,27 @@
+// The example of the README: the board of a small team, fictional.
+
+enum Status { todo, doing, done }
+
+schema Person {
+  name:  Text
+  email: Text
+}
+
+schema Task {
+  title:  Text @heading
+  status: Status
+  owner:  -> Person
+  due:    Date
+  notes:  Prose?
+}
+
+schema Board {
+  name:   Text @heading
+  people: [Person]
+  tasks:  [Task]
+}
+
+// today is supplied by the tool, so the rule stays pure.
+rule on-time(t: Task, on: Date = today) -> Bool
+  reads en "{t.title} is done, or due on {on} or later"
+  = t.status == done or t.due >= on

@@ -156,6 +156,8 @@ Design in `docs/serve.md`.
   over each) only when that finds no error the folder didn't already have; `-n` checks only, `-format json` is for
   programs. Several documents are checked together, so a renamed id and the links to it move at once. Found
   building an app that keeps its tender answers in Kanon, where each program had grown its own lint-then-write.
+  An entry of a folder, which has no type of its own, is checked through the document that owns the folder, with
+  the new text in its place, in a folder that may not exist yet: an agent adds a task as one new file (2026-10-23).
 
 ## Open questions
 
