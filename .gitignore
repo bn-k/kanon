@@ -6,3 +6,5 @@
 /editors/zed/target/
 # An Obsidian vault opened on cases/: personal settings, the plugin is editors/obsidian.
 /cases/.obsidian/
+# A real tender with real company data, kept local until it is anonymized.
+/cases/appel-offres/
