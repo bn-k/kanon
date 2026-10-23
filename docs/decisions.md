@@ -123,6 +123,34 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   on the `markdown` grammar, reads `[[…]]` and `![[…]]`, and opens `[[agents/sophie-bernard]]` as
   `agents/sophie-bernard.kan`. A paragraph of `key: value` lines keeps one line per key (2026-10-22).
 
+## Server
+
+Design in `docs/serve.md`.
+
+- **A Kanon folder is a database for three kinds of users** (2026-10-23): people in an editor (Obsidian, Zed, an
+  IDE), language models through the files, programs through SQL. The files stay the only source of truth: nothing
+  else is stored. People and models lint after each edit; programs go through a server that lints before it writes.
+- **`kan serve` speaks the protocol of PostgreSQL** (2026-10-23), so that every PostgreSQL client and driver
+  connects: psql, psycopg, DBeaver, Metabase. Queries run on the tables of `kan sql`, in memory, in SQLite's
+  dialect; a column has the PostgreSQL type of its field (`bool`, `date`, `numeric`…). No driver of our own, and
+  no dialect translation: a query is SQLite's.
+- **A write is an edit of the files, linted before it lands** (2026-10-23). `INSERT`, `UPDATE` and `DELETE` run on
+  the tables in memory; triggers record the rows they touch, which become changes to objects, then the smallest
+  edits of the files that hold them. The edited files are linted from memory; on an error the transaction is rolled
+  back and the client gets `check_violation` with the diagnostics. A transaction lands at `COMMIT`, all or nothing.
+- **`_position` gives the order** (2026-10-23): one column more in the tables of `kan serve`, the place of a row in
+  its array, from 0. Setting it moves the object; its name starts with an underscore, which no Kanon name can.
+- **Changes made on disk are read again** (2026-10-23): the files are checked every half second, and a transaction
+  that began before a change is refused with `serialization_failure`.
+- **The Python client is psycopg with a thin layer**, the package `kanon` in `clients/python` (2026-10-23): dict
+  rows, `LintError` with the diagnostics, and `kanon.serve()` for tests. Any other language uses its PostgreSQL
+  driver.
+- **The order of a folder can be written**: under the field's heading, a list of links to the entries of its folder
+  gives their order (2026-10-23). Every entry is in it once. Without one, a folder is in the order of its file
+  names, as before; ids stay stable when an entry moves.
+- **A link path starting with `/` is read from the folder of the schema** (2026-10-23): `[[/pipeline#moa]]` from
+  any document below it, instead of `[[../../../pipeline#moa]]`.
+
 ## Open questions
 
 - **A heading that looks like a field.** A clause titled "Dépôt de garantie" folds to the name
