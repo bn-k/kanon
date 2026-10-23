@@ -1,7 +1,7 @@
 # Search
 
 Design of `kan search` (2026-10-22): lexical, semantic and hybrid search over the objects of a document. Modelled
-on the search of the mutuo project (`mutuo/internal/search`): one narrow engine interface, interchangeable
+on a search engine built earlier for another project, not public: one narrow engine interface, interchangeable
 engines, a rebuildable mirror, a golden corpus with hand-labelled queries. Nothing here is built yet.
 
 A document is already searched two ways, its files (grep) and SQL (`kan sql -q`). Both answer exactly: grep finds
@@ -9,7 +9,7 @@ the words, SQL finds the values. Neither finds "the clause about the deposit" wh
 "a house like this one". `kan search` is the third way: it ranks objects by how well they match what is meant. It
 is for agents with a shell (one command, ids and lines out) as much as for people.
 
-What we keep from mutuo: the `Engine` interface and its contract tests; bm25 with the title above the body;
+What we keep from that engine: the `Engine` interface and its contract tests; bm25 with the title above the body;
 accent folding; Reciprocal Rank Fusion (k = 60) over parts asked for four times the limit; L2-normalised int8
 vectors scanned by brute force, no ANN and no extension; a content hash beside every vector so only what changed is
 embedded again; exact filters applied during the scan; a golden corpus with recall, nDCG and MRR.
@@ -121,7 +121,7 @@ min-score: 0.35
   `remote: yes` in the config, so a typo or a copied config never sends a document out. A key is read from the
   environment variable named by `key-env: OPENROUTER_API_KEY`, never written in the file.
 - **Dims.** `dims` truncates a Matryoshka model (qwen3-embedding, nomic-embed-text, OpenAI's text-embedding-3) and the
-  vector is L2-normalised again; 256 is the default (mutuo's choice: small, and recall is close to full size). A model
+  vector is L2-normalised again; 256 is the default (the earlier engine's choice: small, and recall is close to full size). A model
   without Matryoshka keeps its size. A document and a query must use the same `dims` and `model`; the hash covers both.
 - **Prefixes.** `query-prefix` and `doc-prefix` are the model's instruction convention (asymmetric search); they
   differ per model, so they are config, not code.
@@ -136,7 +136,7 @@ min-score: 0.35
 **SQLite and FTS5.** `modernc.org/sqlite` v1.61.0 (go.mod) is built with `SQLITE_ENABLE_FTS5` (the flag is in the header
 of `lib/sqlite_linux_amd64.go`), and a throwaway program confirmed it: `CREATE VIRTUAL TABLE … USING
 fts5(title, body, tokenize='unicode61 remove_diacritics 2')` works, `MATCH 'depot'` finds "Dépôt", and `bm25(t, 5, 1)`
-ranks. So the lexical engine is FTS5 as in mutuo, and no pure-Go BM25 is needed. Not available: a French stemmer
+ranks. So the lexical engine is FTS5, as in the earlier engine, and no pure-Go BM25 is needed. Not available: a French stemmer
 (`porter` is English); stop words are removed from the query in Go (a short French and English list), not from the
 index, since bm25 already lowers their weight. Tokens such as `c++` or `f-2026-031` are split by FTS5 on punctuation;
 a query keeps a quoted phrase whole. The driver is allowed today in the SQL packages only: `internal/search` joins
@@ -160,7 +160,7 @@ kan search [-mode lexical|semantic|hybrid] [-n 20] [-offset 0] [-min-score 0.35]
 - **Semantic.** Cosine against the chunks that pass the filters, **dropped below `min-score`** (from the config, or the
   flag): a query with nothing close returns nothing, not the least bad. The best chunk gives the object's score.
 - **Hybrid.** Both parts are asked for `4 × n`, fused by RRF with k = 60, the fused score divided by the best so the
-  top is 1.00. Lenient as in mutuo: if one part fails or times out (10 s) the other answers, **and the output says
+  top is 1.00. Lenient, as the earlier engine is: if one part fails or times out (10 s) the other answers, **and the output says
   so**. `-strict` makes it exit 1.
 - **`-like key`** replaces the query by the vector of that object (its stored vectors averaged and normalised), and
   leaves it out of the results. It needs the semantic part; with `-mode lexical` it uses the object's `title` and
@@ -211,7 +211,7 @@ to `t.TempDir()` (`-index path` exists for this). What this tests is everything 
 the minimum score, fusion, `-like`, staleness, the parts line. Not the quality of a real model.
 
 **Quality eval (`go test ./internal/search -run Eval`).** `cases/search-annonce/judgments.txt`: about 15 queries, each
-with the keys judged relevant, labelled by hand, in the categories mutuo found worth keeping: an exact term, a
+with the keys judged relevant, labelled by hand, in the categories the earlier engine found worth keeping: an exact term, a
 synonym, an acronym (`DPE`), no accents (`Caluire`), a long natural sentence, a filter alone, an object used as the
 query (`-like`), and a **nothing relevant** query that must return no result. Per mode it computes recall@10, nDCG@10 and MRR,
 printed as a table. Asserted: lexical finds every exact, acronym and no-accent query; semantic finds the synonym ones

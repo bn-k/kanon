@@ -187,8 +187,8 @@ which would take a `reads` pattern on the heading.
 
 - **Scope**: a language that wants to describe everything at once describes nothing well. Start from one piece of
   working material: a **French public tender (DCE)** (RC, AE, CCAP, CCTP, BPU/DPGF), concrete, structured, full of
-  rules (criteria and weightings, penalties, deadlines) and cross-references. Breek (construction tender responses)
-  works on these documents.
+  rules (criteria and weightings, penalties, deadlines) and cross-references, the kind of documents a team that
+  answers construction tenders works on.
 - **Domain bias**: designing the core around the first example. A second, unrelated piece of material (an
   equipment inventory, for instance) keeps the core generic.
 - **Friendliness versus strictness**: Markdown is lenient, a compiler is strict. The friendlier the syntax, the

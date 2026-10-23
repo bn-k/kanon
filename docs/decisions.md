@@ -7,8 +7,7 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 
 - **Open source**, kept in this repository only: no shared drive, every document of the project lives here
   (2026-10-22). The repository `bn-k/kanon` on GitHub, and the module path `github.com/bn-k/kanon`
-  (2026-10-22); public under the MIT licence since 2026-10-23, its history first cleaned of the real tender of
-  `appel-offres`.
+  (2026-10-22); public under the MIT licence since 2026-10-23, its history first cleaned of private data.
 - **The cases are fictional** or public data with their licence (`source/README.md`): no real person, machine or
   address (2026-10-22).
 - **Workflow**: import a real use case (a database, a document, any format), write its schema, write the document
