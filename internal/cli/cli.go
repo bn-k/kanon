@@ -23,7 +23,8 @@ const usage = `usage: kan lint [-today YYYY-MM-DD] <schema.kanonarch> <document.
        kan import <database.sqlite|dump.sql> <out-dir>
        kan sql <schema.kanonarch> <document.kan> [-o out.sql|out.sqlite|out.db]
        kan sql -q <query|@query.sql> [-format table|csv] <schema.kanonarch> <document.kan>
-       kan lsp`
+       kan lsp
+       kan version`
 
 // stdin is what kan lsp reads the editor's messages from, and kan write the new text of a document.
 var stdin io.Reader = os.Stdin
@@ -46,6 +47,8 @@ func Run(args []string, stdout, stderr io.Writer) int {
 			return runSQL(args[1:], stdout, stderr)
 		case "lsp":
 			return runLSP(args[1:], stdout, stderr)
+		case "version", "--version":
+			return runVersion(args[1:], stdout, stderr)
 		}
 	}
 	fmt.Fprintln(stderr, usage)
