@@ -20,6 +20,11 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   case (`cases/board`), how to install it, where it stands. It links to the rules and defines none.
 - **The example of the front page holds whatever the date** (2026-10-23): its rule doesn't read `today`, so that
   the board stays valid and its query still runs a year later. A task that is late is not an invalid board.
+- **The name stays Kanon** (2026-10-23), checked before the first release: no software trademark of that name came
+  up, the Go module `github.com/bn-k/kanon` is ours, but `kanon` is taken on npm and on PyPI by unrelated packages,
+  and a music player of that name is known on GitHub. A package for npm or PyPI takes another name
+  (`kanon-client`, say), chosen when it is built. A rename would change the extensions, the grammar and the
+  editors: cheap before 1.0, not after.
 - **Releases are tags `vX.Y.Z`**, built for Linux and macOS, their notes taken from `CHANGELOG.md` (2026-10-23).
   Before 1.0 a minor version may change the language, and the changelog says how to update documents. Windows
   waits for issue #1.

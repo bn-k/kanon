@@ -82,7 +82,19 @@ $ go install github.com/bn-k/kanon/cmd/kan@latest
 ```
 
 or take a binary for Linux or macOS from the [releases](https://github.com/bn-k/kanon/releases). Windows is not
-supported yet ([#1](https://github.com/bn-k/kanon/issues/1)); WSL works.
+supported yet ([#1](https://github.com/bn-k/kanon/issues/1)); the Linux binary runs in WSL. Then try the board:
+
+```
+$ git clone https://github.com/bn-k/kanon && cd kanon/cases/board
+$ kan lint schema.kanonarch board.kan
+ok  schema.kanonarch
+ok  board.kan
+ok  board/tasks/2026-10-20-brief.kan
+ok  board/tasks/2026-10-30-pricing-page.kan
+ok  board/tasks/2026-11-06-launch-email.kan
+```
+
+For an editor that checks as you type, see [Zed and Obsidian](docs/kan.md#kan-lsp-and-the-editors).
 
 ## Status
 
