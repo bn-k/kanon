@@ -1,0 +1,16 @@
+---
+type: CheckInReport
+---
+
+# Check-in report — 5 New Street
+
+lease: [[lease]]
+date: 2026-09-01
+keys: 3
+
+## Rooms
+
+| id | room | condition | décor | notes |
+|---|---|---|---|---|
+| hall | Entrance hall | Worn | white walls | |
+| living-room | Living room | fair | white walls | |

@@ -1,2 +1,2 @@
 $ kan eval schema.kanonarch crepes.kan
-crepes.kan: duree-totale = 1 h 45 min
+crepes.kan: total-time = 1 h 45 min

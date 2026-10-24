@@ -1,0 +1,27 @@
+---
+type: Inventory
+---
+
+# Home computers
+
+## Atlas {#atlas}
+
+role: the family's file server, always on
+system: Debian 13
+processor: 6 cores, 3.0 GHz (2018)
+encrypted: yes
+memory: 32 GB
+graphics-card: integrated
+bios: 2104
+
+### Disks
+
+| id | model | capacity | condition | usage |
+|---|---|---|---|---|
+| system-ssd | NVMe SSD | 500 GB | good | system |
+| old-archive-hdd | Desktop hard disk | | dead | none, to be replaced |
+
+### Notes
+
+Backups go to an external disk every night. Keep the BIOS at version {bios} or later: see
+the rule [[schema#bios-up-to-date]].

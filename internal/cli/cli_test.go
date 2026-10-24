@@ -318,8 +318,8 @@ func TestWarnings(t *testing.T) {
 func TestToday(t *testing.T) {
 	t.Chdir(t.TempDir())
 	files := map[string]string{
-		"s.kanonarch": "schema Root { fin: Date  jour: Date = today }\nrule ouvert(r: Root) -> Bool = r.fin >= today\n",
-		"root.kan":    "---\ntype: Root\n---\n\n# Root\n\nfin: 2099-12-31\n",
+		"s.kanonarch": "schema Root { end: Date  day: Date = today }\nrule open(r: Root) -> Bool = r.end >= today\n",
+		"root.kan":    "---\ntype: Root\n---\n\n# Root\n\nend: 2099-12-31\n",
 	}
 	for path, src := range files {
 		if err := os.WriteFile(path, []byte(src), 0o644); err != nil {
@@ -331,11 +331,11 @@ func TestToday(t *testing.T) {
 		code int
 		want string
 	}{
-		{[]string{"eval", "-today", "2026-10-22", "s.kanonarch", "root.kan"}, 0, "root.kan: jour = 2026-10-22\n"},
+		{[]string{"eval", "-today", "2026-10-22", "s.kanonarch", "root.kan"}, 0, "root.kan: day = 2026-10-22\n"},
 		{[]string{"lint", "s.kanonarch", "-today", "2099-12-31", "root.kan"}, 0, "ok  s.kanonarch\nok  root.kan\n"},
 		{[]string{"lint", "s.kanonarch", "root.kan", "-today", "2100-01-01"}, 1,
-			"root.kan: error: `ouvert` fails; 2099-12-31 is before 2100-01-01\n1 error\n"},
-		{[]string{"eval", "s.kanonarch", "root.kan"}, 0, "root.kan: jour = " + time.Now().Format(time.DateOnly) + "\n"},
+			"root.kan: error: `open` fails; 2099-12-31 is before 2100-01-01\n1 error\n"},
+		{[]string{"eval", "s.kanonarch", "root.kan"}, 0, "root.kan: day = " + time.Now().Format(time.DateOnly) + "\n"},
 	}
 	for _, tt := range tests {
 		var stdout, stderr bytes.Buffer

@@ -39,7 +39,7 @@ fn t() -> Int = 1 250.50 EUR + 15 000 km + 20 % + 3 years + 0.01 + 1 250
 A dated duration
 ================================================================================
 
-rule r(f: Facture) -> Bool = f.echeance <= f.date + 60 days
+rule r(i: Invoice) -> Bool = i.due <= i.date + 60 days
 
 --------------------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ Strings, escapes and placeholders
 
 schema U reads "a \"b\" \\ c" {}
 schema V reads "{ never closed" {}
-schema S reads fr "le dernier entretien {op} de {v.nom}" {}
+schema S reads en "the last service {op} of {v.name}" {}
 
 --------------------------------------------------------------------------------
 
@@ -111,7 +111,7 @@ schema S reads fr "le dernier entretien {op} de {v.nom}" {}
 Names with hyphens and digits
 ================================================================================
 
-enum Niveau { sous-sol, rez-de-chaussee, etage, x-1 }
+enum Floor { sub-basement, lower-ground-floor, attic, x-1 }
 
 --------------------------------------------------------------------------------
 

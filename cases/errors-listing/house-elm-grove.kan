@@ -1,0 +1,54 @@
+---
+type: Listing
+---
+
+# Family house with a garden in Elm Grove
+
+reference: ELM-2026-118
+property: house
+price: 545 000.00 GBP
+area: 112 m2
+plot: 480 m2
+bedrooms: 3
+energy-rating: c
+viewing: 25/10/2026 10.30am
+seller: [[sellers/fenwick-family]]
+location: [[towns/millbrook]]
+plan: [[house-elm-grove/groundfloor.pdf]]
+
+![[house-elm-grove/photos/01-front.jpg]]
+
+At the end of a quiet close, ten minutes from the centre of Millbrook and its cafés, this {area} house on a
+{plot} plot has three bedrooms, a bright living room opening onto the garden, a utility room and a garage.
+
+![The terrace](house-elm-grove/photos/04-terrace.jpg)
+
+Viewings by appointment with [[agents/helen-carter]]. From the same seller: [[flat-riverside]].
+
+## Agent {#helen-carter}
+
+name: Helen Carter
+phone: +44 1632 960 461
+
+## Co-agents
+
+- [[agents/tom-ashby]]
+- [[sellers/fenwick-family]]
+
+## Rooms
+
+| id | name | level | area |
+|---|---|---|---|
+| living-room | Living room | ground-floor | 38 m2 |
+| kitchen | Kitchen | ground-floor | 14 m2 |
+| kitchen | Pantry | ground-floor | 6 m2 |
+
+## Virtual tour
+
+```html
+<iframe src="https://tour.example/elm-2026-118" width="640" height="360" allowfullscreen></iframe>
+```
+
+```html
+<a href="https://tour.example/elm-2026-118">Open the tour full screen</a>
+```

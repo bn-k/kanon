@@ -1,0 +1,9 @@
+$ kan lint ../public-holidays/schema.kanonarch calendar.kan
+bank-holidays-2020.csv:1:4: error: names are lowercase ASCII: write title, not "títle"
+bank-holidays-2020.csv:3:30: error: write a date as YYYY-MM-DD (2026-10-22), not "10/04/2020"
+bank-holidays-2020.csv:5:1: error: the id `2020-easter-monday` is already used, at line 4
+bank-holidays-2020.csv:6:58: error: `bunting` needs a value
+bank-holidays-2020.csv:7:1: error: an id is a slug of lowercase ASCII letters, digits and hyphens: write 2020-summer-bank-holiday, not "2020-Summer-bank-holiday"
+bank-holidays-2020.csv:9:58: error: this cell is in a column with no name: write a field name at the top of its column, or clear it
+6 errors
+[exit 1]

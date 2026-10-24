@@ -397,7 +397,7 @@ func (e *evaluator) rule(fn *schema.Fn, o *obj) {
 
 var placeholder = regexp.MustCompile(`\{[^{}]*\}`)
 
-// interpolate fills the placeholders of a reads sentence, {v.nom}, with the values of en; one that names no field
+// interpolate fills the placeholders of a reads sentence, {v.name}, with the values of en; one that names no field
 // is left as written. The schema check has made sure that each starts with a parameter.
 func (e *evaluator) interpolate(text string, en *env) string {
 	return placeholder.ReplaceAllStringFunc(text, func(p string) string {

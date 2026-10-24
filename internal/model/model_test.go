@@ -8,10 +8,10 @@ import (
 )
 
 func TestGet(t *testing.T) {
-	nom, lignes := &schema.Field{Name: "nom"}, &schema.Field{Name: "lignes"}
-	o := &Object{Fields: []*Field{{Field: nom}, {Field: lignes}}}
-	if got := o.Get("lignes"); got == nil || got.Field != lignes {
-		t.Errorf("Get(lignes) = %v", got)
+	name, lines := &schema.Field{Name: "name"}, &schema.Field{Name: "lines"}
+	o := &Object{Fields: []*Field{{Field: name}, {Field: lines}}}
+	if got := o.Get("lines"); got == nil || got.Field != lines {
+		t.Errorf("Get(lines) = %v", got)
 	}
 	if got := o.Get("date"); got != nil {
 		t.Errorf("Get(date) = %v, want nil", got)

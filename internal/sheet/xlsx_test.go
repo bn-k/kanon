@@ -111,14 +111,14 @@ func sst(items ...string) string {
 func TestXLSX(t *testing.T) {
 	path := book(t, map[string]string{
 		"xl/sharedStrings.xml": sst(
-			`<si><t>lait</t></si>`,
+			`<si><t>milk</t></si>`,
 			`<si><r><t xml:space="preserve">Crème </t></r><r><rPr><b/></rPr><t>brûlée</t></r></si>`,
 			`<si><t>東京</t><rPh sb="0" eb="2"><t>トウキョウ</t></rPh><phoneticPr fontId="1"/></si>`,
 			`<si><t>a_x000D_b</t></si>`,
 		),
 		"xl/styles.xml": styles(map[int]string{164: `#,##0.00\ "€"`}, 0, 164, 14, 9, 22, 20, 46),
 		"xl/worksheets/sheet1.xml": worksheet(
-			row(1, is("A1", "id"), is("B1", "nom"), is("C1", "prix"), is("D1", "date"), is("E1", "remise"), is("F1", "actif"), is("G1", "note")),
+			row(1, is("A1", "id"), is("B1", "name"), is("C1", "price"), is("D1", "date"), is("E1", "discount"), is("F1", "active"), is("G1", "note")),
 			row(2,
 				`<c r="A2" t="s"><v>0</v></c>`,
 				`<c r="B2" t="s"><v>1</v></c>`,
@@ -126,11 +126,11 @@ func TestXLSX(t *testing.T) {
 				`<c r="D2" s="2"><v>46317</v></c>`,
 				`<c r="E2" s="3"><f>C2/C2/5</f><v>0.2</v></c>`,
 				`<c r="F2" t="b"><v>1</v></c>`,
-				`<c r="G2" t="str"><f>A2&amp;"x"</f><v>lait_x000D_x</v></c>`,
+				`<c r="G2" t="str"><f>A2&amp;"x"</f><v>milk_x000D_x</v></c>`,
 				`<c r="H2" s="1"/>`,
 			),
 			row(4,
-				is("A4", "eau"),
+				is("A4", "water"),
 				`<c r="C4"><v>0.1</v></c>`,
 				`<c r="D4" s="4"><v>46317.604166666664</v></c>`,
 				`<c r="E4" s="5"><v>0.60422453703703704</v></c>`,
@@ -139,19 +139,19 @@ func TestXLSX(t *testing.T) {
 			),
 			row(5, `<c r="A5" t="s"><v>2</v></c>`, is("B5", "_x005F_x000D_"), `<c r="C5" t="s"><v>3</v></c>`),
 		),
-	}, "produits")
-	s := readOK(t, path, "produits")
+	}, "products")
+	s := readOK(t, path, "products")
 	want := [][]string{
-		{"id", "nom", "prix", "date", "remise", "actif", "note"},
-		{"lait", "Crème brûlée", "1250.50 EUR", "2026-10-22", "20 %", "yes", "lait\rx"},
-		{"eau", "", "0.1", "2026-10-22 14:30", "14:30:05", "no", "26 h 30 min"},
+		{"id", "name", "price", "date", "discount", "active", "note"},
+		{"milk", "Crème brûlée", "1250.50 EUR", "2026-10-22", "20 %", "yes", "milk\rx"},
+		{"water", "", "0.1", "2026-10-22 14:30", "14:30:05", "no", "26 h 30 min"},
 		{"東京", "_x000D_", "a\rb", "", "", "", ""},
 	}
 	if got := texts(s); !slices.EqualFunc(got, want, slices.Equal) {
 		t.Errorf("cells =\n%q\nwant\n%q", got, want)
 	}
-	file := path + "#produits"
-	if s.Path != path || s.Name != "produits" || s.Pos() != (diag.Pos{File: file}) {
+	file := path + "#products"
+	if s.Path != path || s.Name != "products" || s.Pos() != (diag.Pos{File: file}) {
 		t.Errorf("Path, Name, Pos = %q, %q, %v", s.Path, s.Name, s.Pos())
 	}
 	tests := []struct {
@@ -174,10 +174,10 @@ func TestXLSX(t *testing.T) {
 
 func TestXLSXSheets(t *testing.T) {
 	path := book(t, map[string]string{
-		"xl/worksheets/sheet1.xml": worksheet(row(1, is("A1", "un"))),
-		"xl/worksheets/sheet2.xml": worksheet(row(1, is("A1", "deux"))),
-	}, "Feuil1", "produits")
-	for name, want := range map[string]string{"": "un", "Feuil1": "un", "produits": "deux"} {
+		"xl/worksheets/sheet1.xml": worksheet(row(1, is("A1", "one"))),
+		"xl/worksheets/sheet2.xml": worksheet(row(1, is("A1", "two"))),
+	}, "Sheet1", "products")
+	for name, want := range map[string]string{"": "one", "Sheet1": "one", "products": "two"} {
 		s := readOK(t, path, name)
 		if s.Header[0].Text != want {
 			t.Errorf("sheet %q holds %q, want %q", name, s.Header[0].Text, want)
@@ -187,8 +187,8 @@ func TestXLSXSheets(t *testing.T) {
 		}
 	}
 	for name, want := range map[string]string{
-		"produit": `error: no sheet "produit" in catalogue.xlsx; did you mean "produits"?`,
-		"clients": `error: no sheet "clients" in catalogue.xlsx; its sheets are "Feuil1", "produits"`,
+		"product": `error: no sheet "product" in catalogue.xlsx; did you mean "products"?`,
+		"clients": `error: no sheet "clients" in catalogue.xlsx; its sheets are "Sheet1", "products"`,
 	} {
 		s, diags := Read(path, name)
 		if s != nil {
@@ -238,7 +238,7 @@ func TestXLSXCellMistakes(t *testing.T) {
 			row(1, `<c r="A1" t="s"><v>0</v></c>`, is("B1", "n")),
 			row(2, `<c r="A2" t="e"><f>VLOOKUP(1,X:X,1)</f><v>#N/A</v></c>`, `<c r="B2" s="1"><v>60</v></c>`),
 			row(3, `<c r="A3" t="s"><v>4</v></c>`, `<c r="B3" s="2"><v>-1</v></c>`),
-			row(4, `<c r="A4"><f>A1*2</f></c>`, `<c r="B4"><v>douze</v></c>`),
+			row(4, `<c r="A4"><f>A1*2</f></c>`, `<c r="B4"><v>twelve</v></c>`),
 			row(5, `<c r="A5" t="d"><v>22/10/2026</v></c>`, `<c r="AA5" s="1"><v>-2</v></c>`),
 		),
 	}, "a")
@@ -249,7 +249,7 @@ func TestXLSXCellMistakes(t *testing.T) {
 		"3:1: error: the workbook is damaged: A3 points to shared string 4, which doesn't exist",
 		"3:2: error: B3 holds -1, which is not a duration: enter one such as 1:30",
 		"4:1: error: A4 holds a formula that was never computed: open the workbook in Excel or LibreOffice and save it again",
-		`4:2: error: the workbook is damaged: B4 holds "douze" as a number`,
+		`4:2: error: the workbook is damaged: B4 holds "twelve" as a number`,
 		`5:1: error: the workbook is damaged: A5 holds "22/10/2026" as a date`,
 		"5:27: error: AA5 holds -2, which is not a real date: enter a date such as 2026-10-22",
 	)
@@ -327,7 +327,7 @@ func TestXLSXTooLarge(t *testing.T) {
 }
 
 func TestXLSXNotAWorkbook(t *testing.T) {
-	s, diags := Read(writeFile(t, "a.xlsx", "id,nom\n"), "")
+	s, diags := Read(writeFile(t, "a.xlsx", "id,name\n"), "")
 	if s != nil {
 		t.Errorf("sheet %v, want nil", s)
 	}
@@ -346,8 +346,8 @@ func TestXLSXPaths(t *testing.T) {
 			`<sheets><sheet name="a" sheetId="1" r:id="rId1"/></sheets></workbook>`,
 		"xl/_rels/workbook.xml.rels": `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
 			`<Relationship Id="rId0" Type="` + strict + `hyperlink" Target="https://example.org/" TargetMode="External"/>` +
-			`<Relationship Id="rId1" Type="` + strict + `worksheet" Target="/xl/feuilles/a.xml"/></Relationships>`,
-		"xl/feuilles/a.xml": `<worksheet xmlns="http://purl.oclc.org/ooxml/spreadsheetml/main"><sheetData>` + row(1, is("A1", "id")) + `</sheetData></worksheet>`,
+			`<Relationship Id="rId1" Type="` + strict + `worksheet" Target="/xl/sheets/a.xml"/></Relationships>`,
+		"xl/sheets/a.xml": `<worksheet xmlns="http://purl.oclc.org/ooxml/spreadsheetml/main"><sheetData>` + row(1, is("A1", "id")) + `</sheetData></worksheet>`,
 	}, "a")
 	if got := readOK(t, path, "a").Header[0].Text; got != "id" {
 		t.Errorf("A1 = %q, want id", got)

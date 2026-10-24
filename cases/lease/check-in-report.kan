@@ -1,0 +1,19 @@
+---
+type: CheckInReport
+---
+
+# Check-in report — 12 Lilac Street
+
+lease: [[lease]]
+date: 2026-09-01
+keys: 3
+
+## Rooms
+
+| id | room | condition | decor | notes |
+|---|---|---|---|---|
+| hall | Entrance hall | good | white walls | |
+| living-room | Living room | good | white walls | scratch on the floorboards near the window |
+| bedroom | Bedroom | new | repainted in August 2026 | |
+| kitchen | Kitchen | worn | white tiles | sink seal to be redone |
+| shower-room | Shower room | good | white tiles | |

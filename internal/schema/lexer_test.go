@@ -36,12 +36,12 @@ func diagStrings(l diag.List) []string {
 
 func TestLex(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"total-ht", "total-ht"},
-		{"total - ht", "total - ht"},
-		{"total -ht", "total - ht"},
-		{"total- ht", "total - ht"},
+		{"net-total", "net-total"},
+		{"net - total", "net - total"},
+		{"net -total", "net - total"},
+		{"net- total", "net - total"},
 		{"a-1 a--b a-_b", "a-1 a - - b a - _b"},
-		{"prix_unitaire pincée _x x2", "prix_unitaire pincée _x x2"},
+		{"unit_price café _x x2", "unit_price café _x x2"},
 		{"12, 0.01 3. 4.x", "12 , 0.01 3 . 4 . x"},
 		{`"a \"b\" \\ c"`, `"a \"b\" \\ c"`},
 		{`"" "« x »"`, `"" "« x »"`},
@@ -125,7 +125,7 @@ func TestLexErrors(t *testing.T) {
 		want      []string
 	}{
 		{"a # b", "a b", []string{`1:3: unexpected character "#"`}},
-		{"l'eau", "l eau", []string{`1:2: unexpected character "'"`}},
+		{"o'clock", "o clock", []string{`1:2: unexpected character "'"`}},
 		{"a" + nbsp + "b", "a b", nil}, // Parse reports it: a schema is written in ASCII
 		{`"abc`, `"abc"`, []string{"1:1: unterminated string"}},
 		{"x \"abc\ny", `x "abc" y`, []string{"1:3: unterminated string"}},

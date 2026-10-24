@@ -1,7 +1,7 @@
-$ kan lint broken.kanonarch diner.kan
-broken.kanonarch:2:10: error: a schema is written in ASCII: write "e", not "é"
-broken.kanonarch:3:8: error: a schema is written in ASCII: write "o", not "°"
-broken.kanonarch:4:19: error: a schema is written in ASCII: rewrite without "«"
-broken.kanonarch:12:31: error: a schema is written in ASCII: write "e", not "é"
+$ kan lint broken.kanonarch dinner.kan
+broken.kanonarch:2:7: error: a schema is written in ASCII: write "e", not "é"
+broken.kanonarch:3:16: error: a schema is written in ASCII: write "o", not "°"
+broken.kanonarch:4:4: error: a schema is written in ASCII: rewrite without "“"
+broken.kanonarch:12:18: error: a schema is written in ASCII: write "e", not "é"
 4 errors
 [exit 1]

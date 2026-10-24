@@ -17,7 +17,7 @@ Whoever writes, the folder stays one that `kan lint` accepts.
 ```
 $ kan serve [-addr 127.0.0.1:5433] [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>
 kan serve: 6 tables, 412 rows, on 127.0.0.1:5433
-$ psql -h 127.0.0.1 -p 5433 -c 'SELECT name FROM actor ORDER BY _position'
+$ psql -h 127.0.0.1 -p 5433 -c 'SELECT name FROM person ORDER BY _position'
 ```
 
 - It lints the document first; on an error it prints the diagnostics and does not start (exit 1).
@@ -38,7 +38,7 @@ its field:
 
 | Kanon | Column | PostgreSQL type (OID) | A client reads |
 |---|---|---|---|
-| `Text`, `Prose`, `Code`, `Duration`, `Version`, an enum, an id, a link | `TEXT` | `text` (25) | `"moa"` |
+| `Text`, `Prose`, `Code`, `Duration`, `Version`, an enum, an id, a link | `TEXT` | `text` (25) | `"ana"` |
 | `Int` | `INTEGER` | `int8` (20) | `3` |
 | `Number`, `Percent`, `Money`, `Quantity` | `NUMERIC` | `numeric` (1700) | `Decimal("1250.50")` |
 | `Bool` | `INTEGER`, 0 or 1 | `bool` (16) | `True` |
@@ -59,15 +59,15 @@ array holds (a document of its own). Its name starts with an underscore, which n
 clashes with a field.
 
 ```sql
-SELECT name FROM step WHERE era_id = 'consultation' ORDER BY _position;
-INSERT INTO step (id, era_id, _position, name, kind) VALUES ('visite', 'consultation', 2, 'Visite', 'milestone');
-UPDATE step SET _position = 0 WHERE id = 'visite';          -- move it first
-UPDATE step SET era_id = NULL, step_id = 'analyse' WHERE id = 'visite';   -- move it into another step
+SELECT name FROM step WHERE phase_id = 'design' ORDER BY _position;
+INSERT INTO step (id, phase_id, _position, name, kind) VALUES ('review', 'design', 2, 'Review', 'milestone');
+UPDATE step SET _position = 0 WHERE id = 'review';          -- move it first
+UPDATE step SET phase_id = NULL, step_id = 'mock-ups' WHERE id = 'review';   -- move it into another step
 ```
 
 - An `INSERT` without `_position` adds the row at the end of its array; with one, before the row that held that
   place. The other rows of the array shift; `_position` is always 0, 1, 2… with no gap.
-- Changing `_position`, or the column of the parent (`era_id`, `step_id`), moves the object, with what it holds.
+- Changing `_position`, or the column of the parent (`phase_id`, `step_id`), moves the object, with what it holds.
 - A table of links (`[-> T]`) and a table of values (`[Text]`) have it too: the place of the link or the value in
   its list.
 
@@ -108,7 +108,7 @@ folder.
 
 - A value is written in the canonical format (`1 250.50 EUR`, `yes`, `2026-10-22`), from what the column holds: a
   `Money` from its two columns, a link from the id of its target, written as a path from the document's folder
-  (`[[#moa]]` in the same file, `[[clients/dupont]]`, or `[[/pipeline#moa]]` from the root folder when the path
+  (`[[#ana]]` in the same file, `[[clients/harbour-builders]]`, or `[[/board#ana]]` from the root folder when the path
   would climb out of it, §7).
 - A `Prose` value is written as its text, under its heading; a `Code` value as a fenced block.
 - A list item read through a `reads` pattern is written again through the first pattern that fits its values.
@@ -125,13 +125,13 @@ order gets an **order list**: under the field's heading, in the document that ow
 its entries.
 
 ```
-# Marché de travaux
+# Website launch
 
-## Eras
+## Phases
 
-- [[pipeline/eras/besoin]]
-- [[pipeline/eras/conception]]
-- [[pipeline/eras/consultation]]
+- [[launch/phases/brief]]
+- [[launch/phases/design]]
+- [[launch/phases/build]]
 ```
 
 The list gives the order of the entries; every entry of the folder is in it once, and it links to nothing else.
@@ -162,8 +162,8 @@ one runs at a time.
 
 ## 7. Links from the root
 
-A link path that starts with `/` is read from the root folder: the folder of the schema. `[[/pipeline#moa]]`
-names the object `moa` of `pipeline.kan` next to the schema, from any document below it. `kan serve` writes it
+A link path that starts with `/` is read from the root folder: the folder of the schema. `[[/board#ana]]`
+names the object `ana` of `board.kan` next to the schema, from any document below it. `kan serve` writes it
 when a relative path would need `..`; a person writes whichever reads better.
 
 ## 8. Lint after every edit
@@ -181,15 +181,16 @@ made and not by the next program that reads the folder.
 
 ## 9. Clients
 
-Any PostgreSQL driver works. `clients/python` is a thin layer over psycopg 3, the `kanon` package:
+Any PostgreSQL driver works. `clients/python` is a thin layer over psycopg 3, imported as `kanon` and published
+under another name, since `kanon` is taken on PyPI:
 
 ```python
 import kanon
 
-with kanon.connect("postgresql://127.0.0.1:5433/pipeline") as db:
-    actors = db.execute("SELECT * FROM actor ORDER BY _position").fetchall()   # dicts
+with kanon.connect("postgresql://127.0.0.1:5433/board") as db:
+    people = db.execute("SELECT * FROM person ORDER BY _position").fetchall()   # dicts
     try:
-        db.execute("UPDATE step SET duration = %s WHERE id = %s", ["trois mois", "visite"])
+        db.execute("UPDATE task SET due = %s WHERE id = %s", ["next friday", "2026-10-30-pricing-page"])
     except kanon.LintError as e:
         for d in e.diagnostics:            # file, line, col, severity, message
             print(d)

@@ -7,11 +7,9 @@ Then each kind of writer gets what it lacks, one at a time.
 
 ## 0.1 — tried in five minutes
 
-Done: `kan version`, `CHANGELOG.md`, CI on Linux and macOS (the checks of `CONTRIBUTING.md`, the grammar), releases
-built by GoReleaser from a tag, a README that is a front page and runs as cases (`cases/board*`), the language in
-`docs/language.md`, `CONTRIBUTING.md`, `SECURITY.md`, issue templates.
-
-Left: the tag `v0.1.0`, once the name is checked.
+Released as `v0.1.0` on 2026-10-23: `kan version`, `CHANGELOG.md`, CI on Linux and macOS (the checks of
+`CONTRIBUTING.md`, the grammar), releases built by GoReleaser from a tag, a README that is a front page and runs as
+cases (`cases/board*`), the language in `docs/language.md`, `CONTRIBUTING.md`, `SECURITY.md`, issue templates.
 
 ## 0.2 — agents
 

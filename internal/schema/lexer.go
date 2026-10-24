@@ -120,7 +120,7 @@ func isDigit(r rune) bool { return r >= '0' && r <= '9' }
 
 func isWordRune(r rune) bool { return unicode.IsLetter(r) || unicode.IsDigit(r) }
 
-// name reads a name; a hyphen belongs to it only between letters or digits: total-ht.
+// name reads a name; a hyphen belongs to it only between letters or digits: net-total.
 func (l *lexer) name(pos diag.Pos) {
 	start := l.i
 	for {

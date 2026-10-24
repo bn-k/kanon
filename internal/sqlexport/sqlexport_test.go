@@ -326,24 +326,24 @@ func TestClashes(t *testing.T) {
 
 func TestSnake(t *testing.T) {
 	tests := map[string]string{
-		"EtatDesLieux":   "etat_des_lieux",
+		"CheckInReport":  "check_in_report",
 		"HTMLPage":       "html_page",
 		"Page2":          "page2",
 		"Page2Bis":       "page2_bis",
 		"ABC":            "abc",
 		"A":              "a",
-		"prix-unitaire":  "prix_unitaire",
-		"controle-2026":  "controle_2026",
+		"unit-price":     "unit_price",
+		"audit-2026":     "audit_2026",
 		"OrderDetail":    "order_detail",
 		"CustomerDemo":   "customer_demo",
 		"IOStream":       "io_stream",
-		"TVAIntra":       "tva_intra",
+		"VATNumber":      "vat_number",
 		"Version3D":      "version3_d",
 		"customer-desc":  "customer_desc",
 		"reports-to-id":  "reports_to_id",
 		"x":              "x",
 		"a-b-c":          "a_b_c",
-		"MaisonCaluire2": "maison_caluire2",
+		"HouseElmGrove2": "house_elm_grove2",
 	}
 	for in, want := range tests {
 		if got := snake(in); got != want {

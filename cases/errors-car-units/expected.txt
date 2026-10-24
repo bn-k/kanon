@@ -1,4 +1,4 @@
-$ kan lint ../car/schema.kanonarch clio.kan
-clio.kan: error: `vidange-a-jour`: 72 200 kg doesn't convert to km
+$ kan lint ../car/schema.kanonarch hatchback.kan
+hatchback.kan: error: `oil-change-up-to-date`: 72 200 kg doesn't convert to km
 1 error
 [exit 1]

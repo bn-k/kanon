@@ -1,0 +1,14 @@
+// Working material: the bank holidays of England and Wales, from GOV.UK's open data (see source/README.md).
+
+schema Calendar {
+  title:    Text @heading
+  source:   Text
+  holidays: [Holiday]
+}
+
+schema Holiday {
+  title:   Text
+  date:    Date
+  notes:   Text?
+  bunting: Bool
+}

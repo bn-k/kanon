@@ -1,0 +1,10 @@
+---
+type: Expense
+---
+
+# Dinner on 22 October
+
+amount: 96.00 EUR
+rate: 10 %
+date: 2026-10-22
+participants: [[alice]], [[bruno]]

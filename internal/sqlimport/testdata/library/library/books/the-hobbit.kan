@@ -1,0 +1,10 @@
+# Book the-hobbit
+
+title: The Hobbit
+price: 12
+available: no
+sample: [[the-hobbit/sample.txt]]
+
+## Summary
+
+A hobbit sets out on a long journey.

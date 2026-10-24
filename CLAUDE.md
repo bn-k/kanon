@@ -2,8 +2,8 @@
 
 The Kanon toolchain: `kan lint`, `kan eval`, `kan write`, `kan import`, `kan sql` and `kan lsp`. `README.md` is the
 front page, kept short; the language and its reading rules are in `docs/language.md`, the commands in
-`docs/kan.md`, the layout of the code and the checks in `CONTRIBUTING.md`; the project's decisions and open
-questions in `docs/decisions.md`; the study that opened it in `docs/study.md`. Kanon is open source: every document of the project lives in this
+`docs/kan.md`, the layout of the code and the checks in `CONTRIBUTING.md`; the project's decisions, its prior art
+and its open questions in `docs/decisions.md`. Kanon is open source: every document of the project lives in this
 repository, none in a shared drive. A new decision goes into `docs/decisions.md`.
 
 The repository is public, on GitHub at `bn-k/kanon`, under the MIT licence (`LICENSE`): whatever is pushed is
@@ -20,7 +20,9 @@ often, without waiting to be asked.
 - Test first. A new use case is a folder of `cases/` with its schema, its documents and an `expected.txt` written by
   hand before running the linter. `go test ./internal/cli -update` only after a deliberate change of output, and
   the diff is read.
-- Everything is English, except the content of a case.
+- Everything is English, the content of cases and test fixtures included. Only third-party data stays as
+  published, with its source and licence: Northwind, the bank holidays of `cases/public-holidays`, the workbooks of
+  `internal/sheet/testdata`.
 - `editors/tree-sitter-kanonarch` follows `internal/schema`: a change to the syntax of schemas goes to both, with a
   test in `test/corpus/`. `tree-sitter generate` and `tree-sitter test` stay clean, and no case schema but
   `cases/errors-schema-label/broken.kanonarch` parses with an error. Zed fetches the grammar from GitHub at the

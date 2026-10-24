@@ -5,7 +5,7 @@ on a search engine built earlier for another project, not public: one narrow eng
 engines, a rebuildable mirror, a golden corpus with hand-labelled queries. Nothing here is built yet.
 
 A document is already searched two ways, its files (grep) and SQL (`kan sql -q`). Both answer exactly: grep finds
-the words, SQL finds the values. Neither finds "the clause about the deposit" when the text says "caution", nor
+the words, SQL finds the values. Neither finds "the clause about the deposit" when the text says "bond", nor
 "a house like this one". `kan search` is the third way: it ranks objects by how well they match what is meant. It
 is for agents with a shell (one command, ids and lines out) as much as for people.
 
@@ -29,14 +29,14 @@ An object gives four texts, each its own column in the lexical index:
 | Column | Holds | bm25 weight |
 |---|---|---|
 | `title` | the `@heading` field (heading or H1), else the id with hyphens turned into spaces | 5 |
-| `id` | the id as a slug (`depot-de-garantie` finds `depot`, `garantie`) | 3 |
-| `keys` | the object's own key lines, tables cells and links: `loyer-hc 850.00 EUR`; a link adds the **title of its target** (`client: Dupont Batiment`) and a computed field its computed value | 2 |
-| `body` | the `@body` field and every `Prose` or `Code` field, with `{field}` inserts expanded (`un dépôt de garantie de 850.00 EUR`) | 1 |
+| `id` | the id as a slug (`security-deposit` finds `security`, `deposit`) | 3 |
+| `keys` | the object's own key lines, tables cells and links: `rent 850.00 EUR`; a link adds the **title of its target** (`client: Harbour Builders`) and a computed field its computed value | 2 |
+| `body` | the `@body` field and every `Prose` or `Code` field, with `{field}` inserts expanded (`a security deposit of 850.00 EUR`) | 1 |
 
 - **Own text only.** A sub-object or a section is an object of its own and is not repeated in its parent. A hit on a
   clause points at the clause, not at the whole lease.
 - **Context for meaning.** The text sent to the embedder is `title of the file / title of the parent / title`,
-  then keys and body: "Garantie" alone means little, "Bail d'habitation, 12 rue des Lilas / Garantie" does.
+  then keys and body: "Deposit" alone means little, "Lease, 12 Lilac Lane / Deposit" does.
 - **Chunking by section, then by paragraph.** A section is already a chunk. A `Prose` longer than 1 500 characters
   is cut at paragraph breaks (a blank line) into chunks of at most that size, each with the context line, each its
   own vector; the result collapses to the best chunk of the object and reports its line. No overlap, no cutting
@@ -52,11 +52,11 @@ An object gives four texts, each its own column in the lexical index:
 
 | Field | Facet |
 |---|---|
-| the schema | `type` (`Facture`), always; `file` (the path) |
-| an enum, `Bool`, `Int`, `Version` | `etat=use`, `zone-tendue=yes`, `pieces=2` |
+| the schema | `type` (`Invoice`), always; `file` (the path) |
+| an enum, `Bool`, `Int`, `Version` | `condition=worn`, `rent-controlled=yes`, `rooms=2` |
 | `Date`, `DateTime` | `date=2026-09-01`, compared as text (canonical form sorts) |
 | `Number`, `Percent`, `Money`, `Quantity` | `num` holds the amount in its base unit; `currency` / `unit` is a second facet |
-| `-> T`, `[-> T]` | the target's key, found by its last segment too: `client=dupont-batiment` |
+| `-> T`, `[-> T]` | the target's key, found by its last segment too: `client=harbour-builders` |
 | `Text`, `Prose`, `Code` | none: free text is for the lexical index |
 
 A facet name is a field name. Two schemas with the same field name share it, `type:` narrows.
@@ -130,15 +130,15 @@ min-score: 0.35
 - **Scan.** `SELECT key, vec FROM vec WHERE model = ? AND key IN (filtered keys)`, streamed through a top-k heap. No
   boot load, memory is the heap. 100 000 chunks at 256 dims is 25 million multiply-adds, tens of milliseconds in
   plain Go even on a CPU without AVX. A query vector is cached in `qcache(model, hash, vec)` (last 1 000).
-- **Suggested local model.** `qwen3-embedding:0.6b` through Ollama: multilingual (the content is French), Matryoshka,
-  runs on a CPU. Check the French recall with the live eval (§5) before trusting any other.
+- **Suggested local model.** `qwen3-embedding:0.6b` through Ollama: multilingual (a document can be in any
+  language), Matryoshka, runs on a CPU. Check its recall with the live eval (§5) before trusting any other.
 
 **SQLite and FTS5.** `modernc.org/sqlite` v1.61.0 (go.mod) is built with `SQLITE_ENABLE_FTS5` (the flag is in the header
 of `lib/sqlite_linux_amd64.go`), and a throwaway program confirmed it: `CREATE VIRTUAL TABLE … USING
-fts5(title, body, tokenize='unicode61 remove_diacritics 2')` works, `MATCH 'depot'` finds "Dépôt", and `bm25(t, 5, 1)`
-ranks. So the lexical engine is FTS5, as in the earlier engine, and no pure-Go BM25 is needed. Not available: a French stemmer
-(`porter` is English); stop words are removed from the query in Go (a short French and English list), not from the
-index, since bm25 already lowers their weight. Tokens such as `c++` or `f-2026-031` are split by FTS5 on punctuation;
+fts5(title, body, tokenize='unicode61 remove_diacritics 2')` works, `MATCH 'cafe'` finds "Café", and `bm25(t, 5, 1)`
+ranks. So the lexical engine is FTS5, as in the earlier engine, and no pure-Go BM25 is needed. Not available: a stemmer
+for any language but English (`porter`); stop words are removed from the query in Go (a short English list), not from
+the index, since bm25 already lowers their weight. Tokens such as `c++` or `inv-2026-031` are split by FTS5 on punctuation;
 a query keeps a quoted phrase whole. The driver is allowed today in the SQL packages only: `internal/search` joins
 them (decisions to amend).
 
@@ -151,10 +151,11 @@ kan search [-mode lexical|semantic|hybrid] [-n 20] [-offset 0] [-min-score 0.35]
 
 - The mode defaults to `hybrid` when `.kanon/embed` exists, else `lexical`. `-n` is capped at 50, `-offset` pages.
 - **Filters.** `-where` is repeated and AND-ed; operators `= != < <= > >=`, values in the canonical format
-  (`date>=2026-01-01`, `loyer-hc<900 EUR`). The same name twice is OR. A filter written inside the query also
-  counts when its name is a known facet: `kan search … "relance type:Facture client:dupont-batiment"`. An unknown
+  (`date>=2026-01-01`, `rent<900 EUR`). The same name twice is OR. A filter written inside the query also
+  counts when its name is a known facet: `kan search … "reminder type:Invoice client:harbour-builders"`. An unknown
   name or a value that is no member of the enum is a diagnostic in the project's words: `a facet is a field name;
-  did you mean client?`, `write use, not "usé"`. Filters apply before ranking, in both parts.
+  did you mean client?`, `"used" is not a Condition: write new, good or worn`. Filters apply before ranking, in both
+  parts.
 - **Lexical.** The terms are AND-ed, the last one as a prefix; a quoted phrase is kept; `-any` ORs them. No result is an
   empty list, not a fallback to OR.
 - **Semantic.** Cosine against the chunks that pass the filters, **dropped below `min-score`** (from the config, or the
@@ -170,9 +171,9 @@ Output follows `kan lint`: one line per object, `file:line: id  score  excerpt`,
 chunk that matched), the score from 0 to 1, an excerpt of about 100 characters, one line, around the first match.
 
 ```
-$ kan search cases/search-annonce/schema.kanonarch cases/search-annonce/agence.kan "caution du locataire"
-annonces/cal-118.kan:31: garantie  1.00  … le locataire verse une caution équivalente à un mois …
-bail.kan:48: garantie  0.71  Le locataire verse un dépôt de garantie de 850.00 EUR. Il lui est restitué …
+$ kan search cases/search-listing/schema.kanonarch cases/search-listing/agency.kan "the tenant's bond"
+listings/elm-118.kan:31: deposit  1.00  … the tenant pays a bond equal to one month of rent …
+lease.kan:48: deposit  0.71  The tenant pays a security deposit of 850.00 EUR. It is returned …
 2 results
 parts: lexical 1 (bm25), semantic 14 (ollama qwen3-embedding:0.6b, 256 dims, min-score 0.35), fused by RRF
 ```
@@ -186,33 +187,33 @@ excerpt, facets); `-format ids` prints only keys, for a pipe.
 
 - `kan search -format ids … | kan sql -q "SELECT … WHERE id IN (…)"` works by hand today, since a key's `#id` is the
   `id` column (for a strong schema; a weak one needs its parent, the key says it).
-- `kan sql -q 'SELECT … FROM facture f JOIN hit h ON h.id = f.id' -search "relance impayé" …` gives the query a table
+- `kan sql -q 'SELECT … FROM invoice i JOIN hit h ON h.id = i.id' -search "unpaid reminder" …` gives the query a table
   `hit(schema, id, file, rank, score)`, filled by a hybrid search before it runs, read only like the rest. The
-  other direction, `kan search -sql 'SELECT id FROM facture WHERE total_ttc > 5000 EUR'`, restricts the candidates to the
+  other direction, `kan search -sql 'SELECT id FROM invoice WHERE total > 5000'`, restricts the candidates to the
   ids a query returns. Facets cover most filters without SQL; this one covers the rest.
 
 ## 5. Evaluation
 
 Two layers, both in the existing harness.
 
-**Golden cases (`go test ./internal/cli`).** A case `cases/search-annonce/`: the annonce schema as a collection
-(`Agence`), about 30 fictional objects (10 annonces with prose, their agents, sellers, a few visit notes) written
+**Golden cases (`go test ./internal/cli`).** A case `cases/search-listing/`: the listing schema as a collection
+(`Agency`), about 30 fictional objects (10 listings with prose, their agents, sellers, a few visit notes) written
 before any search runs. Its `expected.txt` is written by hand like every other: the first line is the command, the
-rest the lines expected. Cases: `search-annonce` (lexical), `search-annonce-semantic`, `search-annonce-hybrid`,
-`search-annonce-like`, `errors-search` (unknown facet, enum written wrong, semantic with no config, remote without
+rest the lines expected. Cases: `search-listing` (lexical), `search-listing-semantic`, `search-listing-hybrid`,
+`search-listing-like`, `errors-search` (unknown facet, enum written wrong, semantic with no config, remote without
 `remote: yes`). `-update` rewrites them after a deliberate change, and the diff is read.
 
 **The offline embedder.** Golden tests cannot call a model, and a hash of the words proves nothing about meaning. The
 `test` provider is feature hashing of folded tokens into 256 dims, plus a **synonym file of the case**
-(`synonyms.txt`: `caution = depot de garantie`, `pavillon = maison`) that sends the words of a line to one bucket. It is
+(`synonyms.txt`: `bond = security deposit`, `bungalow = house`) that sends the words of a line to one bucket. It is
 deterministic, offline, and says exactly what a case means: semantics is whatever the case declares. It is built in
 `internal/search/searchtest`, passed to `cli.Run` by the test only, so `cmd/kan` cannot reach it. The index goes
 to `t.TempDir()` (`-index path` exists for this). What this tests is everything around the model: chunking, filters,
 the minimum score, fusion, `-like`, staleness, the parts line. Not the quality of a real model.
 
-**Quality eval (`go test ./internal/search -run Eval`).** `cases/search-annonce/judgments.txt`: about 15 queries, each
+**Quality eval (`go test ./internal/search -run Eval`).** `cases/search-listing/judgments.txt`: about 15 queries, each
 with the keys judged relevant, labelled by hand, in the categories the earlier engine found worth keeping: an exact term, a
-synonym, an acronym (`DPE`), no accents (`Caluire`), a long natural sentence, a filter alone, an object used as the
+synonym, an acronym (`EPC`), no accents (`cafe` for "Café"), a long natural sentence, a filter alone, an object used as the
 query (`-like`), and a **nothing relevant** query that must return no result. Per mode it computes recall@10, nDCG@10 and MRR,
 printed as a table. Asserted: lexical finds every exact, acronym and no-accent query; semantic finds the synonym ones
 (with the `test` embedder, by construction); **hybrid ≥ best part − 0.05** on each metric; the empty query returns
@@ -241,7 +242,7 @@ excludes before ranking, the limit and the offset hold, an empty query and an un
 
 1. **Lexical.** `internal/search`: objects from the model, the four columns, facets, the hash table, the FTS5
    engine, `kan search -mode lexical`, `-where`, the lines output, `-format ids|json`. The contract suite. Case
-   `search-annonce` with its hand-written `expected.txt`, then the `errors-search` case. No network, no embedder.
+   `search-listing` with its hand-written `expected.txt`, then the `errors-search` case. No network, no embedder.
 2. **Semantic.** `internal/embed` (interface, `ollama`, `openai`, `test`), config, quantised vectors, the scan,
    chunking, `kan index`, `-like`, `min-score`, the query cache, cost lines. Judgments and the eval table.
 3. **Hybrid.** RRF, the parts line, leniency and `-strict`. The "hybrid ≥ best part − 0.05" assertion.
@@ -252,8 +253,8 @@ Each phase ends with `gofmt`, `go vet`, the cases, and coverage at 95% for the n
 ## Open questions
 
 1. **Names and the language of the index.** Lexical search folds accents and drops stop words but has no stemmer:
-   "locataires" does not find "locataire". A light French suffix stripper in Go (fifty lines) is possible; do we
-   accept a stemmer for one language in a language-neutral tool, or leave plurals to the semantic part?
+   "tenants" does not find "tenant". FTS5's `porter` stems English, and English only; do we accept a stemmer for
+   one language in a language-neutral tool, or leave plurals to the semantic part?
 2. **What is embedded.** The 40-character rule is a guess. A schema annotation (`@search`, `@nosearch` on a field or a
    schema) would let the author decide, and fits the language, but it is a change to the schema syntax being
    rewritten now.

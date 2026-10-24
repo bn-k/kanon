@@ -1,63 +1,64 @@
-// Working material: French unfurnished residential leases (loi no 89-462 du 6 juillet 1989).
+// Working material: residential leases of unfurnished homes, each with its check-in report.
 
-enum TypePersonne { physique, morale }
-enum Etat { neuf, bon, use, degrade }
+enum PersonType { individual, company }
+enum Condition { new, good, worn, damaged }
 
-schema Personne {
-  nom:     Text
-  type:    TypePersonne
-  adresse: Text?
+schema Person {
+  name:    Text
+  type:    PersonType
+  address: Text?
 }
 
-schema Logement {
-  adresse: Text
-  surface: Quantity
-  pieces:  Int
+schema Dwelling {
+  address: Text
+  area:    Quantity
+  rooms:   Int
 }
 
 schema Clause {
-  titre: Text  @heading
-  corps: Prose @body
+  title: Text  @heading
+  body:  Prose @body
 }
 
-schema Bail {
-  titre:             Text @heading
-  bailleur:          Personne
-  locataire:         Personne
-  logement:          Logement
-  debut:             Date
-  duree:             Duration
-  loyer-hc:          Money
-  charges:           Money
-  depot-de-garantie: Money
-  zone-tendue:       Bool
-  clauses:           [Clause] @sections
+schema Lease {
+  title:            Text @heading
+  landlord:         Person
+  tenant:           Person
+  dwelling:         Dwelling
+  start:            Date
+  term:             Duration
+  rent:             Money
+  service-charge:   Money
+  security-deposit: Money
+  rent-controlled:  Bool
+  clauses:          [Clause] @sections
 
-  fin:               Date = debut + duree
-  preavis-locataire: Duration = if zone-tendue then 1 month else 3 months
+  end:           Date = start + term
+  notice-period: Duration = if rent-controlled then 1 month else 3 months
 }
 
-schema Piece {
-  piece:     Text
-  etat:      Etat
-  remarques: Text?
+schema Room {
+  room:      Text
+  condition: Condition
+  decor:     Text?
+  notes:     Text?
 }
 
-schema EtatDesLieux {
-  bail:   -> Bail
-  date:   Date
-  cles:   Int
-  pieces: [Piece]
+schema CheckInReport {
+  lease: -> Lease
+  date:  Date
+  keys:  Int
+  rooms: [Room]
 }
 
-rule depot-plafonne(b: Bail) -> Bool
-  reads fr "le depot de garantie ne depasse pas un mois de loyer hors charges (art. 22)"
-  = b.depot-de-garantie <= b.loyer-hc
+rule deposit-cap(l: Lease) -> Bool
+  reads en "the security deposit is at most one month's rent, service charge excluded"
+  = l.security-deposit <= l.rent
 
-rule duree-minimale(b: Bail) -> Bool
-  reads fr "le bail dure au moins 3 ans, 6 ans si le bailleur est une personne morale (art. 10)"
-  = b.duree >= (if b.bailleur.type == morale then 6 years else 3 years)
+rule minimum-term(l: Lease) -> Bool
+  reads en "a lease runs for at least 3 years, 6 years when the landlord is a company"
+  = l.term >= (if l.landlord.type == company then 6 years else 3 years)
 
-rule etat-des-lieux-date(e: EtatDesLieux) -> Bool
-  reads fr "l'etat des lieux d'entree est date au plus tard du premier jour du bail"
-  = e.date <= e.bail.debut
+rule check-in-date(r: CheckInReport) -> Bool
+  reads en "the check-in report is dated no later than the first day of the lease"
+  = r.date <= r.lease.start

@@ -25,18 +25,18 @@ func TestParse(t *testing.T) {
 		},
 		{
 			name: "front matter",
-			src:  "---\ntype: Facture\n\nnote:\n---\n",
+			src:  "---\ntype: Invoice\n\nnote:\n---\n",
 			want: "front-matter\n" +
-				"  key 2:1 type=\"Facture\" 2:7\n" +
+				"  key 2:1 type=\"Invoice\" 2:7\n" +
 				"  key 4:1 note=\"\" 4:6\n" +
 				"root\n",
 		},
 		{
 			name: "front matter with lines that are not keys",
-			src:  "---\ntype Facture\n  x\nType: X\n---\n",
+			src:  "---\ntype Invoice\n  x\nType: X\n---\n",
 			want: "front-matter\nroot\n",
 			diags: []string{
-				`2:1 expected "key: value" in front matter, got "type Facture"`,
+				`2:1 expected "key: value" in front matter, got "type Invoice"`,
 				`3:3 expected "key: value" in front matter, got "x"`,
 				`4:1 expected "key: value" in front matter, got "Type: X"`,
 			},
@@ -73,8 +73,8 @@ func TestParse(t *testing.T) {
 		},
 		{
 			name: "accented heading with an id",
-			src:  "## Émetteur {#atelier-lune}",
-			want: "root\n  h2 1:1 \"Émetteur\" 1:4 #atelier-lune 1:15\n",
+			src:  "## Résumé {#summary}",
+			want: "root\n  h2 1:1 \"Résumé\" 1:4 #summary 1:13\n",
 		},
 		{
 			name: "headings without text",
@@ -107,33 +107,33 @@ func TestParse(t *testing.T) {
 		},
 		{
 			name: "keys at the start of a section",
-			src:  "# T\n\nnom: A\nadresse:  8 quai  \n\nville: Lyon\nText after keys\nkey: not a key\n",
+			src:  "# T\n\nname: A\naddress:  8 Mist Quay  \n\ncity: Larkhaven\nText after keys\nkey: not a key\n",
 			want: "root\n" +
 				"  h1 1:1 \"T\" 1:3\n" +
-				"    key 3:1 nom=\"A\" 3:6\n" +
-				"    key 4:1 adresse=\"8 quai\" 4:11\n" +
-				"    key 6:1 ville=\"Lyon\" 6:8\n" +
+				"    key 3:1 name=\"A\" 3:7\n" +
+				"    key 4:1 address=\"8 Mist Quay\" 4:11\n" +
+				"    key 6:1 city=\"Larkhaven\" 6:7\n" +
 				"    paragraph\n" +
 				"      7:1 \"Text after keys\"\n" +
 				"      8:1 \"key: not a key\"\n",
 		},
 		{
 			name: "keys in root and in each section",
-			src:  "a: 1\n# T\nb: 2\nprix_unitaire: 3\nétat: usé\nvide:   \n",
+			src:  "a: 1\n# T\nb: 2\nunit_price: 3\nrésumé: café\nempty:   \n",
 			want: "root\n" +
 				"  key 1:1 a=\"1\" 1:4\n" +
 				"  h1 2:1 \"T\" 2:3\n" +
 				"    key 3:1 b=\"2\" 3:4\n" +
-				"    key 4:1 prix_unitaire=\"3\" 4:16\n" +
-				"    key 5:1 état=\"usé\" 5:7\n" +
-				"    key 6:1 vide=\"\" 6:6\n",
+				"    key 4:1 unit_price=\"3\" 4:13\n" +
+				"    key 5:1 résumé=\"café\" 5:9\n" +
+				"    key 6:1 empty=\"\" 6:7\n",
 		},
 		{
 			name: "lines that are not keys",
-			src:  "https://x\nNom: x\na:b\n",
+			src:  "https://x\nName: x\na:b\n",
 			want: "root\n  paragraph\n" +
 				"    1:1 \"https://x\"\n" +
-				"    2:1 \"Nom: x\"\n" +
+				"    2:1 \"Name: x\"\n" +
 				"    3:1 \"a:b\"\n",
 		},
 		{
@@ -212,16 +212,16 @@ func TestParse(t *testing.T) {
 		},
 		{
 			name: "lists",
-			src:  "- 250 g de farine {#farine}\n* 4 œufs\n  frais {#oeufs}\n\n+ sel\n\n1. one\n2) two\n\tmore\n- back\n10. ten\n",
+			src:  "- 250 g of flour {#flour}\n* 4 eggs\n  fresh {#eggs}\n\n+ salt\n\n1. one\n2) two\n\tmore\n- back\n10. ten\n",
 			want: "root\n" +
 				"  bullets 1:1\n" +
-				"    item 1:1 #farine 1:21\n" +
-				"      1:3 \"250 g de farine\"\n" +
-				"    item 2:1 #oeufs 3:11\n" +
-				"      2:3 \"4 œufs\"\n" +
-				"      3:3 \"frais\"\n" +
+				"    item 1:1 #flour 1:20\n" +
+				"      1:3 \"250 g of flour\"\n" +
+				"    item 2:1 #eggs 3:11\n" +
+				"      2:3 \"4 eggs\"\n" +
+				"      3:3 \"fresh\"\n" +
 				"    item 5:1\n" +
-				"      5:3 \"sel\"\n" +
+				"      5:3 \"salt\"\n" +
 				"  ordered 7:1\n" +
 				"    item 7:1\n" +
 				"      7:4 \"one\"\n" +
@@ -434,29 +434,29 @@ func TestCases(t *testing.T) {
 		t.Fatalf("parsed %d documents, want at least 12", len(docs))
 	}
 
-	inv := docs["invoice/f-2026-031.kan"]
-	if !inv.HasFrontMatter || len(inv.FrontMatter) != 1 || inv.FrontMatter[0].Key != "type" || inv.FrontMatter[0].Value != "Facture" {
+	inv := docs["invoice/inv-2026-031.kan"]
+	if !inv.HasFrontMatter || len(inv.FrontMatter) != 1 || inv.FrontMatter[0].Key != "type" || inv.FrontMatter[0].Value != "Invoice" {
 		t.Errorf("invoice front matter = %v", inv.FrontMatter)
 	}
 	h1 := inv.Root.Children[0]
-	if h1.Heading.Level != 1 || h1.Heading.Text != "Facture F-2026-031" || len(h1.Keys) != 6 {
+	if h1.Heading.Level != 1 || h1.Heading.Text != "Invoice INV-2026-031" || len(h1.Keys) != 6 {
 		t.Errorf("invoice H1 = %+v with %d keys", h1.Heading, len(h1.Keys))
 	}
-	if k := h1.Keys[3]; k.Key != "client" || k.Value != "[[clients/dupont-batiment]]" {
+	if k := h1.Keys[3]; k.Key != "client" || k.Value != "[[clients/ashgrove-builders]]" {
 		t.Errorf("invoice key 3 = %s: %s", k.Key, k.Value)
 	}
-	if got := headings(h1.Children); got != "Émetteur#atelier-lune Lignes Conditions" {
+	if got := headings(h1.Children); got != "Issuer#halfmoon-studio Lines Terms" {
 		t.Errorf("invoice sections = %s", got)
 	}
 	tbl := h1.Children[1].Blocks[0].(*Table)
-	if got := texts(tbl.Header); got != "id designation quantite prix-unitaire" || len(tbl.Rows) != 2 {
+	if got := texts(tbl.Header); got != "id description quantity unit-price" || len(tbl.Rows) != 2 {
 		t.Errorf("invoice table header = %s, %d rows", got, len(tbl.Rows))
 	}
-	if c := tbl.Rows[1][3]; c.Text != "40.00 EUR" || pos(c.Pos) != "24:62" {
+	if c := tbl.Rows[1][3]; c.Text != "40.00 EUR" || pos(c.Pos) != "24:57" {
 		t.Errorf("invoice cell = %q at %s", c.Text, pos(c.Pos))
 	}
 	if b := h1.Children[2].Blocks; len(b) != 1 || len(b[0].(*Paragraph).Lines) != 3 {
-		t.Errorf("invoice conditions = %v", b)
+		t.Errorf("invoice terms = %v", b)
 	}
 
 	rec := docs["recipe/crepes.kan"].Root.Children[0]
@@ -465,15 +465,15 @@ func TestCases(t *testing.T) {
 	for _, it := range ing.Items {
 		ids = append(ids, it.ID)
 	}
-	if ing.Ordered || strings.Join(ids, " ") != "farine oeufs lait beurre sel" {
+	if ing.Ordered || strings.Join(ids, " ") != "flour eggs milk butter salt" {
 		t.Errorf("recipe ingredients: ordered %v, ids %v", ing.Ordered, ids)
 	}
 	if steps := rec.Children[1].Blocks[0].(*List); !steps.Ordered || len(steps.Items) != 4 {
 		t.Errorf("recipe steps: ordered %v, %d items", steps.Ordered, len(steps.Items))
 	}
 
-	atlas := docs["inventory/maison.kan"].Root.Children[0].Children[0]
-	if atlas.Heading.ID != "atlas" || len(atlas.Keys) != 7 || headings(atlas.Children) != "Disques Notes" {
+	atlas := docs["inventory/house.kan"].Root.Children[0].Children[0]
+	if atlas.Heading.ID != "atlas" || len(atlas.Keys) != 7 || headings(atlas.Children) != "Disks Notes" {
 		t.Errorf("inventory atlas = %+v, %d keys, children %s", atlas.Heading, len(atlas.Keys), headings(atlas.Children))
 	}
 	disks := atlas.Children[0].Blocks[0].(*Table)
@@ -481,7 +481,7 @@ func TestCases(t *testing.T) {
 		t.Errorf("inventory empty cell = %q at %s", c.Text, pos(c.Pos))
 	}
 
-	if e := docs["car/clio/entretiens/2025-06-10-vidange.kan"]; e.HasFrontMatter || len(e.Root.Children[0].Keys) != 5 {
+	if e := docs["car/hatchback/services/2025-06-10-oil-change.kan"]; e.HasFrontMatter || len(e.Root.Children[0].Keys) != 5 {
 		t.Errorf("car entry: front matter %v, keys %v", e.HasFrontMatter, e.Root.Children[0].Keys)
 	}
 }

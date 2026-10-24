@@ -12,7 +12,7 @@ func TestString(t *testing.T) {
 		want string
 	}{
 		{Diagnostic{Pos{"crepes.kan", 4, 12}, Error, "unknown unit"}, "crepes.kan:4:12: error: unknown unit"},
-		{Diagnostic{Pos{"clio/notes.txt", 0, 0}, Warning, "not a .kan file"}, "clio/notes.txt: warning: not a .kan file"},
+		{Diagnostic{Pos{"hatchback/notes.txt", 0, 0}, Warning, "not a .kan file"}, "hatchback/notes.txt: warning: not a .kan file"},
 	}
 	for _, tt := range tests {
 		if got := tt.d.String(); got != tt.want {
@@ -28,8 +28,8 @@ func TestJSON(t *testing.T) {
 	}{
 		{Diagnostic{Pos{"crepes.kan", 4, 12}, Error, "unknown unit"},
 			`{"file":"crepes.kan","line":4,"col":12,"severity":"error","message":"unknown unit"}`},
-		{Diagnostic{Pos{"clio/notes.txt", 0, 0}, Warning, "not a .kan file"},
-			`{"file":"clio/notes.txt","severity":"warning","message":"not a .kan file"}`},
+		{Diagnostic{Pos{"hatchback/notes.txt", 0, 0}, Warning, "not a .kan file"},
+			`{"file":"hatchback/notes.txt","severity":"warning","message":"not a .kan file"}`},
 	}
 	for _, tt := range tests {
 		got, err := json.Marshal(tt.d)
@@ -41,7 +41,7 @@ func TestJSON(t *testing.T) {
 
 func TestCount(t *testing.T) {
 	var l List
-	l.Errorf(Pos{"a.kan", 1, 1}, "`%s` needs a value", "nom")
+	l.Errorf(Pos{"a.kan", 1, 1}, "`%s` needs a value", "name")
 	l.Warnf(Pos{"a.kan", 2, 1}, "ignored")
 	l.Errorf(Pos{"a.kan", 3, 1}, "again")
 	if got := l.Count(Error); got != 2 {
@@ -50,7 +50,7 @@ func TestCount(t *testing.T) {
 	if got := l.Count(Warning); got != 1 {
 		t.Errorf("Count(Warning) = %d, want 1", got)
 	}
-	if l[0].Msg != "`nom` needs a value" {
+	if l[0].Msg != "`name` needs a value" {
 		t.Errorf("Msg = %q", l[0].Msg)
 	}
 }

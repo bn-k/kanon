@@ -139,9 +139,9 @@ schema T {
   g:      Quantity
   n:      Quantity
   d:      Duration
-  jour:   Date
-  quand:  DateTime
-  quand2: DateTime
+  start:  Date
+  at:     DateTime
+  at2:    DateTime
 
   q1: Quantity = q + g
   q2: Quantity = g + q
@@ -157,18 +157,18 @@ schema T {
   d5: Duration = d - d
   d6: Duration = 1 week * 20 %
   d7: Number   = 1 year / 6 months
-  t1: Date     = jour + 1 month
-  t2: Date     = jour - 2 weeks
-  t3: Duration = jour - (jour - 10 days)
-  t4: DateTime = quand + 90 min
-  t5: Duration = quand - (quand - 26 h)
-  t6: Date     = 1 year + jour
-  t7: DateTime = quand2 + 1 month
+  t1: Date     = start + 1 month
+  t2: Date     = start - 2 weeks
+  t3: Duration = start - (start - 10 days)
+  t4: DateTime = at + 90 min
+  t5: Duration = at - (at - 26 h)
+  t6: Date     = 1 year + start
+  t7: DateTime = at2 + 1 month
   t8: Date     = today - 1 day
 }
 `,
-			doc: head("T") + "q: 2 kg\ng: 300 g\nn: 5\nd: 1 day\njour: 2026-01-31\nquand: 2026-10-22 14:30\n" +
-				"quand2: 2026-10-22 14:30:05 +02:00\n",
+			doc: head("T") + "q: 2 kg\ng: 300 g\nn: 5\nd: 1 day\nstart: 2026-01-31\nat: 2026-10-22 14:30\n" +
+				"at2: 2026-10-22 14:30:05 +02:00\n",
 			want: []string{
 				"doc.kan: q1 = 2.3 kg",
 				"doc.kan: q2 = 2 300 g",
@@ -228,20 +228,20 @@ schema T {
 		{
 			name: "comparisons, logic and none",
 			schema: `
-enum Etat { neuf, bon, use }
+enum Condition { mint, good, worn }
 
 schema T {
   a:    Int
   x:    Int?
-  fait: Bool
+  done: Bool
   v:    Version
   s:    Text
-  e:    Etat
+  e:    Condition
   m:    Money
   d:    Duration
   tags: [Text]
 
-  b1:  Bool  = a > 5 and not fait
+  b1:  Bool  = a > 5 and not done
   b2:  Bool? = x > 1
   b3:  Bool? = x > 1 and no
   b4:  Bool? = x > 1 or yes
@@ -250,25 +250,25 @@ schema T {
   b7:  Bool  = tags == tags and tags != tags.map(t => t)
   b8:  Bool  = v < 595 and v >= 580.95 and 581 > v and v == v
   b9:  Bool  = s < "b" and s != "z"
-  b10: Bool  = e == bon and e != neuf
+  b10: Bool  = e == good and e != mint
   b11: Bool  = m >= m and m < m * 2 and m == m
-  b12: Bool  = a == 7.0 and fait == no
+  b12: Bool  = a == 7.0 and done == no
   b13: Bool  = d > 30 days and d < 1 year and d == 1 month
   b14: Bool? = not (x > 1)
   b15: Bool  = yes and yes or no
   i1:  Int?  = x + 1
   i2:  Int   = (x ?? 4) + 1
   i3:  Int?  = if x > 1 then 1 else 2
-  i4:  Int   = if fait then 1 else 2
+  i4:  Int   = if done then 1 else 2
   i5:  Text  = if a > 1 then s else "z"
   i6:  Int   = max(a, 3, 12)
   i7:  Int   = min(a, x ?? 9)
   i8:  Int?  = min(x, a)
   i9:  Int?  = -x
-  e1:  Etat  = if fait then neuf else e
+  e1:  Condition = if done then mint else e
 }
 `,
-			doc: head("T") + "a: 7\nfait: no\nv: 580.95\ns: a\ne: bon\nm: 10.00 EUR\nd: 1 month\n\n## Tags\n\n- a\n- b\n",
+			doc: head("T") + "a: 7\ndone: no\nv: 580.95\ns: a\ne: good\nm: 10.00 EUR\nd: 1 month\n\n## Tags\n\n- a\n- b\n",
 			want: []string{
 				"doc.kan: b1 = yes",
 				"doc.kan: b3 = no",
@@ -288,7 +288,7 @@ schema T {
 				"doc.kan: i6 = 12",
 				"doc.kan: i7 = 7",
 				"doc.kan: i8 = 7",
-				"doc.kan: e1 = bon",
+				"doc.kan: e1 = good",
 			},
 		},
 		{
@@ -305,19 +305,19 @@ schema O {
 }
 
 schema T {
-  a:       Int
-  x:       Int?
-  y:       Int?
-  m:       Money
-  p:       Percent
-  v:       Version
-  d:       Duration
-  resume:  Prose
-  photo:   Image
-  annexes: [File]
-  vides:   [Text]?
-  ps:      [P]
-  o:       O?
+  a:           Int
+  x:           Int?
+  y:           Int?
+  m:           Money
+  p:           Percent
+  v:           Version
+  d:           Duration
+  summary:     Prose
+  photo:       Image
+  attachments: [File]
+  blanks:      [Text]?
+  ps:          [P]
+  o:           O?
 
   c1: Money    = p * m
   c2: Number   = d / 6 h
@@ -327,9 +327,9 @@ schema T {
   c6: Int      = count(ps, i => i == ps.max-by(j => j.n))
   c7: Number   = a / -100000000
   c8: Money    = m / -100000000
-  t1: Prose    = resume
+  t1: Prose    = summary
   t2: Image    = photo
-  t3: Int      = count(annexes) + count(vides)
+  t3: Int      = count(attachments) + count(blanks)
   w1: O?       = o with { ls: ps.n }
   w2: [Int]?   = o?.ls
   w3: [Int]    = ps.map(i => ps.n)
@@ -343,8 +343,8 @@ schema T {
   c9: Duration = 2 * d
 }
 `,
-			doc: head("T") + "a: 1\nx: 4\nm: 1.00 EUR\np: 10 %\nv: 580.95.1\nd: 1 day\nresume: Un *résumé*.\n" +
-				"photo: [[photo.png]]\n\n## Annexes\n\n- [[a.pdf]]\n\n## Ps\n\n| id | n |\n|---|---|\n| p1 | 1 |\n| p2 | 2 |\n",
+			doc: head("T") + "a: 1\nx: 4\nm: 1.00 EUR\np: 10 %\nv: 580.95.1\nd: 1 day\nsummary: A *résumé*.\n" +
+				"photo: [[photo.png]]\n\n## Attachments\n\n- [[a.pdf]]\n\n## Ps\n\n| id | n |\n|---|---|\n| p1 | 1 |\n| p2 | 2 |\n",
 			more: map[string]string{"photo.png": "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR", "a.pdf": "%PDF-1.4\n"},
 			want: []string{
 				"doc.kan: c1 = 0.10 EUR",
@@ -355,7 +355,7 @@ schema T {
 				"doc.kan: c6 = 1",
 				"doc.kan: c7 = 0",
 				"doc.kan: c8 = 0.00 EUR",
-				"doc.kan: t1 = Un *résumé*.",
+				"doc.kan: t1 = A *résumé*.",
 				"doc.kan: t2 = photo.png",
 				"doc.kan: t3 = 1",
 				"doc.kan: w3 = 1, 2, 1, 2",
@@ -372,10 +372,10 @@ schema T {
 const order = `
 schema Item {
   n:     Int
-  prix:  Money
+  price: Money
   tag:   Text?
 
-  total: Money = prix * n
+  total: Money = price * n
 }
 
 schema Order {
@@ -390,17 +390,17 @@ schema Order {
   c:     Int    = count(items, i => i.n > 1) + count(items)
   top:   Int?   = best?.n
   m:     Int?   = max(items.n)
-  zero:  Money  = sum(items.filter(i => i.n > 100).prix)
+  zero:  Money  = sum(items.filter(i => i.n > 100).price)
   half:  Money  = sum(items.map(i => cheap(i).total))
   ids:   [Text] = items.map(i => cheap(i).id)
   promo: [Item] = items.map(i => cheap(i))
   first: Text   = id
 }
 
-fn cheap(i: Item) -> Item = i with { prix: i.prix / 2 }
+fn cheap(i: Item) -> Item = i with { price: i.price / 2 }
 `
 
-const orderDoc = "---\ntype: Order\n---\n# Commande\n\n## Items\n\n| id | n | prix | tag |\n|---|---|---|---|\n" +
+const orderDoc = "---\ntype: Order\n---\n# Order\n\n## Items\n\n| id | n | price | tag |\n|---|---|---|---|\n" +
 	"| a | 1 | 10.00 EUR | x |\n| b | 3 | 2.50 EUR | |\n"
 
 func TestObjects(t *testing.T) {
@@ -430,7 +430,7 @@ func TestObjects(t *testing.T) {
 	// A copy made by with is an object of its own in the model, its fields computed again.
 	promo := d.Root.Get("promo").Links[0]
 	row := d.Root.Get("items").Objects[0]
-	if promo == row || promo.ID != "a" || promo.Get("prix").Values[0].Raw != "5.00 EUR" ||
+	if promo == row || promo.ID != "a" || promo.Get("price").Values[0].Raw != "5.00 EUR" ||
 		promo.Get("total").Values[0].Raw != "5.00 EUR" || promo.Get("tag").Values[0].Raw != "x" {
 		t.Errorf("promo = %+v", promo)
 	}
@@ -444,20 +444,20 @@ func TestRules(t *testing.T) {
 		{
 			name: "rules that fail",
 			schema: `
-enum Etat { neuf, bon, use }
+enum Condition { mint, good, worn }
 
-schema Ligne {
+schema Line {
   n: Int
-  e: Etat
+  e: Condition
 }
 
 schema T {
-  a:      Int
-  b:      Int
-  quand:  Date
-  lignes: [Ligne]
-  tags:   [Text]
-  x:      Int?
+  a:     Int
+  b:     Int
+  at:    Date
+  lines: [Line]
+  tags:  [Text]
+  x:     Int?
 }
 
 fn twice(x: Int, k: Int = 2) -> Int = x * k
@@ -470,8 +470,8 @@ rule both(t: T) -> Bool
   = t.a < 10 and twice(t.b, 3) < t.a
 
 rule dates(t: T) -> Bool
-  reads fr "{t.lignes} {t.tags} {t.x} {t.lignes.e} {t.nope} {t.a.b} { t }"
-  = t.quand >= today
+  reads en "{t.lines} {t.tags} {t.x} {t.lines.e} {t.nope} {t.a.b} { t }"
+  = t.at >= today
 
 rule silent(t: T) -> Bool
   = not (t.a > 0)
@@ -482,21 +482,21 @@ rule holds(t: T) -> Bool
 rule pair(a: T, b: T) -> Bool
   = a.a > b.a
 
-rule many(ls: [Ligne]) -> Bool
+rule many(ls: [Line]) -> Bool
   = count(ls) > 5
 
-rule ligne(l: Ligne) -> Bool
+rule line(l: Line) -> Bool
   reads "{l.e} {l.n}"
-  = l.e != use and l.n < 5 or l.n > 100
+  = l.e != worn and l.n < 5 or l.n > 100
 `,
-			doc: head("T") + "a: 1\nb: 1\nquand: 2026-10-01\n\n## Lignes\n\n| id | n | e |\n|---|---|---|\n" +
-				"| l1 | 1 | neuf |\n| l2 | 2 | use |\n\n## Tags\n\n- a\n- b\n",
+			doc: head("T") + "a: 1\nb: 1\nat: 2026-10-01\n\n## Lines\n\n| id | n | e |\n|---|---|---|\n" +
+				"| l1 | 1 | mint |\n| l2 | 2 | worn |\n\n## Tags\n\n- a\n- b\n",
 			want: []string{
 				"doc.kan: error: `plus` fails: \"1 is more than 1\"; 1 is not more than 1",
 				"doc.kan: error: `both` fails; 3 is not less than 1",
-				"doc.kan: error: `dates` fails: \"l1, l2 a, b none neuf, use {t.nope} {t.a.b} doc\"; 2026-10-01 is before 2026-10-22",
+				"doc.kan: error: `dates` fails: \"l1, l2 a, b none mint, worn {t.nope} {t.a.b} doc\"; 2026-10-01 is before 2026-10-22",
 				"doc.kan: error: `silent` fails",
-				"doc.kan:15:1: error: `ligne` fails: \"use 2\"; use is equal to use and 2 is not more than 100",
+				"doc.kan:15:1: error: `line` fails: \"worn 2\"; worn is equal to worn and 2 is not more than 100",
 			},
 		},
 		{
@@ -614,7 +614,7 @@ rule reads-t(t: T) -> Bool = t.t2 > t.m
 		{
 			name: "units that don't convert",
 			schema: `
-unit pincee
+unit pinch
 
 schema T {
   q: Quantity
@@ -623,13 +623,13 @@ schema T {
 
   t:  Quantity = q + l
   t2: Quantity = q - p
-  t3: Bool     = p > 1 pincee and q == l
+  t3: Bool     = p > 1 pinch and q == l
 }
 `,
-			doc: head("T") + "q: 2 kg\nl: 3 km\np: 2 pincee\n",
+			doc: head("T") + "q: 2 kg\nl: 3 km\np: 2 pinch\n",
 			want: []string{
 				"doc.kan: error: `t`: 3 km doesn't convert to kg",
-				"doc.kan: error: `t2`: 2 pincee doesn't convert to kg",
+				"doc.kan: error: `t2`: 2 pinch doesn't convert to kg",
 				"doc.kan: error: `t3`: 3 km doesn't convert to kg",
 			},
 		},
@@ -637,16 +637,16 @@ schema T {
 			name: "dates that move by part of a day or of a month",
 			schema: `
 schema T {
-  jour:  Date
-  quand: DateTime
+  start: Date
+  at:    DateTime
   d:     Duration
 
-  f: Date     = jour + 12 h
-  g: Date     = jour - d
-  h: DateTime = quand + d
+  f: Date     = start + 12 h
+  g: Date     = start - d
+  h: DateTime = at + d
 }
 `,
-			doc: head("T") + "jour: 2026-10-22\nquand: 2026-10-22 14:30\nd: 1.5 months\n",
+			doc: head("T") + "start: 2026-10-22\nat: 2026-10-22 14:30\nd: 1.5 months\n",
 			want: []string{
 				"doc.kan: error: `f`: a date moves by whole days, not by 12 h",
 				"doc.kan: error: `g`: a date moves by whole days, not by 1.5 months",

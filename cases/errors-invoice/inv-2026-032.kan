@@ -1,0 +1,27 @@
+---
+type: Invoice
+---
+
+# Invoice INV-2026-032
+
+number: INV-2026-032
+date: 22/10/2026
+due: 2026-11-21
+client: [[../invoice/clients/ashgrove-builder]]
+vat-rate: 20
+discount: 5 %
+
+## Issuer {#halfmoon-studio}
+
+name: Halfmoon Studio Ltd
+
+## Lines
+
+| id | Description | quantity | unit-price |
+|---|---|---|---|
+| booking-api | API development | 12 | 650,00 € |
+|  | Hosting | 3 | 40.00 EUR |
+
+## Terms
+
+Please pay {gross} no later than {due}.

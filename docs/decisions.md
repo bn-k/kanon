@@ -1,7 +1,7 @@
 # Decisions
 
-What has been decided about Kanon, and when. The language as it stands is in `docs/language.md`, the design of data and SQL
-in `docs/data.md`, the study that opened the project in `docs/study.md`.
+What has been decided about Kanon, and when; what came before it, under Prior art; what is still open. The language
+as it stands is in `docs/language.md`, the design of data and SQL in `docs/data.md`.
 
 ## Project
 
@@ -10,6 +10,10 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   (2026-10-22); public under the MIT licence since 2026-10-23, its history first cleaned of private data.
 - **The cases are fictional** or public data with their licence (`source/README.md`): no real person, machine or
   address (2026-10-22).
+- **Everything is English, cases and test fixtures included** (2026-10-23): a stranger reads every example, and
+  the accents a test needs come from words English uses (café, façade). Only third-party data stays as published:
+  Northwind, GOV.UK's bank holidays, the workbooks of `internal/sheet/testdata`. This replaces the rule that a case kept its own language;
+  the first cases were French, and the French public holidays became those of England and Wales.
 - **Workflow**: import a real use case (a database, a document, any format), write its schema, write the document
   (one file or a tree), write the expected output by hand, then run `kan lint` (2026-10-22). The cases live in
   `cases/`, their sources included.
@@ -31,11 +35,13 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
 
 ## Language
 
-- Name **Kanon**, extension **`.kan`** for documents (2026-10-22).
+- Name **Kanon**, from the Greek κανών, the rule, and the canon, the body of texts that holds authority; extension
+  **`.kan`** for documents (2026-10-22).
 - Extension **`.kanonarch`** for schemas and rules, after the Byzantine canonarch who intones the canon before the
   choir (2026-10-22).
-- **Universal, so in English**: keywords, native types, documentation, project files. No domain (tenders…) in the
-  core of the language: those are working material, and only their content stays in its own language (2026-10-22).
+- **Universal, so in English**: keywords, native types, documentation, project files. No domain (tenders,
+  invoices…) in the core of the language: those are working material (2026-10-22). A document can be written in
+  any language; the content of the project's own cases is English (see Project).
 - **Code, but human-readable**: a non-developer must be able to edit a `.kan` file like Markdown (2026-10-22).
 - **Literals in canonical English format only**, for now: `2026-09-01`, `1 250.50 EUR`, `no`, `3 years`. No `lang:`
   and no localized literals (2026-10-22). Expressions write them the same way: `total > 1 250.50 EUR`.
@@ -52,12 +58,12 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   used" check: two names that differ cannot fold to the same heading.
 - **A `.kanonarch` file is ASCII** (2026-10-22), strings and comments included, so that a schema reads the same in
   every editor and diff. The checker reports any other character at its position, one diagnostic per line, with the
-  letter to write when a plain one exists (`write "e", not "é"`). A `reads fr` sentence is written without accents,
-  « » become plain quotes or go, `n°` becomes `no`. The content of a case stays in its own language.
+  letter to write when a plain one exists (`write "e", not "é"`). A `reads` sentence in a language with accents
+  is written without them, curly quotes become plain ones, `n°` becomes `no`.
 - **A heading finds its field by name** (2026-10-22). The heading is folded (lowercase, accents removed, spaces,
-  hyphens and apostrophes alike) and compared with the field's name: "Dépôt de garantie" opens `depot-de-garantie`.
-  The folding is one function, `names.Slugify`. Keys, table headers and enum values stay exact names. A document
-  keeps its real French headings.
+  hyphens and apostrophes alike) and compared with the field's name: "Café Terrace" opens `cafe-terrace`. The
+  folding is one function, `names.Slugify`. Keys, table headers and enum values stay exact names. A document keeps
+  its headings as a person writes them.
 - **Hyphen everywhere** (kebab-case) for ids, fields, enum values, rules and functions; subtraction needs spaces
   (2026-10-22).
 - **Every object has an `id`**, an ASCII alphanumeric slug. A UUID is valid, but meaningful slugs are encouraged
@@ -66,10 +72,10 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   (2026-10-22).
 - **Ids are unique per file**: an entry of a folder array is not registered in its parent; the rows of a
   spreadsheet share the namespace of the `.kan` that links to it (2026-10-22).
-- **An object can be a file**, named after its id: `un-fichier-001.kan`. A file with child objects can have them as
+- **An object can be a file**, named after its id: `report-001.kan`. A file with child objects can have them as
   files in the tree; **an array is a folder** holding one `.kan` file per entry (2026-10-22).
-- **Children of a file object go in a sibling folder** named after the object, then the field: `clio.kan` +
-  `clio/entretiens/` (2026-10-22).
+- **Children of a file object go in a sibling folder** named after the object, then the field: `hatchback.kan` +
+  `hatchback/services/` (2026-10-22).
 - **Both forms for an array**: inline (table, list, sections) or a folder (2026-10-22).
 
 ## Data, relations and SQL
@@ -121,7 +127,7 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   answers any request (2026-10-22).
 - **A document's schema is found, not given**: the nearest folder, the document's own or above, that holds
   `.kanonarch` files; there, the file that declares the document's `type`, or the first. A document without a
-  `type` is checked through the document that owns its folder (`clio/` belongs to `clio.kan`). An open schema checks
+  `type` is checked through the document that owns its folder (`hatchback/` belongs to `hatchback.kan`). An open schema checks
   the documents of its folder whose schema it is. This holds for the editor only; `kan lint` still takes the schema
   as an argument (2026-10-22).
 - **A `.kan` document is Markdown in the editor**: the language "Kanon" uses the Markdown grammar that ships with
@@ -132,8 +138,8 @@ in `docs/data.md`, the study that opened the project in `docs/study.md`.
   buttons format the selection or the block being edited: headings, bold, italic, lists, tasks, quotes and
   `[[…]]` links. An extension cannot draw a view, so this is a change to Zed itself, kept in
   our fork (`bn-k/zed`, branch `karim/kanon-preview`) and meant for upstream: the preview takes any language built
-  on the `markdown` grammar, reads `[[…]]` and `![[…]]`, and opens `[[agents/sophie-bernard]]` as
-  `agents/sophie-bernard.kan`. A paragraph of `key: value` lines keeps one line per key (2026-10-22).
+  on the `markdown` grammar, reads `[[…]]` and `![[…]]`, and opens `[[agents/helen-carter]]` as
+  `agents/helen-carter.kan`. A paragraph of `key: value` lines keeps one line per key (2026-10-22).
 
 ## Server
 
@@ -154,14 +160,14 @@ Design in `docs/serve.md`.
   its array, from 0. Setting it moves the object; its name starts with an underscore, which no Kanon name can.
 - **Changes made on disk are read again** (2026-10-23): the files are checked every half second, and a transaction
   that began before a change is refused with `serialization_failure`.
-- **The Python client is psycopg with a thin layer**, the package `kanon` in `clients/python` (2026-10-23): dict
-  rows, `LintError` with the diagnostics, and `kanon.serve()` for tests. Any other language uses its PostgreSQL
-  driver.
+- **The Python client is psycopg with a thin layer**, in `clients/python` (2026-10-23): dict rows, `LintError`
+  with the diagnostics, and `serve()` for tests. Its package takes another name than `kanon`, taken on PyPI (see
+  Project). Any other language uses its PostgreSQL driver.
 - **The order of a folder can be written**: under the field's heading, a list of links to the entries of its folder
   gives their order (2026-10-23). Every entry is in it once. Without one, a folder is in the order of its file
   names, as before; ids stay stable when an entry moves.
-- **A link path starting with `/` is read from the folder of the schema** (2026-10-23): `[[/pipeline#moa]]` from
-  any document below it, instead of `[[../../../pipeline#moa]]`.
+- **A link path starting with `/` is read from the folder of the schema** (2026-10-23): `[[/board#ana]]` from
+  any document below it, instead of `[[../../board#ana]]`.
 - **`kan write` writes whole documents as `kan serve` writes rows** (2026-10-23), for a program that edits the text
   itself: an agent that drafts a section, an editor that saves a block. It lints the new texts from memory, with
   every typed document of the schema's folder that links to one of them, and writes them (a temporary file renamed
@@ -171,24 +177,42 @@ Design in `docs/serve.md`.
   An entry of a folder, which has no type of its own, is checked through the document that owns the folder, with
   the new text in its place, in a folder that may not exist yet: an agent adds a task as one new file (2026-10-23).
 
+## Prior art
+
+Every piece exists; none of them combines prose, typed data, checked links and pure rules in documents that
+someone who doesn't program can edit (2026-10-22).
+
+| Family | Languages | What they do | What's missing |
+|---|---|---|---|
+| Typed data | CUE, Pkl, Nickel, Dhall, KCL | schema and data unified, internal references, pure functions | no prose: configuration, not documents |
+| Schemas, IDL | TypeSpec, Smithy, GraphQL SDL, LinkML | schemas and generated types | no data, no prose, no rules |
+| Contracts and law | Accord Project, Catala, L4, Lexon | legal text tied to executable code | contracts or statutes only |
+| Business rules | DMN/FEEL, CEL, Rego, Drools | business expressions, evaluated | no document model |
+| Documents | XML with XSD, DITA, Markdoc, MDX, Typst | structured text, cross-references | weak typing, no rules; XML and DITA are not for non-developers |
+| Structured notes | Obsidian (properties, `[[links]]`, Dataview), Org-mode | Markdown with fields and links, edited by anyone | no schema, no type checking, links not verified |
+| Domain standards | XBRL, Beancount, OSCAL, DBML, Prisma | established formats | each in its own domain |
+
+The closest are CUE and Pkl for the checking, Catala and Accord Project for rules that read as sentences, and
+Obsidian and Markdoc for the editing.
+
 ## Open questions
 
-- **A heading that looks like a field.** A clause titled "Dépôt de garantie" folds to the name
-  `depot-de-garantie` and opens that field instead of becoming a clause. The folding is looser than the old label
+- **A heading that looks like a field.** A clause titled "Security Deposit" folds to the name
+  `security-deposit` and opens that field instead of becoming a clause. The folding is looser than the old label
   match (case and accents no longer tell them apart), so a neophyte will fall into this more often. The message
   says to give the section another title.
-- **A single sub-object as a file**: `clio/carte-grise.kan` would be named after a field, not an id. Allowed, or
+- **A single sub-object as a file**: `hatchback/logbook.kan` would be named after a field, not an id. Allowed, or
   arrays only?
 - **Where schemas live**: the command line takes the schema as an argument; the language server finds it in the
   nearest folder that holds one (see Editors). Should `kan lint` find it the same way, or is an explicit `use` or a
   project file better?
-- **`reads` patterns** both parse and render a line (`250 g de farine`). How far can they go before they become a
+- **`reads` patterns** both parse and render a line (`250 g of flour`). How far can they go before they become a
   grammar of their own?
 - **Severity**: an oil change that's due is a warning, an illegal deposit is an error. `rule … warn`? A document
   written in parts asks the same: a rule that every criterion has its chapter is right for the finished answer, but
   refuses every save of a draft, so a program cannot write it chapter by chapter. A rule could say it holds when the
   document is final (`rule … final`), and be a warning before.
-- **Where a rule fails**: a rule that fails is reported at the document (`clio.kan: error: …`), without the objects
+- **Where a rule fails**: a rule that fails is reported at the document (`hatchback.kan: error: …`), without the objects
   that make it fail. For `count(xs, x => …) == 0`, naming each `x` that counts, with its line, would let an editor
   or a program point at it.
 - **Escaping in prose**: `{x}` inserts a field, `[[x]]` is a checked link, a line starting with `#` opens a

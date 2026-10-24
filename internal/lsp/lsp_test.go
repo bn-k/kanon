@@ -216,51 +216,51 @@ func writeFiles(t *testing.T, dir string, files map[string]string) {
 	}
 }
 
-const quoteSchema = `enum Etat { neuf, use }
+const quoteSchema = `enum State { new, worn }
 
 schema Client {
-  nom: Text
+  name: Text
 }
 
-schema Ligne reads "{nom} {etat}" {
-  nom:  Text
-  etat: Etat
+schema Line reads "{name} {state}" {
+  name:  Text
+  state: State
 }
 
 schema Doc {
-  titre:  Text @heading
+  title:  Text @heading
   client: -> Client
-  etat:   Etat
-  lignes: [Ligne]
+  state:  State
+  lines:  [Line]
   notes:  Prose?
 }
 
-rule neuve(d: Doc) -> Bool = d.etat == neuf
+rule brand-new(d: Doc) -> Bool = d.state == new
 `
 
 const quote = `---
 type: Doc
 ---
-# Devis
-client: [[clients/dupont]]
-etat: neuf
+# Quote
+client: [[clients/acme]]
+state: new
 
-## Lignes
+## Lines
 
-- vis use {#l1}
+- screw worn {#l1}
 
 ## Notes
 
-Voir 🚗 [[#l1]] et [[schema#neuve]].
+See 🚗 [[#l1]] and [[schema#brand-new]].
 `
 
 // quoteDir writes a quote whose document on disk is not what the editor holds.
 func quoteDir(t *testing.T) (dir, schemaPath, docPath string) {
 	dir = t.TempDir()
 	writeFiles(t, dir, map[string]string{
-		"schema.kanonarch":   quoteSchema,
-		"doc.kan":            "---\ntype: Doc\n---\n# Vide\n",
-		"clients/dupont.kan": "---\ntype: Client\n---\n# Dupont\nnom: Dupont\n",
+		"schema.kanonarch": quoteSchema,
+		"doc.kan":          "---\ntype: Doc\n---\n# Empty\n",
+		"clients/acme.kan": "---\ntype: Client\n---\n# Acme\nname: Acme\n",
 	})
 	return dir, filepath.Join(dir, "schema.kanonarch"), filepath.Join(dir, "doc.kan")
 }
@@ -282,13 +282,13 @@ func TestDefinition(t *testing.T) {
 		{"client:", 0, loc(schemaPath, 13, 2, 8)},
 		{"Doc\n---", 0, loc(schemaPath, 11, 7, 10)},
 		{"\n---\n#", 0, loc(schemaPath, 11, 7, 10)}, // just after the name
-		{"dupont]]", 0, location{toURI(filepath.Join(dir, "clients", "dupont.kan")), span{}}},
-		{"neuf", 0, loc(schemaPath, 0, 12, 16)},
-		{"use {", 0, loc(schemaPath, 0, 18, 21)},
-		{"Lignes", 0, loc(schemaPath, 15, 2, 8)},
-		{"[[#l1]]", 0, loc(docPath, 9, 12, 14)},
-		{"#l1]]", 0, loc(docPath, 9, 12, 14)},
-		{"[[schema#neuve]]", 0, loc(schemaPath, 19, 5, 10)},
+		{"acme]]", 0, location{toURI(filepath.Join(dir, "clients", "acme.kan")), span{}}},
+		{"new", 0, loc(schemaPath, 0, 13, 16)},
+		{"worn {", 0, loc(schemaPath, 0, 18, 22)},
+		{"Lines", 0, loc(schemaPath, 15, 2, 7)},
+		{"[[#l1]]", 0, loc(docPath, 9, 15, 17)},
+		{"#l1]]", 0, loc(docPath, 9, 15, 17)},
+		{"[[schema#brand-new]]", 0, loc(schemaPath, 19, 5, 14)},
 	}
 	for _, tt := range tests {
 		for _, method := range []string{"textDocument/definition", "textDocument/declaration"} {
@@ -298,7 +298,7 @@ func TestDefinition(t *testing.T) {
 			}
 		}
 	}
-	for _, needle := range []string{"type:", "\n## Lignes", "Voir"} {
+	for _, needle := range []string{"type:", "\n## Lines", "See"} {
 		if got, _ := c.call("textDocument/definition", at(t, docPath, quote, needle)); string(got) != "null" {
 			t.Errorf("definition at %q = %s, want null", needle, got)
 		}
@@ -312,13 +312,13 @@ func TestReferences(t *testing.T) {
 	c.open(docPath, quote)
 	c.open(schemaPath, quoteSchema)
 	all := []location{
-		loc(docPath, 5, 0, 4),
-		loc(schemaPath, 14, 2, 6),
-		loc(schemaPath, 19, 31, 35),
+		loc(docPath, 5, 0, 5),
+		loc(schemaPath, 14, 2, 7),
+		loc(schemaPath, 19, 35, 40),
 	}
 	declared := []location{all[0], all[2]}
 	refs := func(includeDeclaration bool) []location {
-		params := at(t, schemaPath, quoteSchema, "etat:", 1)
+		params := at(t, schemaPath, quoteSchema, "state:", 1)
 		params["context"] = map[string]any{"includeDeclaration": includeDeclaration}
 		got := result[[]location](c, "textDocument/references", params)
 		slices.SortFunc(got, func(a, b location) int { return strings.Compare(fmt.Sprint(a), fmt.Sprint(b)) })
@@ -336,7 +336,7 @@ func TestReferences(t *testing.T) {
 
 	type highlight struct{ Range span }
 	got := result[[]highlight](c, "textDocument/documentHighlight", at(t, docPath, quote, "l1}"))
-	want := []highlight{{loc(docPath, 9, 12, 14).Range}, {loc(docPath, 13, 8, 15).Range}}
+	want := []highlight{{loc(docPath, 9, 15, 17).Range}, {loc(docPath, 13, 7, 14).Range}}
 	if !slices.Equal(got, want) {
 		t.Errorf("highlights = %v, want %v", got, want)
 	}
@@ -356,10 +356,10 @@ func TestHover(t *testing.T) {
 		want               string
 		at                 span
 	}{
-		{docPath, quote, "neuf", "```kanonarch\nenum Etat { neuf, use }\n```\n\nschema.kanonarch:1", loc(docPath, 5, 6, 10).Range},
-		{docPath, quote, "[[clients", "`clients/dupont.kan`", loc(docPath, 4, 8, 26).Range},
-		{docPath, quote, "l1]]", "```kan\n- vis use {#l1}\n```", loc(docPath, 13, 8, 15).Range},
-		{schemaPath, quoteSchema, "Etat\n", "```kanonarch\nenum Etat { neuf, use }\n```", loc(schemaPath, 8, 8, 12).Range},
+		{docPath, quote, "new", "```kanonarch\nenum State { new, worn }\n```\n\nschema.kanonarch:1", loc(docPath, 5, 7, 10).Range},
+		{docPath, quote, "[[clients", "`clients/acme.kan`", loc(docPath, 4, 8, 24).Range},
+		{docPath, quote, "l1]]", "```kan\n- screw worn {#l1}\n```", loc(docPath, 13, 7, 14).Range},
+		{schemaPath, quoteSchema, "State\n", "```kanonarch\nenum State { new, worn }\n```", loc(schemaPath, 8, 9, 14).Range},
 	}
 	for _, tt := range tests {
 		got := result[hover](c, "textDocument/hover", at(t, tt.path, tt.text, tt.needle))
@@ -367,7 +367,7 @@ func TestHover(t *testing.T) {
 			t.Errorf("hover at %q = %+v, want %q at %v", tt.needle, got, tt.want, tt.at)
 		}
 	}
-	if got, _ := c.call("textDocument/hover", at(t, docPath, quote, "Voir")); string(got) != "null" {
+	if got, _ := c.call("textDocument/hover", at(t, docPath, quote, "See")); string(got) != "null" {
 		t.Errorf("hover at nothing = %s, want null", got)
 	}
 	c.exit()
@@ -377,15 +377,15 @@ func TestDiagnostics(t *testing.T) {
 	dir, _, docPath := quoteDir(t)
 	writeFiles(t, dir, map[string]string{"photo.jpg": "\x89PNG\r\n\x1a\n"})
 	c := start(t, time.Hour)
-	broken := strings.Replace(quote, "etat: neuf", "etat: vieux", 1) + "\n![photo](photo.jpg)\n"
+	broken := strings.Replace(quote, "state: new", "state: old", 1) + "\n![photo](photo.jpg)\n"
 	c.open(docPath, broken)
 	result[any](c, "shutdown", nil)
 	got := c.diags[toURI(docPath)]
 	if len(got) != 2 {
 		t.Fatalf("diagnostics = %+v, want 2", got)
 	}
-	if d := got[0]; d.Severity != 1 || d.Range != loc(docPath, 5, 6, 11).Range || !strings.Contains(d.Message, `"vieux"`) {
-		t.Errorf("diagnostic = %+v, want an error on vieux", d)
+	if d := got[0]; d.Severity != 1 || d.Range != loc(docPath, 5, 7, 10).Range || !strings.Contains(d.Message, `"old"`) {
+		t.Errorf("diagnostic = %+v, want an error on old", d)
 	}
 	if d := got[1]; d.Severity != 2 || d.Range != loc(docPath, 15, 0, 19).Range || !strings.Contains(d.Message, "photo.png") {
 		t.Errorf("diagnostic = %+v, want a warning on the image", d)
@@ -423,7 +423,7 @@ func TestDiagnostics(t *testing.T) {
 func TestDiagnosticsAfterADelay(t *testing.T) {
 	_, _, docPath := quoteDir(t)
 	c := start(t, 0)
-	c.open(docPath, strings.Replace(quote, "etat: neuf", "etat: vieux", 1))
+	c.open(docPath, strings.Replace(quote, "state: new", "state: old", 1))
 	for len(c.diags[toURI(docPath)]) == 0 {
 		c.next()
 	}
@@ -433,23 +433,23 @@ func TestDiagnosticsAfterADelay(t *testing.T) {
 func TestSchemaDiscovery(t *testing.T) {
 	dir := t.TempDir()
 	writeFiles(t, dir, map[string]string{
-		"a.kanonarch":         "schema Autre { nom: Text }",
-		"b.kanonarch":         "schema Doc { nom: Text }",
-		"deep/down/doc.kan":   "---\ntype: Doc\n---\nnom: x\n",
-		"notes.kan":           "nom: x\n",
-		"lone/x/y/z/orph.kan": "nom: x\n",
+		"a.kanonarch":           "schema Other { name: Text }",
+		"b.kanonarch":           "schema Doc { name: Text }",
+		"deep/down/doc.kan":     "---\ntype: Doc\n---\nname: x\n",
+		"notes.kan":             "name: x\n",
+		"lone/x/y/z/orphan.kan": "name: x\n",
 	})
 	c := start(t, time.Hour)
 	doc := filepath.Join(dir, "deep", "down", "doc.kan")
-	c.open(doc, "---\ntype: Doc\n---\nnom: x\n")
-	got := result[location](c, "textDocument/definition", at(t, doc, "---\ntype: Doc\n---\nnom: x\n", "nom"))
-	if want := loc(filepath.Join(dir, "b.kanonarch"), 0, 13, 16); got != want {
+	c.open(doc, "---\ntype: Doc\n---\nname: x\n")
+	got := result[location](c, "textDocument/definition", at(t, doc, "---\ntype: Doc\n---\nname: x\n", "name"))
+	if want := loc(filepath.Join(dir, "b.kanonarch"), 0, 13, 17); got != want {
 		t.Errorf("definition = %v, want %v", got, want)
 	}
 
 	// A document without a type, held by no document, is checked against the first schema.
 	notes := filepath.Join(dir, "notes.kan")
-	c.open(notes, "nom: x\n")
+	c.open(notes, "name: x\n")
 	result[any](c, "shutdown", nil)
 	if len(c.diags[toURI(notes)]) == 0 {
 		t.Errorf("no diagnostics for a document without a type")
@@ -457,10 +457,10 @@ func TestSchemaDiscovery(t *testing.T) {
 	c.exit()
 
 	far := t.TempDir()
-	orphan := filepath.Join(far, "orph.kan")
-	writeFiles(t, far, map[string]string{"orph.kan": "nom: x\n"})
+	orphan := filepath.Join(far, "orphan.kan")
+	writeFiles(t, far, map[string]string{"orphan.kan": "name: x\n"})
 	c = start(t, time.Hour)
-	c.open(orphan, "nom: x\n")
+	c.open(orphan, "name: x\n")
 	result[any](c, "shutdown", nil)
 	want := []diagnostic{{Severity: 1, Message: "no schema for this document: put a `.kanonarch` file in its folder or a folder above"}}
 	if got := c.diags[toURI(orphan)]; !slices.Equal(got, want) {
@@ -475,7 +475,7 @@ func TestFolderDocuments(t *testing.T) {
 		t.Fatal(err)
 	}
 	schemaPath := filepath.Join(car, "schema.kanonarch")
-	visit := filepath.Join(car, "clio", "entretiens", "2023-09-18-vidange.kan")
+	visit := filepath.Join(car, "hatchback", "services", "2023-09-18-oil-change.kan")
 	visitText, err := os.ReadFile(visit)
 	if err != nil {
 		t.Fatal(err)
@@ -488,8 +488,8 @@ func TestFolderDocuments(t *testing.T) {
 	// An entry of a folder is checked through the document that holds the folder.
 	c := start(t, time.Hour)
 	c.open(visit, string(visitText))
-	got := result[location](c, "textDocument/definition", at(t, visit, string(visitText), "kilometrage"))
-	if want := loc(schemaPath, 6, 2, 13); got != want {
+	got := result[location](c, "textDocument/definition", at(t, visit, string(visitText), "mileage"))
+	if want := loc(schemaPath, 6, 2, 9); got != want {
 		t.Errorf("definition = %v, want %v", got, want)
 	}
 	c.exit()
@@ -497,8 +497,8 @@ func TestFolderDocuments(t *testing.T) {
 	// The names of an open schema lead to the documents of its folder.
 	c = start(t, time.Hour)
 	c.open(schemaPath, string(schemaText))
-	refs := result[[]location](c, "textDocument/references", at(t, schemaPath, string(schemaText), "kilometrage"))
-	if !slices.Contains(refs, loc(visit, 3, 0, 11)) {
+	refs := result[[]location](c, "textDocument/references", at(t, schemaPath, string(schemaText), "mileage"))
+	if !slices.Contains(refs, loc(visit, 3, 0, 7)) {
 		t.Errorf("references = %v, want one in %s", refs, visit)
 	}
 	c.exit()
@@ -531,9 +531,9 @@ func TestSymbols(t *testing.T) {
 		return b.String()
 	}
 	tests := []struct{ path, want string }{
-		{schemaPath, "Etat:10(enum){neuf:22 use:22} Client:23(schema){nom:8(Text)} Ligne:23(schema){nom:8(Text) etat:8(Etat)} " +
-			"Doc:23(schema){titre:8(Text) client:8(-> Client) etat:8(Etat) lignes:8([Ligne]) notes:8(Prose?)} neuve:12(rule)"},
-		{docPath, "Devis:15{Lignes:15{#l1:20} Notes:15}"},
+		{schemaPath, "State:10(enum){new:22 worn:22} Client:23(schema){name:8(Text)} Line:23(schema){name:8(Text) state:8(State)} " +
+			"Doc:23(schema){title:8(Text) client:8(-> Client) state:8(State) lines:8([Line]) notes:8(Prose?)} brand-new:12(rule)"},
+		{docPath, "Quote:15{Lines:15{#l1:20} Notes:15}"},
 		{filepath.Join(filepath.Dir(docPath), "photo.png"), ""},
 		{filepath.Join(filepath.Dir(docPath), "gone.kan"), ""},
 		{filepath.Join(filepath.Dir(docPath), "gone.kanonarch"), ""},
@@ -545,18 +545,18 @@ func TestSymbols(t *testing.T) {
 	}
 	syms := result[[]*symbol](c, "textDocument/documentSymbol", map[string]any{"textDocument": map[string]any{"uri": toURI(docPath)}})
 	if got, want := syms[0].Children[0].Range, (span{position{7, 0}, position{10, 0}}); got != want {
-		t.Errorf("range of Lignes = %v, want %v", got, want)
+		t.Errorf("range of Lines = %v, want %v", got, want)
 	}
 	if got, want := syms[0].Range, (span{position{3, 0}, position{14, 0}}); got != want {
-		t.Errorf("range of Devis = %v, want %v", got, want)
+		t.Errorf("range of Quote = %v, want %v", got, want)
 	}
 	syms = result[[]*symbol](c, "textDocument/documentSymbol", map[string]any{"textDocument": map[string]any{"uri": toURI(schemaPath)}})
-	if got, want := syms[1].Range, (span{position{2, 7}, position{3, 5}}); got != want {
+	if got, want := syms[1].Range, (span{position{2, 7}, position{3, 6}}); got != want {
 		t.Errorf("range of Client = %v, want %v", got, want)
 	}
 	units := filepath.Join(filepath.Dir(docPath), "units.kanonarch")
-	c.open(units, "unit pincee\n")
-	if got, want := outline(units), "pincee:14(unit)"; got != want {
+	c.open(units, "unit pinch\n")
+	if got, want := outline(units), "pinch:14(unit)"; got != want {
 		t.Errorf("outline of units = %s, want %s", got, want)
 	}
 
@@ -564,10 +564,10 @@ func TestSymbols(t *testing.T) {
 		Name, ContainerName string
 		Location            location
 	}
-	got := result[[]found](c, "workspace/symbol", map[string]any{"query": "NEU"})
+	got := result[[]found](c, "workspace/symbol", map[string]any{"query": "NEW"})
 	want := []found{
-		{"neuf", "Etat", loc(schemaPath, 0, 12, 16)},
-		{"neuve", "schema.kanonarch", loc(schemaPath, 19, 5, 10)},
+		{"new", "State", loc(schemaPath, 0, 13, 16)},
+		{"brand-new", "schema.kanonarch", loc(schemaPath, 19, 5, 14)},
 	}
 	if !slices.Equal(got, want) {
 		t.Errorf("workspace symbols = %+v, want %+v", got, want)

@@ -29,13 +29,13 @@ type Ref struct {
 	Decl diag.Pos
 }
 
-// Unit is a unit a Quantity may carry, beyond the built-in ones: unit pincee.
+// Unit is a unit a Quantity may carry, beyond the built-in ones: unit pinch.
 type Unit struct {
 	Pos  diag.Pos
 	Name string
 }
 
-// Enum is a closed set of names: enum Etat { neuf, bon, use }.
+// Enum is a closed set of names: enum Condition { mint, good, worn }.
 type Enum struct {
 	Pos    diag.Pos
 	Name   string
@@ -57,7 +57,7 @@ type Schema struct {
 	Fields   []*Field
 }
 
-// Reads is a sentence that reads or renders a schema, a function or a rule: reads fr "{a} est inférieur à {b}".
+// Reads is a sentence that reads or renders a schema, a function or a rule: reads en "{a} is less than {b}".
 type Reads struct {
 	Pos  diag.Pos // the string
 	Lang string   // "" when none is written
@@ -82,7 +82,7 @@ type Annot struct {
 	Name string
 }
 
-// Type is a written type: Text, Partie, [Ligne], Duration?, -> Partie, [-> Territoire].
+// Type is a written type: Text, Party, [Line], Duration?, -> Party, [-> Territory].
 type Type struct {
 	Pos      diag.Pos
 	Name     string

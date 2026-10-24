@@ -85,9 +85,9 @@ func checkFiles(t *testing.T, r Result, want ...string) {
 
 const note = `
 schema Note {
-  titre: Text @heading
+  title: Text @heading
   date:  Date?
-  corps: Prose?
+  body:  Prose?
 }
 `
 
@@ -114,8 +114,8 @@ func TestFrontMatter(t *testing.T) {
 		{
 			name:   "unknown key",
 			schema: note,
-			doc:    "---\ntype: Note\ntitre: Hi\n---\n# Hi\n",
-			want:   []string{"doc.kan:3:1: error: unknown front matter key `titre`; the front matter holds type: only"},
+			doc:    "---\ntype: Note\ntitle: Hi\n---\n# Hi\n",
+			want:   []string{"doc.kan:3:1: error: unknown front matter key `title`; the front matter holds type: only"},
 		},
 		{
 			name:   "unknown schema",
@@ -125,15 +125,15 @@ func TestFrontMatter(t *testing.T) {
 		},
 		{
 			name:   "no front matter",
-			schema: note + "schema Personne { nom: Text }\n",
+			schema: note + "schema Person { name: Text }\n",
 			doc:    "# Hi\n",
 			want: []string{
-				"doc.kan:1:1: error: this document names no schema; begin it with a front matter: ---, then type: Personne, then ---",
+				"doc.kan:1:1: error: this document names no schema; begin it with a front matter: ---, then type: Person, then ---",
 			},
 		},
 		{
 			name:   "no front matter, and a schema file without schemas",
-			schema: "unit pincee\n",
+			schema: "unit pinch\n",
 			doc:    "# Hi\n",
 			want: []string{
 				"doc.kan:1:1: error: this document names no schema; begin it with a front matter: ---, then type: Name, then ---",
@@ -144,96 +144,96 @@ func TestFrontMatter(t *testing.T) {
 
 const linked = `
 schema Note {
-  titre:  Text @heading
-  auteur: -> Personne?
-  corps:  Prose?
+  title:  Text @heading
+  author: -> Person?
+  body:   Prose?
 }
 
-schema Personne {
-  nom: Text @heading
+schema Person {
+  name: Text @heading
 }
 
-unit pincee
+unit pinch
 `
 
 func TestLinks(t *testing.T) {
-	personne := "---\ntype: Personne\n---\n# Claire Martin\n"
+	person := "---\ntype: Person\n---\n# Sarah Miller\n"
 	runCases(t, []lintCase{
 		{
 			name:   "a value that is not a link",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\nauteur: Claire Martin\n",
-			want:   []string{"doc.kan:6:9: error: this field holds a `Personne`: link to it, as in [[claire-martin]]"},
+			doc:    "---\ntype: Note\n---\n# Hi\n\nauthor: Sarah Miller\n",
+			want:   []string{"doc.kan:6:9: error: this field holds a `Person`: link to it, as in [[sarah-miller]]"},
 		},
 		{
 			name:   "a link to an object of the right type",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\nauteur: [[claire]]\n",
-			more:   files{"claire.kan": personne},
+			doc:    "---\ntype: Note\n---\n# Hi\n\nauthor: [[sarah]]\n",
+			more:   files{"sarah.kan": person},
 		},
 		{
 			name:   "a link to an object of another type",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\nauteur: [[autre]]\n",
-			more:   files{"autre.kan": "---\ntype: Note\n---\n# Autre\n"},
-			want:   []string{"doc.kan:6:9: error: this field holds a `Personne`; [[autre]] is a `Note`"},
+			doc:    "---\ntype: Note\n---\n# Hi\n\nauthor: [[other]]\n",
+			more:   files{"other.kan": "---\ntype: Note\n---\n# Other\n"},
+			want:   []string{"doc.kan:6:9: error: this field holds a `Person`; [[other]] is a `Note`"},
 		},
 		{
 			name:   "a link to a schema file from a typed field",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\nauteur: [[schema]]\n",
-			want:   []string{"doc.kan:6:9: error: this field holds a `Personne`; [[schema]] is a schema file"},
+			doc:    "---\ntype: Note\n---\n# Hi\n\nauthor: [[schema]]\n",
+			want:   []string{"doc.kan:6:9: error: this field holds a `Person`; [[schema]] is a schema file"},
 		},
 		{
 			name:   "links to declarations of the schema",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\n## Corps\n\nEn [[schema#pincee]], pas en [[schema#pince]], selon [[schema]].\n",
-			want:   []string{"doc.kan:8:30: error: unknown declaration `pince` in schema.kanonarch; did you mean `pincee`?"},
+			doc:    "---\ntype: Note\n---\n# Hi\n\n## Body\n\nIn [[schema#pinch]], not in [[schema#pinc]], per [[schema]].\n",
+			want:   []string{"doc.kan:8:29: error: unknown declaration `pinc` in schema.kanonarch; did you mean `pinch`?"},
 		},
 		{
 			name:   "a link path that is not made of ids",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\n## Corps\n\nVoir [[Mes Notes/Autre]] et [[../Autre#x]].\n",
+			doc:    "---\ntype: Note\n---\n# Hi\n\n## Body\n\nSee [[My Notes/Other]] and [[../Other#x]].\n",
 			want: []string{
-				`doc.kan:8:6: error: a link path is made of ids: write [[mes-notes/autre]], not "[[Mes Notes/Autre]]"`,
-				`doc.kan:8:29: error: a link path is made of ids: write [[../autre#x]], not "[[../Autre#x]]"`,
+				`doc.kan:8:5: error: a link path is made of ids: write [[my-notes/other]], not "[[My Notes/Other]]"`,
+				`doc.kan:8:28: error: a link path is made of ids: write [[../other#x]], not "[[../Other#x]]"`,
 			},
 		},
 		{
 			name:   "a link id that is not a slug",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\n## Corps\n\nVoir [[claire#Claire M]].\n",
-			more:   files{"claire.kan": personne},
-			want:   []string{`doc.kan:8:6: error: an id is a slug: write #claire-m, not "#Claire M"`},
+			doc:    "---\ntype: Note\n---\n# Hi\n\n## Body\n\nSee [[sarah#Sarah M]].\n",
+			more:   files{"sarah.kan": person},
+			want:   []string{`doc.kan:8:5: error: an id is a slug: write #sarah-m, not "#Sarah M"`},
 		},
 		{
 			name:   "a link to an unknown id",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\n## Corps\n\nVoir [[#doc]], [[#dc]] et [[claire#bob]].\n",
-			more:   files{"claire.kan": personne},
+			doc:    "---\ntype: Note\n---\n# Hi\n\n## Body\n\nSee [[#doc]], [[#dc]] and [[sarah#bob]].\n",
+			more:   files{"sarah.kan": person},
 			want: []string{
-				"doc.kan:8:16: error: unknown id `dc` in doc.kan; did you mean `doc`?",
-				"doc.kan:8:27: error: unknown id `bob` in claire.kan",
+				"doc.kan:8:15: error: unknown id `dc` in doc.kan; did you mean `doc`?",
+				"doc.kan:8:27: error: unknown id `bob` in sarah.kan",
 			},
 		},
 		{
 			name:   "links to missing documents",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\n## Corps\n\nVoir [[clare]], [[gens/clare]] et [[zz]].\n",
-			more:   files{"claire.kan": personne, "gens/claire.kan": personne, "gens/clara.kan/": ""},
+			doc:    "---\ntype: Note\n---\n# Hi\n\n## Body\n\nSee [[sarh]], [[people/sarh]] and [[zz]].\n",
+			more:   files{"sarah.kan": person, "people/sarah.kan": person, "people/sara.kan/": ""},
 			want: []string{
-				"doc.kan:8:6: error: no document `clare`; did you mean `claire`?",
-				"doc.kan:8:17: error: no document `gens/clare`; did you mean `gens/claire`?",
+				"doc.kan:8:5: error: no document `sarh`; did you mean `sarah`?",
+				"doc.kan:8:15: error: no document `people/sarh`; did you mean `people/sarah`?",
 				"doc.kan:8:35: error: no document `zz`",
 			},
 		},
 		{
 			name:   "a link to a document that names no schema",
 			schema: linked,
-			doc:    "---\ntype: Note\n---\n# Hi\n\nauteur: [[vide]]\n",
-			more:   files{"vide.kan": "# Vide\n"},
+			doc:    "---\ntype: Note\n---\n# Hi\n\nauthor: [[empty]]\n",
+			more:   files{"empty.kan": "# Empty\n"},
 			want: []string{
-				"vide.kan:1:1: error: this document names no schema; begin it with a front matter: ---, then type: Personne, then ---",
+				"empty.kan:1:1: error: this document names no schema; begin it with a front matter: ---, then type: Person, then ---",
 			},
 		},
 	})
@@ -242,28 +242,28 @@ func TestLinks(t *testing.T) {
 func TestLinkedTwice(t *testing.T) {
 	r := lint(t, files{
 		"schema.kanonarch": linked,
-		"claire.kan":       "---\ntype: Personne\n---\n# Claire Martin\n",
-		"doc.kan":          "---\ntype: Note\n---\n# Hi\n\nauteur: [[claire]]\n\n## Corps\n\nPar [[claire]] et [[claire#claire]].\n",
+		"sarah.kan":        "---\ntype: Person\n---\n# Sarah Miller\n",
+		"doc.kan":          "---\ntype: Note\n---\n# Hi\n\nauthor: [[sarah]]\n\n## Body\n\nBy [[sarah]] and [[sarah#sarah]].\n",
 	})
 	check(t, r, nil)
-	checkFiles(t, r, "schema.kanonarch", "doc.kan", "claire.kan")
+	checkFiles(t, r, "schema.kanonarch", "doc.kan", "sarah.kan")
 }
 
 func TestLinkToAnotherSchemaFile(t *testing.T) {
 	r := lint(t, files{
 		"schema.kanonarch": linked,
-		"regles.kanonarch": "unit tasse\n",
-		"doc.kan":          "---\ntype: Note\n---\n# Hi\n\n## Corps\n\nUne [[regles#tasse]], deux [[regles#tase]].\n",
+		"rules.kanonarch":  "unit spoon\n",
+		"doc.kan":          "---\ntype: Note\n---\n# Hi\n\n## Body\n\nOne [[rules#spoon]], two [[rules#spon]].\n",
 	})
-	check(t, r, []string{"doc.kan:8:28: error: unknown declaration `tase` in regles.kanonarch; did you mean `tasse`?"})
-	checkFiles(t, r, "schema.kanonarch", "doc.kan", "regles.kanonarch")
+	check(t, r, []string{"doc.kan:8:26: error: unknown declaration `spon` in rules.kanonarch; did you mean `spoon`?"})
+	checkFiles(t, r, "schema.kanonarch", "doc.kan", "rules.kanonarch")
 }
 
 func TestSlugPath(t *testing.T) {
 	tests := []struct{ target, want string }{
-		{"Mes Notes/Autre", "mes-notes/autre"},
-		{"../Bail#Clé", "../bail#cle"},
-		{"bail", "bail"},
+		{"My Notes/Other", "my-notes/other"},
+		{"../Lease#Café", "../lease#cafe"},
+		{"lease", "lease"},
 	}
 	for _, tt := range tests {
 		if got := slugPath(tt.target); got != tt.want {

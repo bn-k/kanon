@@ -382,7 +382,7 @@ func TestErrors(t *testing.T) {
 			"`T.B` refers to `U.B`; kan import follows foreign keys to the primary key only"},
 		{"same id", `CREATE TABLE T (Code TEXT PRIMARY KEY); INSERT INTO T VALUES ('A b'), ('a-B');`,
 			"`T`: the keys \"A b\" and \"a-B\" both give the id `a-b`"},
-		{"no id", `CREATE TABLE T (Code TEXT PRIMARY KEY); INSERT INTO T VALUES ('été'), ('!');`,
+		{"no id", `CREATE TABLE T (Code TEXT PRIMARY KEY); INSERT INTO T VALUES ('café'), ('!');`,
 			"`T`: the key \"!\" gives no id"},
 		{"null key", `CREATE TABLE T (Code TEXT PRIMARY KEY); INSERT INTO T VALUES (NULL);`,
 			"`T`: a row has no key"},
@@ -549,7 +549,7 @@ func TestWords(t *testing.T) {
 		{"Keys", "keys", "Key", "keys"},
 		{"Analysis", "analysis", "Analysis", "analysis"},
 		{"ship_via", "ship-via", "ShipVia", "ship-vias"},
-		{"Prénom", "prenom", "Prenom", "prenoms"},
+		{"Résumé", "resume", "Resume", "resumes"},
 		{"T", "t", "T", "ts"},
 	}
 	for _, tt := range tests {

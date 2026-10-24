@@ -1,0 +1,27 @@
+---
+type: Invoice
+---
+
+# Invoice INV-2026-034
+
+number: INV-2026-034
+date: 2026-10-22
+due: 2026-11-21
+client: [[../invoice/clients/ashgrove-builders]]
+vat-rate: 20 %
+
+## Issuer {#halfmoon-studio}
+
+name: Halfmoon Studio Ltd
+address: 8 Mist Quay, Larkhaven
+
+## Lines
+
+| id | description | quantity | unit-price |
+|---|---|---|---|
+| booking-api | Booking API development (days) | 12 | 650.00 EUR |
+| hosting | Hosting, October to December (months) | 3 | 40.00 USD |
+
+## Terms
+
+Please pay by bank transfer no later than {due}.

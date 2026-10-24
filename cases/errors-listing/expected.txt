@@ -1,0 +1,16 @@
+$ kan lint ../listing/schema.kanonarch house-elm-grove.kan
+agents/helen-carter.kan:12:4: error: `listings` is the inverse of `Listing.agent`, computed from the documents; remove it
+flat-riverside.kan:15:9: error: [[sellers/fenwick-family]] is already the `seller` of `house-elm-grove`, at house-elm-grove.kan:15:9; a `Seller` has one `listing`
+house-elm-grove.kan:14:10: error: write a date and time as YYYY-MM-DD HH:MM (2026-10-22 14:30), not "25/10/2026 10.30am"
+house-elm-grove.kan:16:1: error: `location` holds its own `Location`, not a link: write it under ## Location {#id}
+house-elm-grove.kan:17:7: error: no file `house-elm-grove/groundfloor.pdf`; did you mean `house-elm-grove/ground-floor.pdf`?
+house-elm-grove.kan:24:1: error: no file `house-elm-grove/photos/04-terrace.jpg`
+house-elm-grove.kan:28:4: error: "Agent" names the field `agent`, a link to an `Agent` written as a key line: agent: [[…]]
+house-elm-grove.kan:36:3: error: this field holds an `Agent`; [[sellers/fenwick-family]] is a `Seller`
+house-elm-grove.kan:44:3: error: the id `kitchen` is already used, at line 43
+house-elm-grove.kan:52:1: error: `virtual-tour` holds one code block; merge this one into the block at line 48
+house-elm-grove/photos/02-living-room.png: warning: 02-living-room.png holds a JPEG image; name it 02-living-room.jpg
+house-elm-grove/photos/Rear façade.JPG: error: name the file rear-facade.jpg, not "Rear façade.JPG"
+house-elm-grove/photos/energy-certificate.pdf: error: energy-certificate.pdf is not an image: it holds application/pdf
+12 errors, 1 warning
+[exit 1]

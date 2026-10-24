@@ -67,8 +67,8 @@ func idents(cols []*column) string {
 	return strings.Join(ns, ", ")
 }
 
-// snake gives the name of a table or a column: EtatDesLieux gives etat_des_lieux, HTMLPage html_page,
-// prix-unitaire prix_unitaire.
+// snake gives the name of a table or a column: CheckInReport gives check_in_report, HTMLPage html_page,
+// unit-price unit_price.
 func snake(s string) string {
 	lower := func(c byte) bool { return c >= 'a' && c <= 'z' || c >= '0' && c <= '9' }
 	upper := func(c byte) bool { return c >= 'A' && c <= 'Z' }

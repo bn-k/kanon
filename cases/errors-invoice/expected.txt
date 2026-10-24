@@ -1,12 +1,12 @@
-$ kan lint ../invoice/schema.kanonarch f-2026-032.kan
-f-2026-032.kan:8:7: error: write a date as YYYY-MM-DD (2026-10-22), not "22/10/2026"
-f-2026-032.kan:10:9: error: no document `../invoice/clients/dupont-batimen`; did you mean `../invoice/clients/dupont-batiment`?
-f-2026-032.kan:11:11: error: write 20 %, not "20"
-f-2026-032.kan:12:1: error: `Facture` has no field `remise`
-f-2026-032.kan:14:1: error: `Partie` needs `adresse`; write adresse: …
-f-2026-032.kan:20:8: error: names are ASCII: write designation, not "Désignation"
-f-2026-032.kan:22:34: error: write 650.00 EUR, not "650,00 €"
-f-2026-032.kan:23:2: error: every object has an id: this `Ligne` needs one; write its id in the id column
-f-2026-032.kan:27:44: error: {total-tc} inserts no field; did you mean {total-ttc}?
+$ kan lint ../invoice/schema.kanonarch inv-2026-032.kan
+inv-2026-032.kan:8:7: error: write a date as YYYY-MM-DD (2026-10-22), not "22/10/2026"
+inv-2026-032.kan:10:9: error: no document `../invoice/clients/ashgrove-builder`; did you mean `../invoice/clients/ashgrove-builders`?
+inv-2026-032.kan:11:11: error: write 20 %, not "20"
+inv-2026-032.kan:12:1: error: `Invoice` has no field `discount`
+inv-2026-032.kan:14:1: error: `Party` needs `address`; write address: …
+inv-2026-032.kan:20:8: error: names are lowercase ASCII: write description, not "Description"
+inv-2026-032.kan:22:40: error: write 650.00 EUR, not "650,00 €"
+inv-2026-032.kan:23:2: error: every object has an id: this `Line` needs one; write its id in the id column
+inv-2026-032.kan:27:13: error: {gross} inserts no field; did you mean {gross-total}?
 9 errors
 [exit 1]

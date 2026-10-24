@@ -1,0 +1,8 @@
+---
+type: Calendar
+---
+
+# Bank holidays in England and Wales, 2019 to 2028
+
+source: GOV.UK, "UK bank holidays", Open Government Licence v3.0
+holidays: [[bank-holidays-england-and-wales.csv]]

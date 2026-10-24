@@ -7,7 +7,7 @@ import (
 )
 
 // IsSlug reports whether s is an ASCII slug: lowercase letters and digits, single hyphens between them.
-// Ids are slugs: crepes, f-2026-031, 2025-06-10-vidange.
+// Ids are slugs: crepes, inv-2026-031, 2025-06-10-oil-change.
 func IsSlug(s string) bool {
 	if s == "" || s[0] == '-' || s[len(s)-1] == '-' {
 		return false
@@ -23,12 +23,12 @@ func IsSlug(s string) bool {
 	return true
 }
 
-// IsName reports whether s is a name: a slug that starts with a letter (prix-unitaire, controle-technique).
+// IsName reports whether s is a name: a slug that starts with a letter (unit-price, oil-change).
 func IsName(s string) bool {
 	return IsSlug(s) && s[0] >= 'a' && s[0] <= 'z'
 }
 
-// IsTypeName reports whether s is a type name: ASCII PascalCase (Recette, EtatDesLieux).
+// IsTypeName reports whether s is a type name: ASCII PascalCase (Recipe, CheckInReport).
 func IsTypeName(s string) bool {
 	if s == "" || s[0] < 'A' || s[0] > 'Z' {
 		return false
@@ -42,7 +42,7 @@ func IsTypeName(s string) bool {
 	return true
 }
 
-// Heading returns the heading that opens the field of a name: zone-tendue is "Zone tendue". Slugify turns it
+// Heading returns the heading that opens the field of a name: unit-price is "Unit price". Slugify turns it
 // back into the name.
 func Heading(name string) string {
 	if name == "" {
@@ -52,7 +52,7 @@ func Heading(name string) string {
 	return strings.ToUpper(s[:1]) + s[1:]
 }
 
-// Article returns `name` in backticks, preceded by a or an: an `Image`, a `Partie`.
+// Article returns `name` in backticks, preceded by a or an: an `Image`, a `Party`.
 func Article(name string) string {
 	if name != "" && strings.ContainsRune("AEIOU", rune(name[0])) {
 		return "an `" + name + "`"
@@ -96,8 +96,8 @@ func Transliterate(r rune) (string, bool) {
 	return s, ok
 }
 
-// Slugify proposes a slug for s: "Durée du bail" becomes duree-du-bail, prix_unitaire becomes prix-unitaire.
-// It is also how a heading finds its field: "Dépôt de garantie" opens depot-de-garantie, "L'état" opens l-etat.
+// Slugify proposes a slug for s: "Rosé of the day" becomes rose-of-the-day, unit_price becomes unit-price.
+// It is also how a heading finds its field: "Unit price" opens unit-price, "Zoë's café" opens zoe-s-cafe.
 func Slugify(s string) string {
 	var b strings.Builder
 	cut := false

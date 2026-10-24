@@ -1,14 +1,14 @@
-$ kan lint ../lease/schema.kanonarch bail.kan
-bail.kan:8:8: error: unknown duration unit "ans"; use min, h, days, weeks, months or years
-bail.kan:11:14: error: write yes or no, not "oui"
-bail.kan:18:1: error: every object has an id: this `Personne` needs one; give it an id, as in ## Locataire {#id}
-bail.kan:21:7: error: "physiques" is not a `TypePersonne`; did you mean physique?
-bail.kan:27:1: error: names are ASCII: write pieces, not "pièces"
-bail.kan:29:4: error: "Dépôt de garantie" names the field `depot-de-garantie`, a `Money` written as a key line: depot-de-garantie: 1 250.50 EUR; to start a section, give it another title
-bail.kan:33:12: error: an id is a slug of lowercase ASCII letters, digits and hyphens: write conge, not "Conge"
-bail.kan:35:52: error: {preavis} inserts no field; did you mean {preavis-locataire}?
-bail.kan:36:12: error: unknown id `claire-martn` in bail.kan; did you mean `claire-martin`?
-etat-des-lieux-entree.kan:15:21: error: write use, not "usé"
-etat-des-lieux-entree.kan:16:21: error: "correct" is not an `Etat`: write neuf, bon, use or degrade
+$ kan lint ../lease/schema.kanonarch lease.kan
+check-in-report.kan:13:27: error: names are lowercase ASCII: write decor, not "décor"
+check-in-report.kan:15:26: error: write worn, not "Worn"
+check-in-report.kan:16:31: error: "fair" is not a `Condition`: write new, good, worn or damaged
+lease.kan:8:7: error: unknown duration unit "yrs"; use min, h, days, weeks, months or years
+lease.kan:11:18: error: write yes or no, not "true"
+lease.kan:18:1: error: every object has an id: this `Person` needs one; give it an id, as in ## Tenant {#id}
+lease.kan:21:7: error: "individuals" is not a `PersonType`; did you mean individual?
+lease.kan:29:4: error: "Security deposit" names the field `security-deposit`, a `Money` written as a key line: security-deposit: 1 250.50 EUR; to start a section, give it another title
+lease.kan:33:13: error: an id is a slug of lowercase ASCII letters, digits and hyphens: write notice, not "Notice"
+lease.kan:35:28: error: {notice} inserts no field; did you mean {notice-period}?
+lease.kan:36:10: error: unknown id `claire-mortn` in lease.kan; did you mean `claire-morton`?
 11 errors
 [exit 1]

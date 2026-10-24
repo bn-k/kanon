@@ -16,10 +16,10 @@ The language the commands read is in `docs/language.md`; the examples below are 
 ## kan lint
 
 ```
-$ kan lint cases/invoice/schema.kanonarch cases/invoice/f-2026-031.kan
+$ kan lint cases/invoice/schema.kanonarch cases/invoice/inv-2026-031.kan
 ok  cases/invoice/schema.kanonarch
-ok  cases/invoice/f-2026-031.kan
-ok  cases/invoice/clients/dupont-batiment.kan
+ok  cases/invoice/inv-2026-031.kan
+ok  cases/invoice/clients/ashgrove-builders.kan
 ```
 
 `kan lint` checks the document, every document it links to and every entry of its folders against the schema. It
@@ -27,9 +27,9 @@ reports like a compiler, `file:line:col: error: message`, and exits with 1 when 
 misused.
 
 ```
-f-2026-032.kan:8:7: error: write a date as YYYY-MM-DD (2026-10-22), not "22/10/2026"
-f-2026-032.kan:20:8: error: names are ASCII: write designation, not "Désignation"
-f-2026-032.kan:27:44: error: {total-tc} inserts no field; did you mean {total-ttc}?
+inv-2026-032.kan:8:7: error: write a date as YYYY-MM-DD (2026-10-22), not "22/10/2026"
+inv-2026-032.kan:20:8: error: names are lowercase ASCII: write description, not "Description"
+inv-2026-032.kan:27:13: error: {gross} inserts no field; did you mean {gross-total}?
 ```
 
 It checks structure (fields, values, ids, links, files and folders), then evaluates the computed fields and the
@@ -37,23 +37,23 @@ rules. A computed field written in the document must hold its computed value, an
 the object, in the words of its `reads` sentence when it has one:
 
 ```
-f-2026-033.kan:12:1: error: `total-ttc` is 9 504.00 EUR, not "9 500.00 EUR"
-clio.kan: error: `vidange-a-jour` fails: "Renault Clio a roule moins de 15 000 km depuis sa derniere vidange"; 15 250 km is not less than 15 000 km
+inv-2026-033.kan:12:1: error: `gross-total` is 9 504.00 EUR, not "9 500.00 EUR"
+hatchback.kan: error: `oil-change-up-to-date` fails: "Grey hatchback has covered less than 15 000 km since its last oil change"; 15 250 km is not less than 15 000 km
 ```
 
 `today` is the local date, or the one given by `-today`, on `kan lint`, `kan eval` and `kan write` alike:
-`kan lint -today 2026-10-22 schema.kanonarch clio.kan`. A case whose output depends on the date passes it, so its
+`kan lint -today 2026-10-22 schema.kanonarch hatchback.kan`. A case whose output depends on the date passes it, so its
 output stays the same.
 
 ## kan eval
 
 ```
-$ kan eval cases/invoice/schema.kanonarch cases/invoice/f-2026-031.kan
-f-2026-031.kan: total-ht = 7 920.00 EUR
-f-2026-031.kan: tva = 1 584.00 EUR
-f-2026-031.kan: total-ttc = 9 504.00 EUR
-f-2026-031.kan:23:1: montant = 7 800.00 EUR
-f-2026-031.kan:24:1: montant = 120.00 EUR
+$ kan eval cases/invoice/schema.kanonarch cases/invoice/inv-2026-031.kan
+inv-2026-031.kan: net-total = 7 920.00 EUR
+inv-2026-031.kan: vat = 1 584.00 EUR
+inv-2026-031.kan: gross-total = 9 504.00 EUR
+inv-2026-031.kan:23:1: amount = 7 800.00 EUR
+inv-2026-031.kan:24:1: amount = 120.00 EUR
 ```
 
 `kan eval` lints like `kan lint`, then prints the value of every computed field, where its object is written; the
@@ -65,8 +65,8 @@ A program that edits documents (a server, an agent) writes them with `kan write`
 documents stays valid, as a database keeps its constraints:
 
 ```
-$ kan write -n schema.kanonarch liste.kan=liste-renommee.txt
-critique.kan:7:8: error: unknown id `dune` in liste.kan; did you mean `dune-messie`?
+$ kan write -n schema.kanonarch list.kan=list-renamed.txt
+review.kan:7:7: error: unknown id `tidewater` in list.kan; did you mean `tidewater-rising`?
 1 error
 ```
 
@@ -75,7 +75,7 @@ links to one of them, and writes them only when that finds no error: none in the
 that links to them which it didn't have before. Each document is written through a file renamed over it, so that a
 reader never sees half of it.
 
-- `liste.kan=liste-renommee.txt` reads the new text from a file; one document at most goes without `=`, and reads
+- `list.kan=list-renamed.txt` reads the new text from a file; one document at most goes without `=`, and reads
   it from stdin. Several documents are checked together: a book renamed with the review that links it.
 - An entry of a folder, which has no type of its own, is checked through the document that owns the folder, with
   the new text in its place: `board/tasks/2026-10-28-release-notes.kan` is a new task of `board.kan`, even before
@@ -147,7 +147,7 @@ diagnostics of `kan lint`, and answers:
 
 A document finds its schema in the nearest folder, its own or above, that holds `.kanonarch` files: the one that
 declares the `type` of its front matter, or the first. A document without a `type` is checked as part of the
-document that owns its folder (`clio/entretiens/…` through `clio.kan`). An open schema also checks the documents of
+document that owns its folder (`hatchback/services/…` through `hatchback.kan`). An open schema also checks the documents of
 its folder whose schema it is.
 
 ### Obsidian

@@ -52,13 +52,13 @@ module.exports = grammar({
       $.rule_declaration,
     ),
 
-    // unit pincee
+    // unit pinch
     unit_declaration: $ => seq(
       'unit',
       field('name', $.identifier),
     ),
 
-    // enum Etat { neuf, bon, use }
+    // enum Condition { mint, good, worn }
     enum_declaration: $ => seq(
       'enum',
       field('name', $.identifier),
@@ -72,7 +72,7 @@ module.exports = grammar({
       optional(','),
     ),
 
-    // schema Ingredient reads "{quantite} [de] {nom}" { … }
+    // schema Ingredient reads "{quantity} [of] {name}" { … }
     schema_declaration: $ => seq(
       'schema',
       field('name', $.identifier),
@@ -82,14 +82,14 @@ module.exports = grammar({
 
     schema_body: $ => seq('{', repeat($.field_declaration), '}'),
 
-    // reads fr "{m.nom} a un BIOS a jour"
+    // reads en "{m.name} has an up-to-date BIOS"
     reads_clause: $ => seq(
       'reads',
       optional(field('language', $.identifier)),
       field('text', $.string),
     ),
 
-    // total-ht: Money @heading = sum(lignes.montant),
+    // net-total: Money @heading = sum(lines.amount),
     field_declaration: $ => seq(
       field('name', $.identifier),
       ':',
@@ -100,7 +100,7 @@ module.exports = grammar({
       optional(','),
     ),
 
-    // [Annonce] <- agent
+    // [Listing] <- agent
     inverse: $ => seq('<-', field('field', $.identifier)),
 
     annotation: $ => seq('@', field('name', $.identifier)),
@@ -114,7 +114,7 @@ module.exports = grammar({
       optional('?'),
     ),
 
-    // fn dernier(v: Vehicule, op: Operation) -> Entretien? reads fr "…" = …
+    // fn last(v: Vehicle, op: Operation) -> Service? reads en "…" = …
     function_declaration: $ => seq(
       'fn',
       field('name', $.identifier),
@@ -231,7 +231,7 @@ module.exports = grammar({
 
     unit: $ => choice('%', $.identifier),
 
-    // A hyphen belongs to a name between letters or digits: total-ht is a name, total - ht a subtraction.
+    // A hyphen belongs to a name between letters or digits: net-total is a name, net - total a subtraction.
     identifier: _ => /[\p{L}_]([\p{L}\p{Nd}_]|-[\p{L}\p{Nd}])*/u,
 
     // Thousands are grouped with single spaces, as in a document: 1 250.50.

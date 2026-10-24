@@ -1,7 +1,7 @@
 ---
-type: Personne
+type: Person
 ---
 
 # Bruno
 
-parrain: [[alice]]
+sponsor: [[alice]]

@@ -66,7 +66,7 @@ func (s *Section) Level() int {
 	return s.Heading.Level
 }
 
-// Heading is a line such as ## Émetteur {#atelier-lune}. ID is "" when no {#id} is written.
+// Heading is a line such as ## Issuer {#moon-studio}. ID is "" when no {#id} is written.
 type Heading struct {
 	Pos     diag.Pos
 	Level   int

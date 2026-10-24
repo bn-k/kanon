@@ -1,0 +1,9 @@
+---
+type: Expense
+---
+
+# Dinner on 22 October
+
+amount: 96.00 EUR
+at: 2026-10-22 20:30
+paid-by: [[alice]]

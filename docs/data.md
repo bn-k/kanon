@@ -1,9 +1,8 @@
 # Files, relations, spreadsheets and SQL
 
-Design of the second stage of Kanon (2026-10-22): accept any kind of data (images, binaries, code,
-spreadsheets), support relations, and turn Kanon into SQL and back. Choices made: **SQLite first**, a
-**pure Go driver** (`modernc.org/sqlite`) allowed in the SQL packages only, **spreadsheets are validated data**, and
-**Northwind** is the first database imported.
+How Kanon holds any kind of data (images, binaries, code, spreadsheets), how it links objects, and how it turns
+into SQL and back. **SQLite first**, through a **pure Go driver** (`modernc.org/sqlite`) allowed in the SQL packages
+only; **spreadsheets are validated data**; **Northwind** is the database of the cases.
 
 The principle stays the same: a `.kan` file is text anyone edits; whatever is not text lives in a file next to it.
 
@@ -11,16 +10,16 @@ The principle stays the same: a `.kan` file is text anyone edits; whatever is no
 
 | Type | Written as | Checked |
 |---|---|---|
-| `File` | a link to a file next to the document: `plan: [[lilas-12/plan.pdf]]` | the file exists and is a regular file |
+| `File` | a link to a file next to the document: `plan: [[elm-grove/plan.pdf]]` | the file exists and is a regular file |
 | `Image` | the same: `photo: [[davolio/photo.jpg]]` | the same, and its content is an image |
 | `Code` | a fenced block under the field's heading, or a link to a source file | a single block |
 | `DateTime` | `2026-10-22 14:30`, `2026-10-22 14:30:05`, optionally ` UTC` or ` +02:00` | a real date and time |
 
 - A **file link** is a link whose last segment has an extension other than `.kan` and `.kanonarch`. Its path is
   relative to the document's folder, like any link, or to the schema's folder when it starts with `/`
-  (`[[/logos/marque.svg]]`); every segment is an id and the extension is lowercase ASCII
-  letters and digits (`photo.jpg`, `plan-rdc.pdf`, `rapport-2026.xlsx`). A file named `Plan RDC.pdf` is reported with
-  the name to give it: `name the file plan-rdc.pdf, not "Plan RDC.pdf"`.
+  (`[[/logos/brand.svg]]`); every segment is an id and the extension is lowercase ASCII
+  letters and digits (`photo.jpg`, `ground-floor.pdf`, `report-2026.xlsx`). A file named `Ground Floor.pdf` is
+  reported with the name to give it: `name the file ground-floor.pdf, not "Ground Floor.pdf"`.
 - The content decides what a file is, not its extension: `net/http.DetectContentType` on its first 512 bytes, plus
   SVG (an `.svg` whose content holds `<svg`). An `Image` that holds something else is an error
   (`photo.jpg is not an image: it holds application/pdf`). A file whose extension doesn't match its content is a
@@ -31,7 +30,7 @@ The principle stays the same: a `.kan` file is text anyone edits; whatever is no
 - `Code`: the language is the info string of the fence (```` ```sql ````) or the extension of the linked file. A
   `Code` field holds one block; two blocks under its heading are an error. A linked source file must hold text.
 - An **array of files** (`photos: [Image]`) is written as a list of file links under the field's heading, as file
-  links separated by commas on a key line, or **as a folder**: `maison/photos/` holding the files themselves, in
+  links separated by commas on a key line, or **as a folder**: `house/photos/` holding the files themselves, in
   lexical order of their names.
 - In prose, `![[path]]` embeds a file and `[[path.ext]]` links to one; Markdown's `![alt](path)` and `[text](path)`
   with a relative path (no scheme, not `#…`) are checked the same way: the file must exist, and `![alt](path)` must
@@ -60,15 +59,14 @@ schema Employee {
 - `[S] <- f` (or `S? <- f` for one to one) is the **inverse** of the field `f` of `S`, which must be `-> Self`,
   `-> Self?` or `[-> Self]`. It is computed from the documents, so writing it is an error, like a computed field.
 - `->` applies to schemas only: `-> Text` is an error in the schema.
-- Existing cases change accordingly: `Facture.client: -> Partie`, `EtatDesLieux.bail: -> Bail`.
 
 ## 3. Spreadsheets
 
 An array of objects can live in a CSV or a spreadsheet: write the field as a link to it.
 
 ```
-mesures: [[maison/mesures.csv]]
-produits: [[catalogue.xlsx#produits]]     // #sheet; without it, the first sheet
+measurements: [[house/measurements.csv]]
+products: [[catalogue.xlsx#products]]     // #sheet; without it, the first sheet
 ```
 
 - The first row holds field names (the names themselves, exactly: the same rule as a table's header) and the `id` column; every
@@ -76,8 +74,8 @@ produits: [[catalogue.xlsx#produits]]     // #sheet; without it, the first sheet
 - Cells are written in the canonical format. An xlsx cell typed by Excel is first turned into its canonical text: a
   number into a decimal (`1250.5`), a date into `2026-10-22` (or a `DateTime`), a boolean into `yes`/`no`, a
   percentage into `20 %`, an amount with a currency format into `1250.50 EUR`.
-- A diagnostic points at the cell: `mesures.csv:4:12: error: …` (line, column in characters) and
-  `catalogue.xlsx#produits:4:3: error: …` (row, column number) with the cell's name in the message when it helps
+- A diagnostic points at the cell: `measurements.csv:4:12: error: …` (line, column in characters) and
+  `catalogue.xlsx#products:4:3: error: …` (row, column number) with the cell's name in the message when it helps
   (`C4`).
 
 ## 4. SQL (SQLite)
@@ -89,8 +87,8 @@ Lints first; on an error it prints the diagnostics and writes nothing. Otherwise
 
 | Kanon | SQLite |
 |---|---|
-| a schema | a table, its name in snake_case: `EtatDesLieux` → `etat_des_lieux` |
-| a field | a column in snake_case: `prix-unitaire` → `prix_unitaire` |
+| a schema | a table, its name in snake_case: `CheckInReport` → `check_in_report` |
+| a field | a column in snake_case: `unit-price` → `unit_price` |
 | `id` | `id TEXT NOT NULL`, the primary key (see weak schemas) |
 | `Text`, `Prose`, `Code`, `Duration`, `Version` | `TEXT`, in canonical form |
 | `Date`, `DateTime` | `DATE`, `DATETIME`: the text in canonical form (`2026-10-22 14:30:05 +02:00`), which SQLite stores as `TEXT` |
@@ -99,10 +97,10 @@ Lints first; on an error it prints the diagnostics and writes nothing. Otherwise
 | `Money` | `x NUMERIC` and `x_currency TEXT` |
 | `Quantity` | `x NUMERIC` and `x_unit TEXT` (NULL without a unit) |
 | `Bool` | `INTEGER CHECK (x IN (0, 1))` |
-| an enum | `TEXT CHECK (x IN ('neuf', 'bon', 'use'))` |
+| an enum | `TEXT CHECK (x IN ('new', 'good', 'worn'))` |
 | `File`, `Image` | `BLOB`, the file's content |
 | `T` (owned) or `-> T` | `x_id TEXT REFERENCES t (id)` |
-| `[T]` (owned) | rows of `t` with a column `<parent>_id` (`ligne.facture_id`); `<parent>_<field>_id` when the parent has two such fields |
+| `[T]` (owned) | rows of `t` with a column `<parent>_id` (`line.invoice_id`); `<parent>_<field>_id` when the parent has two such fields |
 | `[-> T]` | a join table `<parent>_<field>` (`employee_territories`) with `<parent>_id` and `<t>_id` |
 | `[Text]`, `[Image]`, … (values) | a table `<parent>_<field>` with `<parent>_id` and `value` |
 | `S <- f`, a computed field | nothing: they are derived |
@@ -115,7 +113,7 @@ Lints first; on an error it prints the diagnostics and writes nothing. Otherwise
 - `DATE` and `DATETIME` tell SQLite tools what a column holds. They give the column NUMERIC affinity, but a date
   written `2026-10-22` is not a number, so SQLite keeps it as `TEXT`, zone and seconds included.
 - A **weak schema** is one only ever held by one owned array field and never linked to nor held by a single field
-  (`Ligne`, only in `Facture.lignes`). Its ids are unique within its parent only, so its primary key is
+  (`Line`, only in `Invoice.lines`). Its ids are unique within its parent only, so its primary key is
   `(<parent>_id, id)`. Every other schema's primary key is `id`, and `kan sql` reports two objects of the same schema
   with the same id.
 - A **collection** is a schema whose fields are all arrays of objects (the root of an imported database). It has no
@@ -183,10 +181,3 @@ northwind/
   `Quantity`, enums and `Code` come back from SQL as plain columns (`Text`, `Number`), and the language of `Code`
   and `Prose` is lost. Embedding the schema in the database would make the round trip exact for any schema; it is a
   later step.
-
-## 5. Order of the work
-
-1. Language: `->`, `[-> T]`, `<-`, `File`, `Image`, `Code`, `DateTime`, file links (schema, value, doc, lint).
-2. In parallel: `internal/sheet` (CSV and xlsx reading) and `internal/sqlimport` (`kan import`).
-3. The bound model of a document, then `kan sql`; spreadsheets as array sources in the linter.
-4. The round-trip test over Northwind.

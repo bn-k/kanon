@@ -1,9 +1,9 @@
-$ kan lint broken.kanonarch salon.kan
-broken.kanonarch:4:13: error: a unit holds no label: remove "pincee"; the document writes `pincee`
-broken.kanonarch:6:28: error: an enum value holds no label: remove "use"; the document writes `use`
-broken.kanonarch:8:14: error: a schema holds no label: remove "Piece"; a document writes `type: Piece`
-broken.kanonarch:10:15: error: a field holds no label: remove "Etat"; a heading in the document finds the field by its name, `etat`
-broken.kanonarch:11:15: error: a field holds no label: remove "Note"; a heading in the document finds the field by its name, `note`
-broken.kanonarch:11:22: error: a field holds no label: remove "Remarque"; a heading in the document finds the field by its name, `note`
+$ kan lint broken.kanonarch living-room.kan
+broken.kanonarch:4:11: error: a unit holds no label: remove "roll"; the document writes `roll`
+broken.kanonarch:6:30: error: an enum value holds no label: remove "worn"; the document writes `worn`
+broken.kanonarch:8:13: error: a schema holds no label: remove "Room"; a document writes `type: Room`
+broken.kanonarch:10:16: error: a field holds no label: remove "State"; a heading in the document finds the field by its name, `state`
+broken.kanonarch:11:15: error: a field holds no label: remove "Décor"; a heading in the document finds the field by its name, `decor`
+broken.kanonarch:11:23: error: a field holds no label: remove "Decoration"; a heading in the document finds the field by its name, `decor`
 6 errors
 [exit 1]

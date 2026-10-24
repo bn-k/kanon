@@ -1,4 +1,4 @@
-// Package pattern reads the reads patterns of schemas, such as "{quantite} [de] {nom}", and matches list items
+// Package pattern reads the reads patterns of schemas, such as "{quantity} [of] {name}", and matches list items
 // against them.
 package pattern
 
@@ -146,7 +146,7 @@ func (p *parser) placeholder() (segment, error) {
 	p.i = end + 1
 	switch {
 	case name == "":
-		return segment{}, errorf(col, "empty placeholder; write a field name between the braces, as in {nom}")
+		return segment{}, errorf(col, "empty placeholder; write a field name between the braces, as in {name}")
 	case !names.IsName(name):
 		if fix := names.Slugify(name); names.IsName(fix) {
 			return segment{}, errorf(col, "write {%s}, not %q", fix, "{"+name+"}")

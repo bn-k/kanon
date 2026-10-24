@@ -28,7 +28,7 @@ INSERT INTO Books VALUES
   ('DUNE', 'Dune {1965}',
    'A desert planet.' || char(10) || '- first edition: Chilton' || char(10) || char(10) || 'See [[spice]] and {water}.',
    1250.5, 1, CAST('%PDF-1.4' || char(10) AS BLOB)),
-  ('Le Petit Prince', 'Le Petit Prince', 'Un aviateur rencontre un petit prince.', 12, 0,
+  ('The Hobbit', 'The Hobbit', 'A hobbit sets out on a long journey.', 12, 0,
    CAST('Once upon a time.' || char(10) AS BLOB)),
   ('sicp', 'Structure and Interpretation of Computer Programs', '', NULL, 1, NULL);
 
@@ -54,7 +54,7 @@ CREATE TABLE Loans (
 INSERT INTO Loans VALUES
   (1, 'DUNE', 2, 1, '2026-09-30 00:00:00', 1),
   (2, 'sicp', 3, 1, '2026-10-01 09:05:30', 0),
-  (3, 'Le Petit Prince', NULL, 3, '2026-10-22 14:30', NULL);
+  (3, 'The Hobbit', NULL, 3, '2026-10-22 14:30', NULL);
 
 -- A join table.
 CREATE TABLE MemberFavorites (

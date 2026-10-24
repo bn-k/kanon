@@ -1,0 +1,18 @@
+---
+type: Training
+---
+
+# Working safely on electrical installations
+
+## Trainers
+
+| id | name |
+|---|---|
+| dawson | Claire Dawson |
+| hale | Mark Hale |
+
+## Modules
+
+- [[training/modules/welcome]]
+- [[training/modules/safety]]
+- [[training/modules/review]]

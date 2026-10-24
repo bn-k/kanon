@@ -1,11 +1,11 @@
-$ kan lint broken.kanonarch diner.kan
-broken.kanonarch:15:31: error: cannot divide `Money` by `[Personne]`
-broken.kanonarch:16:38: error: cannot add `Money` and `Int`
-broken.kanonarch:17:48: error: `sum` adds numbers, amounts, quantities, durations or percentages, not `Text`
-broken.kanonarch:18:31: error: unknown unit `jours`; a schema declares its own units, as in: unit jours
-broken.kanonarch:19:26: error: `if` takes a `Bool` condition, not `Money`
-broken.kanonarch:20:47: error: `Personne` has no field `age`
-broken.kanonarch:21:33: error: write 125, not "1 25"
+$ kan lint broken.kanonarch dinner.kan
+broken.kanonarch:15:26: error: cannot divide `Money` by `[Person]`
+broken.kanonarch:16:33: error: cannot add `Money` and `Int`
+broken.kanonarch:17:44: error: `sum` adds numbers, amounts, quantities, durations or percentages, not `Text`
+broken.kanonarch:18:29: error: unknown unit `workdays`; a schema declares its own units, as in: unit workdays
+broken.kanonarch:19:22: error: `if` takes a `Bool` condition, not `Money`
+broken.kanonarch:20:43: error: `Person` has no field `age`
+broken.kanonarch:21:28: error: write 125, not "1 25"
 broken.kanonarch:26:27: error: cannot compare `Int` with `Text`
 8 errors
 [exit 1]

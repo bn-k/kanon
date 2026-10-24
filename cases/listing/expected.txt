@@ -1,0 +1,12 @@
+$ kan lint schema.kanonarch house-elm-grove.kan
+ok  schema.kanonarch
+ok  house-elm-grove.kan
+ok  house-elm-grove/ground-floor.pdf
+ok  house-elm-grove/photos/02-living-room.jpg
+ok  house-elm-grove/photos/01-front.jpg
+ok  house-elm-grove/photos/03-garden.png
+ok  agents/helen-carter.kan
+ok  agents/helen-carter/portrait.jpg
+ok  sellers/fenwick-family.kan
+ok  agents/tom-ashby.kan
+ok  agents/chloe-hart.kan

@@ -1,4 +1,4 @@
-$ kan lint schema.kanonarch bail.kan
+$ kan lint schema.kanonarch lease.kan
 ok  schema.kanonarch
-ok  bail.kan
-ok  etat-des-lieux-entree.kan
+ok  lease.kan
+ok  check-in-report.kan

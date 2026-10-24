@@ -163,10 +163,10 @@ func (c *checker) typeName(pos diag.Pos, name string) {
 		c.errorf(pos, "type names are PascalCase: write %s, not %q", fix, name)
 		return
 	}
-	c.errorf(pos, "%q is not a type name: use ASCII PascalCase, such as EtatDesLieux", name)
+	c.errorf(pos, "%q is not a type name: use ASCII PascalCase, such as CheckInReport", name)
 }
 
-// pascal proposes a type name for s: etat-des-lieux becomes EtatDesLieux, Pièce becomes Piece; or "".
+// pascal proposes a type name for s: check-in-report becomes CheckInReport, Café becomes Cafe; or "".
 func pascal(s string) string {
 	var b strings.Builder
 	up := true
@@ -480,7 +480,7 @@ func (c *checker) fn(fn *Fn) {
 	}
 }
 
-// fnReads checks that each {…} placeholder of a function's reads text starts with a parameter: {v.nom}.
+// fnReads checks that each {…} placeholder of a function's reads text starts with a parameter: {v.name}.
 func (c *checker) fnReads(r *Reads, ps []*Param) {
 	var params []string
 	for _, p := range ps {

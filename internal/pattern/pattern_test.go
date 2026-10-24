@@ -10,18 +10,18 @@ import (
 	"github.com/bn-k/kanon/internal/value"
 )
 
-var units = value.NewUnits([]string{"pincee"})
+var units = value.NewUnits([]string{"pinch"})
 
-// ingredient accepts a Quantity for quantite and any text for the other fields, as the linter would.
+// ingredient accepts a Quantity for quantity and any text for the other fields, as the linter would.
 func ingredient(field, v string) bool {
-	if field == "quantite" {
+	if field == "quantity" {
 		_, err := value.Parse(value.Quantity, v, units)
 		return err == nil
 	}
 	return v != ""
 }
 
-func greedyQuantite(field string) bool { return field == "quantite" }
+func greedyQuantity(field string) bool { return field == "quantity" }
 
 func anything(field, v string) bool { return true }
 
@@ -46,16 +46,16 @@ func TestParseErrors(t *testing.T) {
 	}{
 		{"", 1, "empty pattern"},
 		{"   ", 1, "empty pattern"},
-		{"{}", 1, "empty placeholder; write a field name between the braces, as in {nom}"},
-		{"{Prix}", 1, `write {prix}, not "{Prix}"`},
-		{"  {Prix}", 3, `write {prix}, not "{Prix}"`},
-		{"{prix unitaire}", 1, `write {prix-unitaire}, not "{prix unitaire}"`},
+		{"{}", 1, "empty placeholder; write a field name between the braces, as in {name}"},
+		{"{Price}", 1, `write {price}, not "{Price}"`},
+		{"  {Price}", 3, `write {price}, not "{Price}"`},
+		{"{unit price}", 1, `write {unit-price}, not "{unit price}"`},
 		{"a {123}", 3, `"{123}" is not a field name: use lowercase ASCII letters, digits and hyphens, starting with a letter`},
-		{"{nom", 1, `unterminated placeholder; close it with "}"`},
+		{"{name", 1, `unterminated placeholder; close it with "}"`},
 		{"{a {b}", 1, `unterminated placeholder; close it with "}"`},
 		{"a } b", 3, `unmatched "}"; write \} for a literal brace`},
 		{"a ] b", 3, `unmatched "]"; write \] for a literal bracket`},
-		{"[de {nom}", 1, `unclosed optional group; close it with "]"`},
+		{"[of {name}", 1, `unclosed optional group; close it with "]"`},
 		{"[[x] {a}", 1, `unclosed optional group; close it with "]"`},
 		{"[]", 1, "empty optional group"},
 		{"x [ ] y", 3, "empty optional group"},
@@ -92,10 +92,10 @@ func TestParseOK(t *testing.T) {
 		text   string
 		fields []string
 	}{
-		{"{quantite} [de] {nom}", []string{"quantite", "nom"}},
-		{"  {nom}  ", []string{"nom"}},
+		{"{quantity} [of] {name}", []string{"quantity", "name"}},
+		{"  {name}  ", []string{"name"}},
 		{"[{a} x] {b} [y [{c}]]", []string{"a", "b", "c"}},
-		{"{prix-unitaire} EUR", []string{"prix-unitaire"}},
+		{"{unit-price} EUR", []string{"unit-price"}},
 		{"{a} x {b}", []string{"a", "b"}},
 		{"{a}[ x]", []string{"a"}},
 		{"{a} [x] [y] {b}", []string{"a", "b"}},
@@ -142,16 +142,16 @@ func runMatches(t *testing.T, text string, accept func(string, string) bool, gre
 }
 
 func TestMatchIngredient(t *testing.T) {
-	runMatches(t, "{quantite} [de] {nom}", ingredient, greedyQuantite, []matchTest{
-		{"250 g de farine", map[string]string{"quantite": "250 g", "nom": "farine"}},
-		{"4 œufs", map[string]string{"quantite": "4", "nom": "œufs"}},
-		{"50 cl de lait", map[string]string{"quantite": "50 cl", "nom": "lait"}},
-		{"50 g de beurre fondu", map[string]string{"quantite": "50 g", "nom": "beurre fondu"}},
-		{"1 pincee de sel", map[string]string{"quantite": "1 pincee", "nom": "sel"}},
-		{"1 250 g de farine", map[string]string{"quantite": "1 250 g", "nom": "farine"}},
-		{"  250 g  de\tfarine  ", map[string]string{"quantite": "250 g", "nom": "farine"}},
-		{"de farine", nil},
-		{"farine", nil},
+	runMatches(t, "{quantity} [of] {name}", ingredient, greedyQuantity, []matchTest{
+		{"250 g of flour", map[string]string{"quantity": "250 g", "name": "flour"}},
+		{"2 jalapeños", map[string]string{"quantity": "2", "name": "jalapeños"}},
+		{"50 cl of milk", map[string]string{"quantity": "50 cl", "name": "milk"}},
+		{"50 g of melted butter", map[string]string{"quantity": "50 g", "name": "melted butter"}},
+		{"1 pinch of salt", map[string]string{"quantity": "1 pinch", "name": "salt"}},
+		{"1 250 g of flour", map[string]string{"quantity": "1 250 g", "name": "flour"}},
+		{"  250 g  of\tflour  ", map[string]string{"quantity": "250 g", "name": "flour"}},
+		{"of flour", nil},
+		{"flour", nil},
 		{"250", nil},
 		{"", nil},
 		{"   ", nil},
@@ -170,8 +170,8 @@ func TestMatchLiteral(t *testing.T) {
 	runMatches(t, "{a} x {b}", anything, greedy, []matchTest{
 		{"1 x 2 x 3", map[string]string{"a": "1 x 2", "b": "3"}},
 	})
-	runMatches(t, "Total: {montant} EUR", anything, lazy, []matchTest{
-		{"Total: 12.50 EUR", map[string]string{"montant": "12.50"}},
+	runMatches(t, "Total: {amount} EUR", anything, lazy, []matchTest{
+		{"Total: 12.50 EUR", map[string]string{"amount": "12.50"}},
 		{"Total: EUR", nil},
 		{"Sum: 12.50 EUR", nil},
 		{"Total: 12.50 EUR extra", nil},
@@ -185,19 +185,19 @@ func TestMatchLiteral(t *testing.T) {
 }
 
 func TestMatchOptional(t *testing.T) {
-	runMatches(t, "[le] {nom}", anything, lazy, []matchTest{
-		{"le chat", map[string]string{"nom": "chat"}},
-		{"chat", map[string]string{"nom": "chat"}},
+	runMatches(t, "[the] {name}", anything, lazy, []matchTest{
+		{"the cat", map[string]string{"name": "cat"}},
+		{"cat", map[string]string{"name": "cat"}},
 	})
 	runMatches(t, "{n} item[s] left", anything, lazy, []matchTest{
 		{"1 item left", map[string]string{"n": "1"}},
 		{"2 items left", map[string]string{"n": "2"}},
 		{"2 itemleft", nil},
 	})
-	runMatches(t, "{nom} [({note})]", anything, lazy, []matchTest{
-		{"farine", map[string]string{"nom": "farine"}},
-		{"farine (bio)", map[string]string{"nom": "farine", "note": "bio"}},
-		{"farine ()", map[string]string{"nom": "farine ()"}},
+	runMatches(t, "{name} [({note})]", anything, lazy, []matchTest{
+		{"flour", map[string]string{"name": "flour"}},
+		{"flour (organic)", map[string]string{"name": "flour", "note": "organic"}},
+		{"flour ()", map[string]string{"name": "flour ()"}},
 	})
 	runMatches(t, "{a} [x {b} y] z", anything, lazy, []matchTest{
 		{"1 x 2 y z", map[string]string{"a": "1", "b": "2"}},
@@ -222,18 +222,18 @@ func TestMatchOptional(t *testing.T) {
 }
 
 func TestMatchNestedOptional(t *testing.T) {
-	runMatches(t, "{n} [de [la]] {nom}", anything, lazy, []matchTest{
-		{"2 de la farine", map[string]string{"n": "2", "nom": "farine"}},
-		{"2 de farine", map[string]string{"n": "2", "nom": "farine"}},
-		{"2 farine", map[string]string{"n": "2", "nom": "farine"}},
-		{"2 la farine", map[string]string{"n": "2", "nom": "la farine"}},
+	runMatches(t, "{n} [bags [of]] {name}", anything, lazy, []matchTest{
+		{"2 bags of flour", map[string]string{"n": "2", "name": "flour"}},
+		{"2 bags flour", map[string]string{"n": "2", "name": "flour"}},
+		{"2 flour", map[string]string{"n": "2", "name": "flour"}},
+		{"2 of flour", map[string]string{"n": "2", "name": "of flour"}},
 	})
-	runMatches(t, "{n} [[tres] {adj}] {nom}", anything, lazy, []matchTest{
-		{"2 tres bonnes pommes", map[string]string{"n": "2", "adj": "bonnes", "nom": "pommes"}},
-		{"2 bonnes pommes", map[string]string{"n": "2", "adj": "bonnes", "nom": "pommes"}},
+	runMatches(t, "{n} [[very] {adj}] {name}", anything, lazy, []matchTest{
+		{"2 very good apples", map[string]string{"n": "2", "adj": "good", "name": "apples"}},
+		{"2 good apples", map[string]string{"n": "2", "adj": "good", "name": "apples"}},
 	})
-	runMatches(t, "{n} [[tres] {adj}] {nom}", anything, greedy, []matchTest{
-		{"2 tres bonnes pommes", map[string]string{"n": "2 tres bonnes", "nom": "pommes"}},
+	runMatches(t, "{n} [[very] {adj}] {name}", anything, greedy, []matchTest{
+		{"2 very good apples", map[string]string{"n": "2 very good", "name": "apples"}},
 	})
 	runMatches(t, "[[x] y] {b}", anything, lazy, []matchTest{
 		{"x y 1", map[string]string{"b": "1"}},

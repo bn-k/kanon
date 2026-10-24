@@ -1,0 +1,36 @@
+---
+type: Lease
+---
+
+# Residential lease — 5 New Street, Larkhaven
+
+start: 2026-09-01
+term: 3 yrs
+rent: 850.00 EUR
+service-charge: 90.00 EUR
+rent-controlled: true
+
+## Landlord {#claire-morton}
+
+name: Claire Morton
+type: individual
+
+## Tenant
+
+name: Joel Durrant
+type: individuals
+
+## Dwelling {#new-street-5}
+
+address: 5 New Street, Larkhaven
+area: 48 m2
+rooms: 2
+
+## Security deposit {#deposit}
+
+The tenant pays a security deposit of one month's rent.
+
+## Notice {#Notice}
+
+The tenant may leave with {notice} of notice; the check-out report is compared with the [[check-in-report]].
+See also [[lease#claire-mortn]].

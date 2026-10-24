@@ -1,13 +1,13 @@
 // Working material: a schema is written in ASCII, comments and strings included.
-// Un schéma s'écrit sans accents.
-// Un n° de facture s'ecrit "no".
-// Les guillemets « » sont refuses.
+// A résumé is written resume.
+// An invoice n° is written "no".
+// “Curly quotes” are refused.
 
-schema Depense {
-  objet:   Text @heading
-  montant: Money
+schema Expense {
+  title:  Text @heading
+  amount: Money
 }
 
-rule plafond(d: Depense) -> Bool
-  reads fr "le montant d'une dépense ne dépasse pas 500 EUR « sauf accord »"
-  = d.montant <= 500 EUR
+rule cap(e: Expense) -> Bool
+  reads en "a café bill stays under 500 EUR “unless agreed”"
+  = e.amount <= 500 EUR

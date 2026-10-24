@@ -24,13 +24,13 @@ type Sheet struct {
 // Cell is a cell of a sheet. Rows holding no value are left out; every row has at least as many cells as the
 // header, and more only when a cell past the header holds a value.
 type Cell struct {
-	Pos  diag.Pos // mesures.csv:4:12, line and column in characters; catalogue.xlsx#produits:4:3, row and column
+	Pos  diag.Pos // readings.csv:4:12, line and column in characters; catalogue.xlsx#products:4:3, row and column
 	Ref  string   // the name of a cell of a workbook, C4; "" in a CSV file
 	Text string   // in canonical form, or as written for text
 	Err  bool     // the cell holds an error (#N/A) or a value that can't be read, already reported
 }
 
-// Pos is the position of the whole sheet: mesures.csv or catalogue.xlsx#produits.
+// Pos is the position of the whole sheet: readings.csv or catalogue.xlsx#products.
 func (s *Sheet) Pos() diag.Pos {
 	if s.Name == "" {
 		return diag.Pos{File: s.Path}

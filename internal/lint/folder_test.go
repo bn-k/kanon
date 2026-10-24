@@ -5,111 +5,111 @@ import (
 	"testing"
 )
 
-const carnet = `
-schema Carnet {
-  titre:   Text @heading
-  date:    Date?
-  entrees: [Entree]?
-  annexes: [Entree]?
+const notebook = `
+schema Notebook {
+  title:      Text @heading
+  date:       Date?
+  entries:    [Entry]?
+  appendices: [Entry]?
 }
 
-schema Entree {
-  titre: Text @heading
-  corps: Prose? @body
+schema Entry {
+  title: Text @heading
+  body:  Prose? @body
 }
 `
 
-const carnetDoc = "---\ntype: Carnet\n---\n# Carnet\n\ndate: 2026-10-22\n"
+const notebookDoc = "---\ntype: Notebook\n---\n# Notebook\n\ndate: 2026-10-22\n"
 
 func TestFolders(t *testing.T) {
 	runCases(t, []lintCase{
 		{
 			name:   "entries that insert a field of their parent",
-			schema: carnet,
-			doc:    carnetDoc,
+			schema: notebook,
+			doc:    notebookDoc,
 			more: files{
-				"doc/.git/":            "",
-				"doc/entrees/.keep":    "",
-				"doc/entrees/un.kan":   "# Un\n\nLe {date}, {titre}.\n",
-				"doc/entrees/deux.kan": "# Deux\n\nLe {jour}.\n",
+				"doc/.git/":           "",
+				"doc/entries/.keep":   "",
+				"doc/entries/one.kan": "# One\n\nOn {date}, {title}.\n",
+				"doc/entries/two.kan": "# Two\n\nOn {day}.\n",
 			},
-			want: []string{"doc/entrees/deux.kan:3:5: error: {jour} inserts no field"},
+			want: []string{"doc/entries/two.kan:3:5: error: {day} inserts no field"},
 		},
 		{
 			name:   "entries of another type, with a wrong name, and other files",
-			schema: carnet,
-			doc:    carnetDoc,
+			schema: notebook,
+			doc:    notebookDoc,
 			more: files{
-				"doc/entrees/un.kan":    "---\ntype: Carnet\n---\n# Un\n",
-				"doc/entrees/Un 2.kan":  "# Un 2\n",
-				"doc/entrees/notes.txt": "",
+				"doc/entries/one.kan":   "---\ntype: Notebook\n---\n# One\n",
+				"doc/entries/One 2.kan": "# One 2\n",
+				"doc/entries/notes.txt": "",
 				"doc/zz/":               "",
 			},
 			want: []string{
-				`doc/entrees/Un 2.kan: error: the file name is the object's id: write un-2.kan, not "Un 2.kan"`,
-				"doc/entrees/notes.txt: warning: not a .kan file; ignored",
-				"doc/entrees/un.kan:2:7: error: this folder holds `Entree` entries, not `Carnet`",
-				"doc/zz: error: `Carnet` has no field `zz`",
+				`doc/entries/One 2.kan: error: the file name is the object's id: write one-2.kan, not "One 2.kan"`,
+				"doc/entries/notes.txt: warning: not a .kan file; ignored",
+				"doc/entries/one.kan:2:7: error: this folder holds `Entry` entries, not `Notebook`",
+				"doc/zz: error: `Notebook` has no field `zz`",
 			},
 		},
 		{
 			name:   "a file in the folder of the object",
-			schema: carnet,
-			doc:    carnetDoc,
+			schema: notebook,
+			doc:    notebookDoc,
 			more:   files{"doc/notes.txt": "", "doc/notes.kan": "# Notes\n"},
 			want: []string{
-				"doc/notes.kan: error: this document belongs to no list: move it into a list's folder, as in doc/entrees/notes.kan",
+				"doc/notes.kan: error: this document belongs to no list: move it into a list's folder, as in doc/entries/notes.kan",
 			},
 		},
 		{
 			name:   "a folder for a field that is not a list of objects",
-			schema: carnet,
-			doc:    carnetDoc,
+			schema: notebook,
+			doc:    notebookDoc,
 			more:   files{"doc/date/": ""},
 			want:   []string{"doc/date: error: only a list of objects or of files can be a folder, and `date` is a `Date`"},
 		},
 		{
 			name:   "a field written inline and as a folder",
-			schema: carnet,
-			doc:    carnetDoc + "\n## Entrees\n\n### Un {#un}\n",
-			more:   files{"doc/entrees/deux.kan": "# Deux\n"},
-			want:   []string{"doc/entrees: error: `entrees` is written twice: here and at doc.kan:8:4"},
+			schema: notebook,
+			doc:    notebookDoc + "\n## Entries\n\n### One {#one}\n",
+			more:   files{"doc/entries/two.kan": "# Two\n"},
+			want:   []string{"doc/entries: error: `entries` is written twice: here and at doc.kan:8:4"},
 		},
 		{
 			name:   "a folder that belongs to no entry",
-			schema: carnet,
-			doc:    carnetDoc,
+			schema: notebook,
+			doc:    notebookDoc,
 			more: files{
-				"doc/entrees/un.kan":  "# Un\n",
-				"doc/entrees/un/":     "",
-				"doc/entrees/deux/":   "",
-				"doc/entrees/un/x/":   "",
-				"doc/entrees/un/.x/":  "",
-				"doc/annexes/a.kan":   "# A\n",
-				"doc/annexes/a/b.kan": "",
+				"doc/entries/one.kan":    "# One\n",
+				"doc/entries/one/":       "",
+				"doc/entries/two/":       "",
+				"doc/entries/one/x/":     "",
+				"doc/entries/one/.x/":    "",
+				"doc/appendices/a.kan":   "# A\n",
+				"doc/appendices/a/b.kan": "",
 			},
 			want: []string{
-				"doc/annexes/a/b.kan: error: this document belongs to no list: `Entree` has no list of objects",
-				"doc/entrees/deux: error: this folder belongs to no entry: there is no deux.kan",
-				"doc/entrees/un/x: error: `Entree` has no field `x`",
+				"doc/appendices/a/b.kan: error: this document belongs to no list: `Entry` has no list of objects",
+				"doc/entries/one/x: error: `Entry` has no field `x`",
+				"doc/entries/two: error: this folder belongs to no entry: there is no two.kan",
 			},
 		},
 		{
 			name:   "an entry with the id of an inline object, which is in another file",
-			schema: carnet,
-			doc:    carnetDoc + "\n## Annexes\n\n### Un {#un}\n",
-			more:   files{"doc/entrees/un.kan": "# Un\n"},
+			schema: notebook,
+			doc:    notebookDoc + "\n## Appendices\n\n### One {#one}\n",
+			more:   files{"doc/entries/one.kan": "# One\n"},
 		},
 		{
 			name:   "entries of two folders with the same ids, linked by their path",
-			schema: carnet,
-			doc:    carnetDoc,
+			schema: notebook,
+			doc:    notebookDoc,
 			more: files{
-				"doc/entrees/un.kan":   "# Un\n",
-				"doc/entrees/deux.kan": "# Deux\n",
-				"doc/annexes/un.kan":   "# Un\n\nVoir [[../entrees/un]], [[../entrees/deux]] et [[../../doc#deux]].\n",
+				"doc/entries/one.kan":    "# One\n",
+				"doc/entries/two.kan":    "# Two\n",
+				"doc/appendices/one.kan": "# One\n\nSee [[../entries/one]], [[../entries/two]] and [[../../doc#two]].\n",
 			},
-			want: []string{"doc/annexes/un.kan:3:48: error: unknown id `deux` in doc.kan"},
+			want: []string{"doc/appendices/one.kan:3:48: error: unknown id `two` in doc.kan"},
 		},
 	})
 }
@@ -119,30 +119,30 @@ func TestUnreadable(t *testing.T) {
 		t.Skip("root reads every file")
 	}
 	t.Run("folder", func(t *testing.T) {
-		r := lintLocked(t, "doc/entrees", files{
-			"schema.kanonarch":   carnet,
-			"doc.kan":            carnetDoc,
-			"doc/entrees/un.kan": "# Un\n",
+		r := lintLocked(t, "doc/entries", files{
+			"schema.kanonarch":    notebook,
+			"doc.kan":             notebookDoc,
+			"doc/entries/one.kan": "# One\n",
 		})
-		check(t, r, []string{"doc/entrees: error: cannot read the folder: permission denied"})
+		check(t, r, []string{"doc/entries: error: cannot read the folder: permission denied"})
 	})
 	t.Run("folder of files", func(t *testing.T) {
 		r := lintLocked(t, "doc/photos", files{
-			"schema.kanonarch": maison,
-			"doc.kan":          maisonDoc,
+			"schema.kanonarch": house,
+			"doc.kan":          houseDoc,
 			"doc/photos/a.jpg": jpeg,
 		})
 		check(t, r, []string{"doc/photos: error: cannot read the folder: permission denied"})
 	})
 	t.Run("entry", func(t *testing.T) {
-		r := lintLocked(t, "doc/entrees/un.kan", files{
-			"schema.kanonarch":     carnet,
-			"doc.kan":              carnetDoc,
-			"doc/entrees/un.kan":   "# Un\n",
-			"doc/entrees/deux.kan": "# Deux\n",
+		r := lintLocked(t, "doc/entries/one.kan", files{
+			"schema.kanonarch":    notebook,
+			"doc.kan":             notebookDoc,
+			"doc/entries/one.kan": "# One\n",
+			"doc/entries/two.kan": "# Two\n",
 		})
-		check(t, r, []string{"doc/entrees/un.kan: error: cannot read the file: permission denied"})
-		checkFiles(t, r, "schema.kanonarch", "doc.kan", "doc/entrees/deux.kan", "doc/entrees/un.kan")
+		check(t, r, []string{"doc/entries/one.kan: error: cannot read the file: permission denied"})
+		checkFiles(t, r, "schema.kanonarch", "doc.kan", "doc/entries/one.kan", "doc/entries/two.kan")
 	})
 }
 

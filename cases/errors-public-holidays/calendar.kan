@@ -1,0 +1,8 @@
+---
+type: Calendar
+---
+
+# Bank holidays in England and Wales, 2020
+
+source: GOV.UK, "UK bank holidays", Open Government Licence v3.0
+holidays: [[bank-holidays-2020.csv]]

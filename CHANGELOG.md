@@ -6,6 +6,14 @@ schemas, and its entry says how.
 
 ## [Unreleased]
 
+### Changed
+
+- The cases, the examples of the documentation and the test fixtures are in English, with fictional people and
+  places: `annonce/` is `listing/`, `jours-feries/` is `public-holidays/` (the bank holidays of England and Wales,
+  from GOV.UK), and the other cases keep their folder with English documents. Northwind and the workbooks of
+  `internal/sheet/testdata` stay as published.
+- A table header or key written with capitals is reported as `names are lowercase ASCII`, as one with accents is.
+
 ## [0.1.0] - 2026-10-23
 
 The first release: a folder of `.kan` documents, checked against a `.kanonarch` schema, that people, language

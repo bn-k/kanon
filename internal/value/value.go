@@ -87,7 +87,7 @@ var DurationUnits = map[string]string{
 	"month": "month", "months": "month", "year": "year", "years": "year",
 }
 
-// UnitName is the shape of a unit name: ASCII letters and digits, starting with a letter (m2, kWh, pincee).
+// UnitName is the shape of a unit name: ASCII letters and digits, starting with a letter (m2, kWh, pinch).
 var UnitName = regexp.MustCompile(`^[A-Za-z][A-Za-z0-9]*$`)
 
 // Currency is the shape of a currency code: three uppercase ASCII letters (EUR).

@@ -56,9 +56,9 @@ func wantDiags(t *testing.T, diags diag.List, want ...string) {
 }
 
 func TestCSV(t *testing.T) {
-	path := writeFile(t, "mesures.csv", bom+"id,pièce,surface\nsejour,Séjour,\"32,5\"\ncuisine,\"Cuisine\nouverte\",12\n")
+	path := writeFile(t, "rooms.csv", bom+"id,décor,cost\nlounge,Art déco,\"1,250\"\nkitchen,\"Shaker\npainted\",12\n")
 	s := readOK(t, path, "")
-	want := [][]string{{"id", "pièce", "surface"}, {"sejour", "Séjour", "32,5"}, {"cuisine", "Cuisine\nouverte", "12"}}
+	want := [][]string{{"id", "décor", "cost"}, {"lounge", "Art déco", "1,250"}, {"kitchen", "Shaker\npainted", "12"}}
 	if got := texts(s); !slices.EqualFunc(got, want, slices.Equal) {
 		t.Errorf("cells = %q, want %q", got, want)
 	}
@@ -72,7 +72,7 @@ func TestCSV(t *testing.T) {
 	}{
 		{s.Header[0], 1, 1}, // the byte order mark doesn't count
 		{s.Header[2], 1, 10},
-		{s.Rows[0][2], 2, 15}, // in characters: é is one
+		{s.Rows[0][2], 2, 17}, // in characters: é is one
 		{s.Rows[1][1], 3, 9},
 		{s.Rows[1][2], 4, 10}, // after the cell on two lines
 	}
@@ -84,14 +84,14 @@ func TestCSV(t *testing.T) {
 }
 
 func TestCSVSemicolons(t *testing.T) {
-	// French Excel exports separate cells with semicolons, as the comma is their decimal point.
-	s := readOK(t, writeFile(t, "a.csv", "id;prix\r\nlait;1,05\r\n"), "")
-	want := [][]string{{"id", "prix"}, {"lait", "1,05"}}
+	// Excel exports in locales such as fr-FR separate cells with semicolons, as the comma is their decimal point.
+	s := readOK(t, writeFile(t, "a.csv", "id;price\r\nmilk;1,05\r\n"), "")
+	want := [][]string{{"id", "price"}, {"milk", "1,05"}}
 	if got := texts(s); !slices.EqualFunc(got, want, slices.Equal) {
 		t.Errorf("cells = %q, want %q", got, want)
 	}
 	// A comma in the header line keeps the comma as the separator.
-	s = readOK(t, writeFile(t, "b.csv", "id,note\nlait,a;b\n"), "")
+	s = readOK(t, writeFile(t, "b.csv", "id,note\nmilk,a;b\n"), "")
 	if got := s.Rows[0][1].Text; got != "a;b" {
 		t.Errorf("cell = %q, want a;b", got)
 	}
@@ -99,9 +99,9 @@ func TestCSVSemicolons(t *testing.T) {
 
 func TestCSVRows(t *testing.T) {
 	// Empty rows are dropped, empty cells past the header too; short rows get empty cells.
-	path := writeFile(t, "a.csv", "id;nom;;\n\n;;;\nlait;;;\neau\n  ;\npain;b;c\n")
+	path := writeFile(t, "a.csv", "id;name;;\n\n;;;\nmilk;;;\ntea\n  ;\nbread;b;c\n")
 	s := readOK(t, path, "")
-	want := [][]string{{"id", "nom"}, {"lait", ""}, {"eau", ""}, {"pain", "b", "c"}}
+	want := [][]string{{"id", "name"}, {"milk", ""}, {"tea", ""}, {"bread", "b", "c"}}
 	if got := texts(s); !slices.EqualFunc(got, want, slices.Equal) {
 		t.Errorf("cells = %q, want %q", got, want)
 	}
@@ -132,11 +132,11 @@ func TestCSVMistakes(t *testing.T) {
 		rows    int // the rows read before the mistake; -1 when the file can't be read at all
 		want    string
 	}{
-		{"id,nom\né,b\"c\n", 0, "2:4: error: " + quotes},
-		{"id,nom\na,\"b\"x,c\n", 0, "2:5: error: " + quotes},
-		{"id,nom\na,b\nc,\"d\ne\n", 1, "3:1: error: a double quote opened on this line is never closed"},
-		{"id,nom\na,b\nc,\"d", 1, "3:1: error: a double quote opened on this line is never closed"},
-		{"id,nom\nécu,\xe9t\xe9\n", -1, "2:5: error: the file is not in UTF-8: save it as CSV UTF-8"},
+		{"id,name\né,b\"c\n", 0, "2:4: error: " + quotes},
+		{"id,name\na,\"b\"x,c\n", 0, "2:5: error: " + quotes},
+		{"id,name\na,b\nc,\"d\ne\n", 1, "3:1: error: a double quote opened on this line is never closed"},
+		{"id,name\na,b\nc,\"d", 1, "3:1: error: a double quote opened on this line is never closed"},
+		{"id,name\ncafé,caf\xe9\n", -1, "2:9: error: the file is not in UTF-8: save it as CSV UTF-8"}, // café in Latin-1
 	}
 	for _, tt := range tests {
 		s, diags := Read(writeFile(t, "a.csv", tt.content), "")

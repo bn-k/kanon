@@ -140,7 +140,7 @@ func (l *linter) stray(b doc.Block, o *object) {
 }
 
 // heading binds a heading under o: the field it names, or else an entry of o's @sections. A heading names a field
-// when its text, folded, is the field's name: "Dépôt de garantie" names depot-de-garantie.
+// when its text, folded, is the field's name: "Security Deposit" names security-deposit.
 func (l *linter) heading(c *doc.Section, o *object) {
 	h := c.Heading
 	slug := names.Slugify(h.Text)
@@ -414,7 +414,7 @@ func (l *linter) table(t *doc.Table, in *schema.Field, parent *object, level int
 }
 
 // spreadsheet binds the rows of the spreadsheet linked to at pos, entries of the array in of parent: target is
-// mesures.csv, or catalogue.xlsx#produits for one sheet of a workbook, its first sheet without one.
+// readings.csv, or catalogue.xlsx#products for one sheet of a workbook, its first sheet without one.
 func (l *linter) spreadsheet(target string, pos diag.Pos, in *schema.Field, parent *object, level int) {
 	name, sheetName, _ := strings.Cut(target, "#")
 	switch strings.ToLower(filepath.Ext(name)) {
@@ -765,7 +765,7 @@ func unknownField(name string, s *schema.Schema) (msg string, meant *schema.Fiel
 		return "an object's id is written in its heading ({#id}) or its file name, not as a key", nil
 	}
 	if f := s.Field(names.Slugify(name)); f != nil && !names.IsName(name) {
-		return fmt.Sprintf("names are ASCII: write %s, not \"%s\"", f.Name, name), f
+		return fmt.Sprintf("names are lowercase ASCII: write %s, not \"%s\"", f.Name, name), f
 	}
 	msg = fmt.Sprintf("`%s` has no field `%s`", s.Name, name)
 	if c := names.Closest(name, s.FieldNames()); c != "" {
@@ -851,7 +851,7 @@ func (l *linter) valid(t *schema.Type, s string) bool {
 	return err == nil
 }
 
-// linkValue returns the target of a value that is exactly one link: [[clients/dupont-batiment]].
+// linkValue returns the target of a value that is exactly one link: [[clients/acme-builders]].
 func linkValue(s string) (string, bool) {
 	inner, ok := strings.CutPrefix(s, "[[")
 	if !ok {
@@ -861,8 +861,8 @@ func linkValue(s string) (string, bool) {
 	return inner, ok && inner != "" && !strings.Contains(inner, "]]")
 }
 
-// sheetLink reports whether s is exactly one link to a file, as to a spreadsheet: [[mesures.csv]],
-// [[catalogue.xlsx#produits]].
+// sheetLink reports whether s is exactly one link to a file, as to a spreadsheet: [[readings.csv]],
+// [[catalogue.xlsx#products]].
 func sheetLink(s string) bool {
 	target, ok := linkValue(s)
 	name, _, _ := strings.Cut(target, "#")
@@ -882,7 +882,7 @@ func enumError(e *schema.Enum, s string) string {
 	return fmt.Sprintf("\"%s\" is not %s: write %s", s, names.Article(e.Name), either(e.ValueNames()))
 }
 
-// either joins values for a message: neuf, bon or use.
+// either joins values for a message: new, good or worn.
 func either(vs []string) string {
 	if len(vs) < 2 {
 		return strings.Join(vs, "")
@@ -1086,7 +1086,7 @@ func reported(o *object, f *schema.Field) {
 	}
 }
 
-// where tells where prev is, seen from pos. A sheet of a workbook, catalogue.xlsx#produits, has rows, not lines.
+// where tells where prev is, seen from pos. A sheet of a workbook, catalogue.xlsx#products, has rows, not lines.
 func where(prev, pos diag.Pos) string {
 	switch {
 	case prev.Line == 0:
@@ -1158,7 +1158,7 @@ func linkExample(t *schema.Type) string {
 	return "[[…]]"
 }
 
-// kind describes a type in a message: a Date, a list of Ligne, a link to a Partie.
+// kind describes a type in a message: a Date, a list of Line, a link to a Party.
 func kind(t *schema.Type) string {
 	switch {
 	case t.Array && t.Link:

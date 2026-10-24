@@ -8,8 +8,8 @@ func TestIsSlug(t *testing.T) {
 		want bool
 	}{
 		{"crepes", true},
-		{"f-2026-031", true},
-		{"2025-06-10-vidange", true},
+		{"inv-2026-031", true},
+		{"2025-06-10-oil-change", true},
 		{"0f8fad5b-d9cb-469f-a165-70867728950e", true},
 		{"", false},
 		{"-crepes", false},
@@ -17,7 +17,7 @@ func TestIsSlug(t *testing.T) {
 		{"double--hyphen", false},
 		{"Crepes", false},
 		{"crêpes", false},
-		{"prix_unitaire", false},
+		{"unit_price", false},
 		{"two words", false},
 	}
 	for _, tt := range tests {
@@ -32,11 +32,11 @@ func TestIsName(t *testing.T) {
 		s    string
 		want bool
 	}{
-		{"prix-unitaire", true},
+		{"unit-price", true},
 		{"m2", true},
-		{"2-roues", false},
+		{"2-wheels", false},
 		{"", false},
-		{"Prix", false},
+		{"Price", false},
 	}
 	for _, tt := range tests {
 		if got := IsName(tt.s); got != tt.want {
@@ -50,13 +50,13 @@ func TestIsTypeName(t *testing.T) {
 		s    string
 		want bool
 	}{
-		{"Recette", true},
-		{"EtatDesLieux", true},
+		{"Recipe", true},
+		{"CheckInReport", true},
 		{"V2", true},
 		{"", false},
-		{"recette", false},
-		{"Etat-des-lieux", false},
-		{"Pièce", false},
+		{"recipe", false},
+		{"Check-in-report", false},
+		{"Café", false},
 	}
 	for _, tt := range tests {
 		if got := IsTypeName(tt.s); got != tt.want {
@@ -67,8 +67,8 @@ func TestIsTypeName(t *testing.T) {
 
 func TestHeading(t *testing.T) {
 	tests := []struct{ name, want string }{
-		{"zone-tendue", "Zone tendue"},
-		{"nom", "Nom"},
+		{"unit-price", "Unit price"},
+		{"name", "Name"},
 		{"m2", "M2"},
 		{"", ""},
 	}
@@ -111,7 +111,7 @@ func TestTransliterate(t *testing.T) {
 func TestArticle(t *testing.T) {
 	tests := []struct{ name, want string }{
 		{"Image", "an `Image`"},
-		{"Partie", "a `Partie`"},
+		{"Party", "a `Party`"},
 		{"", "a ``"},
 	}
 	for _, tt := range tests {
@@ -123,8 +123,8 @@ func TestArticle(t *testing.T) {
 
 func TestFold(t *testing.T) {
 	tests := []struct{ s, want string }{
-		{"Échéance", "echeance"},
-		{"Œufs", "oeufs"},
+		{"Émigré", "emigre"},
+		{"Œuvre", "oeuvre"},
 		{"Straße", "strasse"},
 		{"plain", "plain"},
 	}
@@ -137,15 +137,15 @@ func TestFold(t *testing.T) {
 
 func TestSlugify(t *testing.T) {
 	tests := []struct{ s, want string }{
-		{"Durée du bail", "duree-du-bail"},
-		{"prix_unitaire", "prix-unitaire"},
-		{"  État  des lieux ", "etat-des-lieux"},
-		{"Dépôt de garantie", "depot-de-garantie"},
-		{"Émetteur", "emetteur"},
-		{"L'état des lieux", "l-etat-des-lieux"},
-		{"L’état-des lieux", "l-etat-des-lieux"},
-		{"Zone tendue", "zone-tendue"},
-		{"F-2026/031", "f-2026-031"},
+		{"Rosé of the day", "rose-of-the-day"},
+		{"unit_price", "unit-price"},
+		{"  Émigré  writers ", "emigre-writers"},
+		{"Table d'hôte", "table-d-hote"},
+		{"Éclair", "eclair"},
+		{"Zoë's café menu", "zoe-s-cafe-menu"},
+		{"Zoë’s café-menu", "zoe-s-cafe-menu"},
+		{"Unit price", "unit-price"},
+		{"INV-2026/031", "inv-2026-031"},
 		{"!!", ""},
 	}
 	for _, tt := range tests {
@@ -156,14 +156,14 @@ func TestSlugify(t *testing.T) {
 }
 
 func TestClosest(t *testing.T) {
-	candidates := []string{"vidange", "controle-technique", "pneus", "km", "Ingrédients"}
+	candidates := []string{"service", "inspection-date", "tyres", "km", "Résumé"}
 	tests := []struct{ s, want string }{
-		{"vidage", "vidange"},
+		{"servise", "service"},
 		{"kms", "km"},
-		{"ingredients", "Ingrédients"},
-		{"controle", "controle-technique"},
-		{"pneu", "pneus"},
-		{"freins", ""},
+		{"resume", "Résumé"},
+		{"inspection", "inspection-date"},
+		{"tyre", "tyres"},
+		{"brakes", ""},
 		{"co", ""},
 		{"x", ""},
 	}
@@ -175,7 +175,7 @@ func TestClosest(t *testing.T) {
 }
 
 func TestClosestPrefersNearest(t *testing.T) {
-	if got := Closest("bon", []string{"bonne", "bons", "bon"}); got != "bon" {
-		t.Errorf("Closest(bon) = %q, want the exact match", got)
+	if got := Closest("car", []string{"cards", "cars", "car"}); got != "car" {
+		t.Errorf("Closest(car) = %q, want the exact match", got)
 	}
 }

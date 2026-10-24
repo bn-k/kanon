@@ -451,7 +451,7 @@ func (s *server) typeOf(path string) string {
 }
 
 // root returns the document to check for the document at path: itself when it has a type, or else the document
-// that holds the folder it lies in, as clio.kan holds clio/entretiens/vidange.kan.
+// that holds the folder it lies in, as hatchback.kan holds hatchback/services/oil-change.kan.
 func (s *server) root(path string) string {
 	if s.typeOf(path) != "" {
 		return path

@@ -449,7 +449,7 @@ func (c *checker) aggregate(id *Ident, e *Call, sc *scope) *Type {
 	if len(e.Args) == 2 {
 		l, body := c.fnArg(e.Args[1], sc, item)
 		if l == nil {
-			example := map[string]string{"sum": "sum(lignes, l => l.montant)", "count": "count(xs, x => …)"}[id.Name]
+			example := map[string]string{"sum": "sum(lines, l => l.amount)", "count": "count(xs, x => …)"}[id.Name]
 			c.errorf(e.Args[1].At(), "`%s` takes a function of one parameter as its second argument, as in %s", id.Name, example)
 			return nil
 		}

@@ -163,11 +163,11 @@ func TestTable(t *testing.T) {
 		want string
 	}{
 		{"aligned by type", &Result{[]string{"name", "qty", "price"}, [][]any{
-			{"Café", int64(12), 1250.5}, {"Thé vert", int64(3), 20.0}}},
-			"name      qty   price\n" +
-				"--------  ---  ------\n" +
-				"Café       12  1250.5\n" +
-				"Thé vert    3      20\n" +
+			{"Café", int64(12), 1250.5}, {"Crème brûlée", int64(3), 20.0}}},
+			"name          qty   price\n" +
+				"------------  ---  ------\n" +
+				"Café           12  1250.5\n" +
+				"Crème brûlée    3      20\n" +
 				"2 rows\n"},
 		{"values of every kind", &Result{[]string{"v"}, [][]any{
 			{nil}, {"a\nb\t\r"}, {[]byte{0}}, {[]byte{1, 2}}}},

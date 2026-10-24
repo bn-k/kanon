@@ -27,8 +27,8 @@ func check(t *testing.T, src string) (*File, []string) {
 
 func TestCheckOK(t *testing.T) {
 	tests := []string{
-		"unit pincee\nfn f() -> Quantity = 2 pincee",
-		"unit tasse\nunit kWatt",
+		"unit pinch\nfn f() -> Quantity = 2 pinch",
+		"unit cup\nunit kWatt",
 		"fn f() -> Quantity = 2 kg + 300 g * 3\nfn g() -> Duration = 3 years + 0 min\nfn h() -> Percent = 20 %",
 		"enum E { aa, bb }\nrule r(x: E) -> Bool = x == aa or x == bb",
 		"rule r() = today == today and yes or no",
@@ -42,11 +42,11 @@ func TestCheckOK(t *testing.T) {
 		"schema S { a: Int  xs: [Int]  b: Int = sum(xs) + count(xs) + max(a, a) + min(a, a) + abs(a) + round(a, 0.01) }",
 		"schema S { t: Text @heading  c: Prose? @body  s: [S] @sections }",
 		"schema S { b: Int  a: Int = if b > 1 then -b else (if not yes then 1 else 2) }",
-		`fn f(v: Int) -> Int reads fr "{v.nom} et {v}" reads "{ v }" = v`,
+		`fn f(v: Int) -> Int reads en "{v.name} and {v}" reads "{ v }" = v`,
 		"enum E { a }\nschema S { e: E  l: [E]?  d: Date }",
 		"schema S { a: DateTime  f: File?  i: [Image]  c: Code }",
-		"schema E { chef: -> E?  equipe: [E] <- chef  zones: [-> Z] }\nschema Z { e: [E] <- zones }",
-		"schema P { bureau: -> B? }\nschema B { p: P? <- bureau }",
+		"schema E { boss: -> E?  team: [E] <- boss  zones: [-> Z] }\nschema Z { e: [E] <- zones }",
+		"schema P { desk: -> B? }\nschema B { p: P? <- desk }",
 		"schema O { e: -> E }\nschema E { o: [O] <- e  o2: [O]? <- e }\nfn f(o: -> O) -> -> E = o.e",
 	}
 	for _, src := range tests {
@@ -59,38 +59,38 @@ func TestCheckOK(t *testing.T) {
 }
 
 func TestCheckResolves(t *testing.T) {
-	f, diags := check(t, "enum Etat { neuf }\nschema Clause { t: Text }\nschema Bail { clauses: [Clause]  etat: Etat?  debut: Date }\nfn f(b: Bail) -> Bool = yes")
+	f, diags := check(t, "enum Condition { mint }\nschema Clause { t: Text }\nschema Lease { clauses: [Clause]  condition: Condition?  start: Date }\nfn f(l: Lease) -> Bool = yes")
 	if len(diags) > 0 {
 		t.Fatalf("Check: %v", diags)
 	}
-	bail := f.Schema("Bail")
-	clauses, etat, debut := bail.Fields[0].Type, bail.Fields[1].Type, bail.Fields[2].Type
+	lease := f.Schema("Lease")
+	clauses, condition, start := lease.Fields[0].Type, lease.Fields[1].Type, lease.Fields[2].Type
 	if clauses.Schema != f.Schema("Clause") || !clauses.Array || clauses.Native {
 		t.Errorf("clauses: %+v", clauses)
 	}
-	if etat.Enum != f.Enums[0] || !etat.Optional {
-		t.Errorf("etat: %+v", etat)
+	if condition.Enum != f.Enums[0] || !condition.Optional {
+		t.Errorf("condition: %+v", condition)
 	}
-	if !debut.Native || debut.Kind != value.Date {
-		t.Errorf("debut: %+v", debut)
+	if !start.Native || start.Kind != value.Date {
+		t.Errorf("start: %+v", start)
 	}
 	fn := f.Fns[0]
-	if fn.Params[0].Type.Schema != bail || fn.Result.Kind != value.Bool || !fn.Result.Native {
+	if fn.Params[0].Type.Schema != lease || fn.Result.Kind != value.Bool || !fn.Result.Native {
 		t.Errorf("fn types: %+v %+v", fn.Params[0].Type, fn.Result)
 	}
 }
 
 func TestCheckRelations(t *testing.T) {
-	f, diags := check(t, "schema Facture { client: -> Partie }\nschema Partie { factures: [Facture] <- client }")
+	f, diags := check(t, "schema Invoice { client: -> Party }\nschema Party { invoices: [Invoice] <- client }")
 	if len(diags) > 0 {
 		t.Fatalf("Check: %v", diags)
 	}
-	client, factures := f.Schema("Facture").Fields[0], f.Schema("Partie").Fields[0]
-	if !client.Type.Link || client.Type.Schema != f.Schema("Partie") || !client.Required() || client.Computed() {
+	client, invoices := f.Schema("Invoice").Fields[0], f.Schema("Party").Fields[0]
+	if !client.Type.Link || client.Type.Schema != f.Schema("Party") || !client.Required() || client.Computed() {
 		t.Errorf("client: %+v", client.Type)
 	}
-	if factures.Type.Link || factures.Type.Schema != f.Schema("Facture") || factures.Required() || !factures.Computed() {
-		t.Errorf("factures: %+v", factures.Type)
+	if invoices.Type.Link || invoices.Type.Schema != f.Schema("Invoice") || invoices.Required() || !invoices.Computed() {
+		t.Errorf("invoices: %+v", invoices.Type)
 	}
 }
 
@@ -101,28 +101,28 @@ func TestCheckErrors(t *testing.T) {
 	}{
 		// Declarations.
 		{"schema A {}\nenum A { x }", []string{"2:6: `A` is already declared on line 1"}},
-		{"unit pincee\nfn pincee() -> Int = 1", []string{"2:4: `pincee` is already declared on line 1"}},
+		{"unit pinch\nfn pinch() -> Int = 1", []string{"2:4: `pinch` is already declared on line 1"}},
 		{"schema Text {}", []string{"1:8: `Text` is a native type; choose another name"}},
-		{"schema etat-des-lieux {}", []string{`1:8: type names are PascalCase: write EtatDesLieux, not "etat-des-lieux"`}},
+		{"schema check-in-report {}", []string{`1:8: type names are PascalCase: write CheckInReport, not "check-in-report"`}},
 		{"enum Piece_x { a }", []string{`1:6: type names are PascalCase: write PieceX, not "Piece_x"`}},
-		{"schema _ {}", []string{`1:8: "_" is not a type name: use ASCII PascalCase, such as EtatDesLieux`}},
+		{"schema _ {}", []string{`1:8: "_" is not a type name: use ASCII PascalCase, such as CheckInReport`}},
 		{"unit g", []string{"1:6: `g` is a built-in unit"}},
 		{"unit days", []string{"1:6: `days` is a duration unit"}},
-		{"unit pince_e", []string{`1:6: write pincee, not "pince_e"`}},
+		{"unit tea_spoon", []string{`1:6: write teaspoon, not "tea_spoon"`}},
 		{"unit _", []string{`1:6: "_" is not a unit name: use ASCII letters and digits, starting with a letter`}},
 		{"enum E { a, a }", []string{"1:13: `a` is already a value of `E`"}},
-		{"enum E { Bon }", []string{`1:10: write bon, not "Bon"`}},
+		{"enum E { Good }", []string{`1:10: write good, not "Good"`}},
 		{"enum E { _ }", []string{`1:10: "_" is not a name: use lowercase ASCII letters, digits and hyphens, starting with a letter`}},
 
 		// Fields.
 		{"schema S { id: Text }", []string{"1:12: `id` is reserved: every object has one"}},
 		{"schema S { a: Text a: Int }", []string{"1:20: `a` is already a field of `S`"}},
-		{"schema S { prix_unitaire: Money }", []string{`1:12: write prix-unitaire, not "prix_unitaire"`}},
+		{"schema S { unit_price: Money }", []string{`1:12: write unit-price, not "unit_price"`}},
 
 		// Types.
 		{"schema S { a: Txt }", []string{"1:15: unknown type `Txt`; did you mean `Text`?"}},
-		{"schema S { a: [Partie] }\nschema Partei {}", []string{"1:16: unknown type `Partie`; did you mean `Partei`?"}},
-		{"schema S { a: Zorglub }", []string{"1:15: unknown type `Zorglub`"}},
+		{"schema S { a: [Tennat] }\nschema Tenant {}", []string{"1:16: unknown type `Tennat`; did you mean `Tenant`?"}},
+		{"schema S { a: Widget }", []string{"1:15: unknown type `Widget`"}},
 		{"schema S { a: Datetime }", []string{"1:15: unknown type `Datetime`; did you mean `DateTime`?"}},
 
 		// Relations.
@@ -158,17 +158,17 @@ func TestCheckErrors(t *testing.T) {
 		{"fn f(a: Int = 1, b: Int) -> Int = a", []string{"1:18: `b` needs a default value, as it follows a parameter that has one"}},
 		{"fn Foo() -> Int = 1", []string{`1:4: write foo, not "Foo"`}},
 		{"rule a_b() = yes", []string{`1:6: write a-b, not "a_b"`}},
-		{"fn f(prixHT: Int) -> Int = prixHT", []string{`1:6: write prixht, not "prixHT"`}},
-		{`fn f(v: Int) -> Int reads "{w.nom}" = v`, []string{"1:28: unknown parameter `w`; did you mean `v`?"}},
+		{"fn f(netPrice: Int) -> Int = netPrice", []string{`1:6: write netprice, not "netPrice"`}},
+		{`fn f(v: Int) -> Int reads "{w.name}" = v`, []string{"1:28: unknown parameter `w`; did you mean `v`?"}},
 		{`fn f(v: Int) -> Int reads "a \"{w}\"" = v`, []string{"1:32: unknown parameter `w`; did you mean `v`?"}},
 		{`fn f(v: Int) -> Int reads "{v" = v`, []string{"1:28: missing `}` after `{`"}},
 		{`fn f(v: Int) -> Int reads "{}" = v`, []string{"1:28: empty placeholder `{}`"}},
 
 		// Expressions.
-		{"schema S {\n  quantite: Int\n  b: Int = quantte\n}", []string{"3:12: unknown name `quantte`; did you mean `quantite`?"}},
+		{"schema S {\n  quantity: Int\n  b: Int = quantty\n}", []string{"3:12: unknown name `quantty`; did you mean `quantity`?"}},
 		{"fn f(a: Int, b: Int = zz, zz: Int = 1) -> Int = a", []string{"1:23: unknown name `zz`"}},
 		{"fn f(v: [Int]) -> Int = v.map(x => x + yy)", []string{"1:40: unknown name `yy`"}},
-		{"enum Op { vidange }\nrule r(x: Op) -> Bool = x == vidang", []string{"2:30: unknown name `vidang`; did you mean `vidange`?"}},
+		{"enum Op { service }\nrule r(x: Op) -> Bool = x == servce", []string{"2:30: unknown name `servce`; did you mean `service`?"}},
 		{"fn f() -> Int = -zz.a + (not zz) + g(zz) + zz with { a: zz } + (if zz then zz else zz) + (q => zz)", []string{
 			"1:18: unknown name `zz`", "1:30: unknown name `zz`", "1:36: unknown name `g`; did you mean `f`?",
 			"1:38: unknown name `zz`", "1:44: unknown name `zz`", "1:57: unknown name `zz`", "1:68: unknown name `zz`",
@@ -180,9 +180,9 @@ func TestCheckErrors(t *testing.T) {
 		{"fn g(a: Int, b: Int) -> Int = a\nfn f() -> Int = g(1)", []string{"2:17: `g` takes 2 arguments, not 1"}},
 		{"fn g() -> Int = 1\nfn f() -> Int = g(1)", []string{"2:17: `g` takes no arguments, not 1"}},
 		{"fn g(a: Int, b: Int = 1, c: Int = 2) -> Int = a\nfn f() -> Int = g()", []string{"2:17: `g` takes 1 to 3 arguments, not 0"}},
-		{"fn f() -> Quantity = 2 pincee", []string{"1:24: unknown unit `pincee`; a schema declares its own units, as in: unit pincee"}},
+		{"fn f() -> Quantity = 2 pinch", []string{"1:24: unknown unit `pinch`; a schema declares its own units, as in: unit pinch"}},
 		{"fn f() -> Quantity = 2 kgg", []string{"1:24: unknown unit `kgg`; did you mean `kg`?"}},
-		{"fn f(d: Date) -> Date = d + 30 jours", []string{"1:32: unknown unit `jours`; a schema declares its own units, as in: unit jours"}},
+		{"fn f(d: Date) -> Date = d + 30 nights", []string{"1:32: unknown unit `nights`; a schema declares its own units, as in: unit nights"}},
 		{"rule r(m: Money) -> Bool = m > 1 EUR and m * 2 < 1000.50 USD", nil},
 		{"rule r(m: Money) -> Bool = m > 1 250.50 EUR + 1", []string{"1:45: cannot add `Money` and `Int`"}},
 		{"rule r(d: Quantity) -> Bool = d > 15 000 km", nil},
@@ -246,7 +246,7 @@ func TestCheckPatterns(t *testing.T) {
 		})
 	}
 
-	f, diags := check(t, `schema I reads "{quantite} [de] {nom}" reads fr "{nom}: {quantite}" { quantite: Quantity nom: Text }`)
+	f, diags := check(t, `schema I reads "{quantity} [of] {name}" reads en "{name}: {quantity}" { quantity: Quantity name: Text }`)
 	if len(diags) > 0 || len(f.Schemas[0].Patterns) != 2 {
 		t.Errorf("got %q and %d patterns, want none and 2", diags, len(f.Schemas[0].Patterns))
 	}
@@ -284,12 +284,12 @@ func TestLoadCases(t *testing.T) {
 }
 
 func TestCheckRefs(t *testing.T) {
-	src := `unit pincee
-enum Etat { neuf, use }
-schema Ligne reads "{qte} de {nom}" { qte: Quantity  nom: Text  etat: Etat = neuf  doc: Doc? <- lignes }
-schema Doc { titre: Text  lignes: [-> Ligne]  n: Quantity = sum(lignes, l => l.qte) + 2 pincee }
-fn f(d: Doc, k: Int = 1) -> Doc reads "{ d.titre }" = d with { titre: "x" }
-rule r(d: Doc) = f(d).titre == "x" and today == today`
+	src := `unit pinch
+enum Condition { mint, worn }
+schema Line reads "{qty} of {name}" { qty: Quantity  name: Text  condition: Condition = mint  doc: Doc? <- lines }
+schema Doc { title: Text  lines: [-> Line]  n: Quantity = sum(lines, l => l.qty) + 2 pinch }
+fn f(d: Doc, k: Int = 1) -> Doc reads "{ d.title }" = d with { title: "x" }
+rule r(d: Doc) = f(d).title == "x" and today == today`
 	f, diags := check(t, src)
 	if len(diags) > 0 {
 		t.Fatalf("Check: %q", diags)
@@ -308,9 +308,9 @@ rule r(d: Doc) = f(d).titre == "x" and today == today`
 		got[fmt.Sprintf("%s@%d", name, r.Decl.Line)]++
 	}
 	want := map[string]int{
-		"pincee@1": 2, "Etat@2": 2, "neuf@2": 2, "use@2": 1,
-		"Ligne@3": 2, "qte@3": 3, "nom@3": 2, "etat@3": 1, "doc@3": 1,
-		"Doc@4": 5, "titre@4": 3, "lignes@4": 3, "n@4": 1, "l@4": 2,
+		"pinch@1": 2, "Condition@2": 2, "mint@2": 2, "worn@2": 1,
+		"Line@3": 2, "qty@3": 3, "name@3": 2, "condition@3": 1, "doc@3": 1,
+		"Doc@4": 5, "title@4": 3, "lines@4": 3, "n@4": 1, "l@4": 2,
 		"f@5": 2, "d@5": 3, "k@5": 1, "r@6": 1, "d@6": 2,
 	}
 	if !maps.Equal(got, want) {
@@ -324,7 +324,7 @@ rule r(d: Doc) = f(d).titre == "x" and today == today`
 		t.Errorf("checked twice: %d refs, want %d", len(f.Refs), n)
 	}
 
-	for name, want := range map[string]diag.Pos{"pincee": {Line: 1, Col: 6}, "Etat": {Line: 2, Col: 6}, "Doc": {Line: 4, Col: 8}, "r": {Line: 6, Col: 6}} {
+	for name, want := range map[string]diag.Pos{"pinch": {Line: 1, Col: 6}, "Condition": {Line: 2, Col: 6}, "Doc": {Line: 4, Col: 8}, "r": {Line: 6, Col: 6}} {
 		want.File = "t.kanonarch"
 		if got, ok := f.Decl(name); !ok || got != want {
 			t.Errorf("Decl(%q) = %v, %v, want %v", name, got, ok, want)
@@ -340,21 +340,21 @@ func TestHelpers(t *testing.T) {
 	if len(diags) > 0 {
 		t.Fatalf("Load: %v", diags)
 	}
-	bail := f.Schema("Bail")
-	etat := f.Enums[1]
+	lease := f.Schema("Lease")
+	condition := f.Enums[1]
 	switch {
-	case !f.Declares("Bail") || !f.Declares("depot-plafonne") || f.Declares("Nope"):
+	case !f.Declares("Lease") || !f.Declares("deposit-cap") || f.Declares("Nope"):
 		t.Errorf("Declares: %v", f.DeclNames())
-	case bail.Annotated("heading") != bail.Field("titre") || bail.Annotated("body") != nil:
+	case lease.Annotated("heading") != lease.Field("title") || lease.Annotated("body") != nil:
 		t.Errorf("Annotated")
-	case !slices.Contains(bail.FieldNames(), "zone-tendue") || len(bail.FieldNames()) != len(bail.Fields):
-		t.Errorf("FieldNames: %q", bail.FieldNames())
-	case !bail.Field("clauses").Has("sections") || bail.Field("titre").Has("sections"):
+	case !slices.Contains(lease.FieldNames(), "rent-controlled") || len(lease.FieldNames()) != len(lease.Fields):
+		t.Errorf("FieldNames: %q", lease.FieldNames())
+	case !lease.Field("clauses").Has("sections") || lease.Field("title").Has("sections"):
 		t.Errorf("Has")
-	case etat.Value("use") == nil || etat.Value("use").Name != "use" || etat.Value("nope") != nil:
+	case condition.Value("worn") == nil || condition.Value("worn").Name != "worn" || condition.Value("nope") != nil:
 		t.Errorf("Value")
-	case !slices.Contains(etat.ValueNames(), "use") || len(etat.ValueNames()) != len(etat.Values):
-		t.Errorf("ValueNames: %q", etat.ValueNames())
+	case !slices.Contains(condition.ValueNames(), "worn") || len(condition.ValueNames()) != len(condition.Values):
+		t.Errorf("ValueNames: %q", condition.ValueNames())
 	}
 }
 

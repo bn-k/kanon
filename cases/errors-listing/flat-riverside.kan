@@ -1,0 +1,32 @@
+---
+type: Listing
+---
+
+# Dual-aspect flat in Riverside
+
+reference: RVS-2026-042
+property: flat
+price: 245 000.00 GBP
+area: 68 m2
+bedrooms: 2
+energy-rating: d
+viewing: 2026-10-27 18:00
+agent: [[agents/tom-ashby]]
+seller: [[sellers/fenwick-family]]
+plan: [[house-elm-grove/ground-floor.pdf]]
+photos: [[house-elm-grove/photos/01-front.jpg]]
+
+A two-bedroom flat on the second floor, dual aspect, with a balcony over the courtyard.
+
+## Location {#riverside}
+
+town: Millbrook
+postcode: MB1 3LP
+
+## Rooms
+
+| id | name | level | area |
+|---|---|---|---|
+| living-room | Living room | upper-floor | 24 m2 |
+| bedroom-1 | Bedroom | upper-floor | 12 m2 |
+| bedroom-2 | Bedroom | upper-floor | 10 m2 |

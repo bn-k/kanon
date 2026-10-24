@@ -170,17 +170,17 @@ func TestParseExpr(t *testing.T) {
 		{"0 min + 0.5 kg", "(0 min + 0.5 kg)"},
 		{"a * 2", "(a * 2)"},
 		{`"s"`, `"s"`},
-		{"total-ht * taux-tva", "(total-ht * taux-tva)"},
-		{"total-ht - ht", "(total-ht - ht)"},
-		{"v.entretiens.filter(e => e.operation == op).max-by(e => e.date)",
-			"v.entretiens.filter((e => (e.operation == op))).max-by((e => e.date))"},
-		{"dernier(v, controle-technique)?.date + 2 years >= le",
-			"((dernier(v, controle-technique)?.date + 2 years) >= le)"},
-		{"preparation + (repos ?? 0 min) + (cuisson ?? 0 min)",
-			"((preparation + (repos ?? 0 min)) + (cuisson ?? 0 min))"},
-		{"round(total-ht * taux-tva, 0.01)", "round((total-ht * taux-tva), 0.01)"},
-		{"r with { portions: n, ingredients: r.ingredients.map(i => i with { quantite: i.quantite * n / r.portions }), }",
-			"(r with {portions: n, ingredients: r.ingredients.map((i => (i with {quantite: ((i.quantite * n) / r.portions)})))})"},
+		{"net-total * vat-rate", "(net-total * vat-rate)"},
+		{"net-total - net", "(net-total - net)"},
+		{"v.services.filter(s => s.operation == op).max-by(s => s.date)",
+			"v.services.filter((s => (s.operation == op))).max-by((s => s.date))"},
+		{"last(v, safety-check)?.date + 2 years >= on",
+			"((last(v, safety-check)?.date + 2 years) >= on)"},
+		{"preparation + (resting ?? 0 min) + (cooking ?? 0 min)",
+			"((preparation + (resting ?? 0 min)) + (cooking ?? 0 min))"},
+		{"round(net-total * vat-rate, 0.01)", "round((net-total * vat-rate), 0.01)"},
+		{"r with { portions: n, ingredients: r.ingredients.map(i => i with { quantity: i.quantity * n / r.portions }), }",
+			"(r with {portions: n, ingredients: r.ingredients.map((i => (i with {quantity: ((i.quantity * n) / r.portions)})))})"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.src, func(t *testing.T) {
@@ -193,16 +193,16 @@ func TestParseExpr(t *testing.T) {
 
 func TestParseDecls(t *testing.T) {
 	src := `// A comment.
-unit pincee
-unit tasse
-enum Etat { neuf, bon use, degrade, }
-schema Ingredient reads "{quantite} [de] {nom}" reads fr "{nom}" {
-  quantite: Quantity
-  nom:      Text @heading
+unit pinch
+unit cup
+enum Condition { mint, good worn, damaged, }
+schema Ingredient reads "{quantity} [of] {name}" reads en "{name}" {
+  quantity: Quantity
+  name:     Text @heading
   notes:    [Prose]? @body @sections,
   total:    Money = a * b
 }
-schema Dce { rc: Rc  ae: Ae }
+schema Bid { terms: Terms  form: Form }
 schema L {
   a: -> A
   b: -> A?
@@ -217,22 +217,22 @@ schema Q {
   d: Int = 2
   kg: Int
 }
-fn pour(r: Recette, n: Int = 2,) -> Recette reads fr "{r.titre}" = r with { portions: n }
+fn scale(r: Recipe, n: Int = 2,) -> Recipe reads en "{r.title}" = r with { portions: n }
 rule ok(v: V) = yes
 rule ok2() -> Bool reads "x" reads en "y" = no
 `
-	want := `unit pincee
-unit tasse
-enum Etat { neuf, bon, use, degrade }
-schema Ingredient reads "{quantite} [de] {nom}" reads fr "{nom}" {
-  quantite: Quantity
-  nom: Text @heading
+	want := `unit pinch
+unit cup
+enum Condition { mint, good, worn, damaged }
+schema Ingredient reads "{quantity} [of] {name}" reads en "{name}" {
+  quantity: Quantity
+  name: Text @heading
   notes: [Prose]? @body @sections
   total: Money = (a * b)
 }
-schema Dce {
-  rc: Rc
-  ae: Ae
+schema Bid {
+  terms: Terms
+  form: Form
 }
 schema L {
   a: -> A
@@ -249,7 +249,7 @@ schema Q {
   d: Int = 2
   kg: Int
 }
-fn pour(r: Recette, n: Int = 2) -> Recette reads fr "{r.titre}" = (r with {portions: n})
+fn scale(r: Recipe, n: Int = 2) -> Recipe reads en "{r.title}" = (r with {portions: n})
 rule ok(v: V) = yes
 rule ok2() -> Bool reads "x" reads en "y" = no
 `
@@ -387,8 +387,8 @@ func TestParseASCII(t *testing.T) {
 		want []string
 	}{
 		{"schema S { é: Text }", []string{`1:12: a schema is written in ASCII: write "e", not "é"`}},
-		{"// Ça\nunit u", []string{`1:4: a schema is written in ASCII: write "C", not "Ç"`}},
-		{"rule r() -> Bool reads \"n°\" = yes", []string{`1:26: a schema is written in ASCII: write "o", not "°"`}},
+		{"// FAÇADE\nunit u", []string{`1:6: a schema is written in ASCII: write "C", not "Ç"`}},
+		{"rule r() -> Bool reads \"5°\" = yes", []string{`1:26: a schema is written in ASCII: write "o", not "°"`}},
 		{"// « x »", []string{`1:4: a schema is written in ASCII: rewrite without "«"`}},
 		{"// éé\n// ü", []string{
 			`1:4: a schema is written in ASCII: write "e", not "é"`,
@@ -403,7 +403,7 @@ func TestParseASCII(t *testing.T) {
 		{"schema S { a: Text \"é\" }", []string{
 			"1:20: a field holds no label: remove \"é\"; a heading in the document finds the field by its name, `a`",
 		}},
-		{"schema S { a: Text }\n// à", []string{`2:4: a schema is written in ASCII: write "a", not "à"`}},
+		{"schema S { a: Text }\n// à la carte", []string{`2:4: a schema is written in ASCII: write "a", not "à"`}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.src, func(t *testing.T) {

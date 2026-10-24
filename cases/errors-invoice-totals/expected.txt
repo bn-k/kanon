@@ -1,6 +1,6 @@
-$ kan lint ../invoice/schema.kanonarch f-2026-033.kan
-f-2026-033.kan: error: `echeance-legale` fails: "le paiement est du au plus tard 60 jours apres la date de la facture (Code de commerce, art. L441-10)"; 2027-01-15 is after 2026-12-21
-f-2026-033.kan:12:1: error: `total-ttc` is 9 504.00 EUR, not "9 500.00 EUR"
-f-2026-033.kan:24:74: error: `montant` is 120.00 EUR, not "100.00 EUR"
+$ kan lint ../invoice/schema.kanonarch inv-2026-033.kan
+inv-2026-033.kan: error: `payment-deadline` fails: "payment is due at most 60 days after the invoice date"; 2027-01-15 is after 2026-12-21
+inv-2026-033.kan:12:1: error: `gross-total` is 9 504.00 EUR, not "9 500.00 EUR"
+inv-2026-033.kan:24:69: error: `amount` is 120.00 EUR, not "100.00 EUR"
 3 errors
 [exit 1]

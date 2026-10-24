@@ -1,0 +1,9 @@
+# Safety
+
+duration: 3 h
+trainer: [[/training#hale]]
+
+## Modules
+
+- [[safety/modules/ppe]]
+- [[safety/modules/lockout]]

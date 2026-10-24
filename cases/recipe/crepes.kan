@@ -1,25 +1,25 @@
 ---
-type: Recette
+type: Recipe
 ---
 
 # Crêpes
 
-portions: 4
+servings: 4
 preparation: 15 min
-repos: 1 h
-cuisson: 30 min
+resting: 1 h
+cooking: 30 min
 
-## Ingrédients
+## Ingredients
 
-- 250 g de farine {#farine}
-- 4 œufs {#oeufs}
-- 50 cl de lait {#lait}
-- 50 g de beurre fondu {#beurre}
-- 1 pincee de sel {#sel}
+- 250 g of flour {#flour}
+- 4 eggs {#eggs}
+- 50 cl of milk {#milk}
+- 50 g of melted butter {#butter}
+- 1 pinch of salt {#salt}
 
-## Étapes
+## Steps
 
-1. Verser la farine dans un saladier, creuser un puits et y casser les œufs.
-2. Ajouter le lait peu à peu en fouettant, puis le beurre fondu et le sel.
-3. Laisser reposer la pâte {repos}.
-4. Cuire chaque crêpe environ une minute de chaque côté, dans une poêle chaude et beurrée.
+1. Put the flour in a mixing bowl, make a well in the centre and break the eggs into it.
+2. Whisk in the milk a little at a time, then the melted butter and the salt.
+3. Leave the batter to rest for {resting}.
+4. Cook each crêpe for about a minute on each side, in a hot buttered pan.

@@ -1,0 +1,56 @@
+// Working material: a property listing, with its photos and floor plan, the agents who sell the property and its
+// seller, each in a document of their own, fictional.
+
+enum PropertyType { flat, house, land }
+enum EnergyRating { a, b, c, d, e, f, g }
+enum Level { basement, ground-floor, upper-floor }
+
+schema Listing {
+  title:         Text @heading
+  reference:     Text
+  property:      PropertyType
+  price:         Money
+  area:          Quantity
+  plot:          Quantity?
+  bedrooms:      Int
+  energy-rating: EnergyRating
+  viewing:       DateTime
+  agent:         -> Agent
+  co-agents:     [-> Agent]?
+  seller:        -> Seller
+  location:      Location
+  plan:          File
+  photos:        [Image]
+  description:   Prose @body
+  rooms:         [Room]
+  virtual-tour:  Code?
+}
+
+schema Location {
+  town:     Text
+  postcode: Text
+  district: Text?
+}
+
+schema Room {
+  name:  Text
+  level: Level
+  area:  Quantity
+}
+
+schema Agent {
+  name:        Text @heading
+  agency:      Text
+  phone:       Text
+  email:       Text
+  portrait:    Image?
+  listings:    [Listing] <- agent
+  co-listings: [Listing] <- co-agents
+}
+
+// The seller of one property: its listing is the inverse of Listing.seller, one to one.
+schema Seller {
+  name:    Text @heading
+  address: Text
+  listing: Listing? <- seller
+}

@@ -1,0 +1,4 @@
+$ kan lint schema.kanonarch calendar.kan
+ok  schema.kanonarch
+ok  calendar.kan
+ok  bank-holidays-england-and-wales.csv

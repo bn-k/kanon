@@ -1,0 +1,57 @@
+---
+type: Listing
+---
+
+# Family house with a garden in Elm Grove
+
+reference: ELM-2026-118
+property: house
+price: 545 000.00 GBP
+area: 112 m2
+plot: 480 m2
+bedrooms: 3
+energy-rating: c
+viewing: 2026-10-25 10:30
+agent: [[agents/helen-carter]]
+seller: [[sellers/fenwick-family]]
+plan: [[house-elm-grove/ground-floor.pdf]]
+
+![[house-elm-grove/photos/01-front.jpg]]
+
+At the end of a quiet close, ten minutes from the centre of Millbrook and its cafés, this {area} house on a
+{plot} plot has three bedrooms, a bright living room opening onto the garden, a utility room and a garage.
+
+![The living room, south-facing](house-elm-grove/photos/02-living-room.jpg)
+
+The living room, the kitchen and the main bedroom are all on the ground floor (see the
+[ground floor plan](house-elm-grove/ground-floor.pdf)). Offers in the region of {price}, with no onward
+chain. Viewings by appointment with [[agents/helen-carter]], the next one on {viewing}.
+
+## Location {#orchard-close}
+
+town: Millbrook
+postcode: MB4 2QT
+district: Elm Grove
+
+## Co-agents
+
+- [[agents/tom-ashby]]
+- [[agents/chloe-hart]]
+
+## Rooms
+
+| id | name | level | area |
+|---|---|---|---|
+| living-room | Living room | ground-floor | 38 m2 |
+| kitchen | Kitchen | ground-floor | 14 m2 |
+| bedroom-1 | Main bedroom | ground-floor | 12 m2 |
+| bathroom | Bathroom | ground-floor | 6 m2 |
+| bedroom-2 | Bedroom | upper-floor | 11 m2 |
+| bedroom-3 | Bedroom | upper-floor | 10 m2 |
+| utility-room | Utility room | basement | 8 m2 |
+
+## Virtual tour
+
+```html
+<iframe src="https://tour.example/elm-2026-118" width="640" height="360" allowfullscreen></iframe>
+```

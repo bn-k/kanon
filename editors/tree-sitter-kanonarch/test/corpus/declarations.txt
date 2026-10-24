@@ -3,16 +3,16 @@ Units, enums and schemas
 ================================================================================
 
 // A comment.
-unit pincee
-unit tasse
-enum Etat { neuf, bon use, degrade, }
-schema Ingredient reads "{quantite} [de] {nom}" reads fr "{nom}" {
-  quantite: Quantity
-  nom:      Text @heading
+unit pinch
+unit cup
+enum Condition { mint, good worn, damaged, }
+schema Ingredient reads "{quantity} [of] {name}" reads en "{name}" {
+  quantity: Quantity
+  name:     Text @heading
   notes:    [Prose]? @body @sections,
   total:    Money = a * b
 }
-schema Dce { rc: Rc  ae: Ae }
+schema Bid { terms: Terms  form: Form }
 
 --------------------------------------------------------------------------------
 
@@ -178,7 +178,7 @@ schema Q {
 Functions and rules
 ================================================================================
 
-fn pour(r: Recette, n: Int = 2,) -> Recette reads fr "{r.titre}" = r with { portions: n }
+fn scale(r: Recipe, n: Int = 2,) -> Recipe reads en "{r.title}" = r with { portions: n }
 rule ok(v: V) = yes
 rule ok2() -> Bool reads "x" reads en "y" = no
 

@@ -1,0 +1,35 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 318 >>
+stream
+2 w 60 60 480 300 re S
+1 w 60 210 200 150 re S 260 210 280 150 re S 60 60 160 150 re S 220 60 120 150 re S
+BT /F1 14 Tf 60 390 Td (Ground floor plan - 12 Orchard Close, Millbrook MB4) Tj ET
+BT /F1 10 Tf 120 280 Td (Living room 38 m2) Tj 220 0 Td (Kitchen 14 m2) Tj -210 -140 Td (Bedroom 12 m2) Tj 160 0 Td (Bath) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000241 00000 n
+0000000610 00000 n
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+680
+%%EOF

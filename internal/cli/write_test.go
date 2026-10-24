@@ -17,7 +17,7 @@ import (
 func club(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
-	for _, name := range []string{"schema.kanonarch", "liste.kan", "critique.kan", "liste-renommee.txt"} {
+	for _, name := range []string{"schema.kanonarch", "list.kan", "review.kan", "list-renamed.txt"} {
 		src, err := os.ReadFile(filepath.Join("../../cases/write-dependent", name))
 		if err != nil {
 			t.Fatal(err)
@@ -27,7 +27,7 @@ func club(t *testing.T) string {
 		}
 	}
 	t.Chdir(dir)
-	return read(t, "liste.kan")
+	return read(t, "list.kan")
 }
 
 // withStdin makes text what kan reads on stdin, for the test.
@@ -38,20 +38,20 @@ func withStdin(t *testing.T, text string) {
 	t.Cleanup(func() { stdin = old })
 }
 
-const nouveauLivre = "| solaris | Solaris | Stanisław Lem |\n"
+const newBook = "| salt-and-iron | Salt and Iron | Ruth Okafor |\n"
 
 func TestWrite(t *testing.T) {
-	liste := club(t)
-	withStdin(t, liste+nouveauLivre)
+	list := club(t)
+	withStdin(t, list+newBook)
 	var stdout, stderr bytes.Buffer
-	if code := Run([]string{"write", "schema.kanonarch", "liste.kan"}, &stdout, &stderr); code != 0 {
+	if code := Run([]string{"write", "schema.kanonarch", "list.kan"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("write = %d\n%s%s", code, stdout.String(), stderr.String())
 	}
-	if want := "wrote liste.kan\nok  critique.kan\n"; stdout.String() != want || stderr.Len() > 0 {
+	if want := "wrote list.kan\nok  review.kan\n"; stdout.String() != want || stderr.Len() > 0 {
 		t.Errorf("write printed %q and %q, want %q", stdout.String(), stderr.String(), want)
 	}
-	if got := read(t, "liste.kan"); got != liste+nouveauLivre {
-		t.Errorf("liste.kan holds\n%s", got)
+	if got := read(t, "list.kan"); got != list+newBook {
+		t.Errorf("list.kan holds\n%s", got)
 	}
 	if left, _ := filepath.Glob(".kan-write-*"); len(left) > 0 {
 		t.Errorf("write left %v", left)
@@ -59,41 +59,41 @@ func TestWrite(t *testing.T) {
 }
 
 func TestWriteDry(t *testing.T) {
-	liste := club(t)
-	os.WriteFile("nouvelle.txt", []byte(liste+nouveauLivre), 0o644)
+	list := club(t)
+	os.WriteFile("new.txt", []byte(list+newBook), 0o644)
 	var out bytes.Buffer
-	if code := Run([]string{"write", "-n", "liste.kan=nouvelle.txt", "schema.kanonarch"}, &out, &out); code != 0 {
+	if code := Run([]string{"write", "-n", "list.kan=new.txt", "schema.kanonarch"}, &out, &out); code != 0 {
 		t.Fatalf("write -n = %d\n%s", code, out.String())
 	}
-	if want := "ok  liste.kan\nok  critique.kan\n"; out.String() != want {
+	if want := "ok  list.kan\nok  review.kan\n"; out.String() != want {
 		t.Errorf("write -n printed %q, want %q", out.String(), want)
 	}
-	if read(t, "liste.kan") != liste {
-		t.Error("write -n changed liste.kan")
+	if read(t, "list.kan") != list {
+		t.Error("write -n changed list.kan")
 	}
 }
 
 func TestWriteRefused(t *testing.T) {
-	liste := club(t)
+	list := club(t)
 	var out bytes.Buffer
-	if code := Run([]string{"write", "schema.kanonarch", "liste.kan=liste-renommee.txt"}, &out, &out); code != 1 {
+	if code := Run([]string{"write", "schema.kanonarch", "list.kan=list-renamed.txt"}, &out, &out); code != 1 {
 		t.Fatalf("write = %d, want 1\n%s", code, out.String())
 	}
-	if read(t, "liste.kan") != liste {
-		t.Error("a refused write changed liste.kan")
+	if read(t, "list.kan") != list {
+		t.Error("a refused write changed list.kan")
 	}
 }
 
 // A document of the folder that is already wrong doesn't stop a write, as long as the write adds no error to it.
 func TestWriteKeepsKnownErrors(t *testing.T) {
-	liste := club(t)
-	os.WriteFile("ancienne.kan", []byte("---\ntype: Critique\n---\n\n# Ancienne\n\nlivre: [[liste#hyperion]]\n"), 0o644)
-	withStdin(t, liste+nouveauLivre)
+	list := club(t)
+	os.WriteFile("old.kan", []byte("---\ntype: Review\n---\n\n# An old review\n\nbook: [[list#lighthouse]]\n"), 0o644)
+	withStdin(t, list+newBook)
 	var out bytes.Buffer
-	if code := Run([]string{"write", "schema.kanonarch", "liste.kan"}, &out, &out); code != 0 {
+	if code := Run([]string{"write", "schema.kanonarch", "list.kan"}, &out, &out); code != 0 {
 		t.Fatalf("write = %d\n%s", code, out.String())
 	}
-	if want := "wrote liste.kan\nok  ancienne.kan\nok  critique.kan\n"; out.String() != want {
+	if want := "wrote list.kan\nok  old.kan\nok  review.kan\n"; out.String() != want {
 		t.Errorf("write printed %q, want %q", out.String(), want)
 	}
 }
@@ -101,21 +101,21 @@ func TestWriteKeepsKnownErrors(t *testing.T) {
 // Only the documents whose links lead to a written one are checked: a name in the text is not a link, nor a hidden
 // folder part of the documents.
 func TestWriteDependents(t *testing.T) {
-	liste := club(t)
-	os.WriteFile("journal.kan", []byte("---\ntype: Critique\n---\n\n# Sur une autre liste\n\nlivre: [[autre#x]]\n"), 0o644)
-	os.WriteFile("autre.kan", []byte("---\ntype: Liste\n---\n\n# Autre\n\n## Livres\n\n| id | titre | auteur |\n|---|---|---|\n| x | X | Y |\n"), 0o644)
-	os.Mkdir(".brouillons", 0o755)
-	os.WriteFile(".brouillons/critique.kan", []byte("---\ntype: Critique\n---\n\nlivre: [[../liste#dune]]\n"), 0o644)
+	list := club(t)
+	os.WriteFile("journal.kan", []byte("---\ntype: Review\n---\n\n# On another list\n\nbook: [[other#x]]\n"), 0o644)
+	os.WriteFile("other.kan", []byte("---\ntype: ReadingList\n---\n\n# Other\n\n## Books\n\n| id | title | author |\n|---|---|---|\n| x | X | Y |\n"), 0o644)
+	os.Mkdir(".drafts", 0o755)
+	os.WriteFile(".drafts/review.kan", []byte("---\ntype: Review\n---\n\nbook: [[../list#tidewater]]\n"), 0o644)
 	os.Mkdir("journal", 0o755) // the folder of journal.kan: its entries have no type of their own
-	os.WriteFile("journal/semaine.kan", []byte("# Semaine\n\nlivre: [[../liste#dune]]\n"), 0o644)
-	os.WriteFile("journal/mois.kan", []byte("---\ntitre: Mois\n---\n\nlivre: [[../liste#dune]]\n"), 0o644)
-	os.WriteFile("journal/an.kan", []byte("---\ntitre: An\n"), 0o644)
-	withStdin(t, liste+nouveauLivre)
+	os.WriteFile("journal/week.kan", []byte("# Week\n\nbook: [[../list#tidewater]]\n"), 0o644)
+	os.WriteFile("journal/month.kan", []byte("---\ntitle: Month\n---\n\nbook: [[../list#tidewater]]\n"), 0o644)
+	os.WriteFile("journal/year.kan", []byte("---\ntitle: Year\n"), 0o644)
+	withStdin(t, list+newBook)
 	var out bytes.Buffer
-	if code := Run([]string{"write", "-n", "schema.kanonarch", "liste.kan"}, &out, &out); code != 0 {
+	if code := Run([]string{"write", "-n", "schema.kanonarch", "list.kan"}, &out, &out); code != 0 {
 		t.Fatalf("write -n = %d\n%s", code, out.String())
 	}
-	if want := "ok  liste.kan\nok  critique.kan\n"; out.String() != want {
+	if want := "ok  list.kan\nok  review.kan\n"; out.String() != want {
 		t.Errorf("write -n printed %q, want %q", out.String(), want)
 	}
 }
@@ -123,31 +123,31 @@ func TestWriteDependents(t *testing.T) {
 // Two documents written at once are checked together: the review may follow the book it links to.
 func TestWriteTogether(t *testing.T) {
 	club(t)
-	critique := strings.Replace(read(t, "critique.kan"), "#dune]]", "#dune-messie]]", 1)
-	os.WriteFile("critique.txt", []byte(critique), 0o644)
+	review := strings.Replace(read(t, "review.kan"), "#tidewater]]", "#tidewater-rising]]", 1)
+	os.WriteFile("review.txt", []byte(review), 0o644)
 	var out bytes.Buffer
-	code := Run([]string{"write", "schema.kanonarch", "liste.kan=liste-renommee.txt", "critique.kan=critique.txt"}, &out, &out)
+	code := Run([]string{"write", "schema.kanonarch", "list.kan=list-renamed.txt", "review.kan=review.txt"}, &out, &out)
 	if code != 0 {
 		t.Fatalf("write = %d\n%s", code, out.String())
 	}
-	if want := "wrote liste.kan\nwrote critique.kan\n"; out.String() != want {
+	if want := "wrote list.kan\nwrote review.kan\n"; out.String() != want {
 		t.Errorf("write printed %q, want %q", out.String(), want)
 	}
-	if read(t, "critique.kan") != critique {
-		t.Error("critique.kan was not written")
+	if read(t, "review.kan") != review {
+		t.Error("review.kan was not written")
 	}
 }
 
 func TestWriteNew(t *testing.T) {
 	club(t)
-	withStdin(t, "---\ntype: Critique\n---\n\n# Fondation\n\nlivre: [[../liste#fondation]]\n")
+	withStdin(t, "---\ntype: Review\n---\n\n# The Glass Orchard\n\nbook: [[../list#glass-orchard]]\n")
 	var out bytes.Buffer
-	if code := Run([]string{"write", "schema.kanonarch", "critiques/fondation.kan"}, &out, &out); code != 0 {
+	if code := Run([]string{"write", "schema.kanonarch", "reviews/glass-orchard.kan"}, &out, &out); code != 0 {
 		t.Fatalf("write = %d\n%s", code, out.String())
 	}
-	info, err := os.Stat("critiques/fondation.kan")
+	info, err := os.Stat("reviews/glass-orchard.kan")
 	if err != nil || info.Mode().Perm() != 0o644 {
-		t.Errorf("critiques/fondation.kan: %v, %v", info, err)
+		t.Errorf("reviews/glass-orchard.kan: %v, %v", info, err)
 	}
 }
 
@@ -245,11 +245,11 @@ func TestEdited(t *testing.T) {
 
 func TestWriteWarnings(t *testing.T) {
 	club(t)
-	os.WriteFile("couverture.png", []byte("\xff\xd8\xff\xe0\x00\x10JFIF\x00"), 0o644) // a JPEG image
-	withStdin(t, read(t, "critique.kan")+"\n![[couverture.png]]\n")
+	os.WriteFile("cover.png", []byte("\xff\xd8\xff\xe0\x00\x10JFIF\x00"), 0o644) // a JPEG image
+	withStdin(t, read(t, "review.kan")+"\n![[cover.png]]\n")
 	var out bytes.Buffer
-	code := Run([]string{"write", "-n", "schema.kanonarch", "critique.kan"}, &out, &out)
-	if code != 0 || !strings.Contains(out.String(), ": warning: ") || !strings.HasSuffix(out.String(), "1 warning\nok  critique.kan\n") {
+	code := Run([]string{"write", "-n", "schema.kanonarch", "review.kan"}, &out, &out)
+	if code != 0 || !strings.Contains(out.String(), ": warning: ") || !strings.HasSuffix(out.String(), "1 warning\nok  review.kan\n") {
 		t.Errorf("write -n = %d\n%s", code, out.String())
 	}
 }
@@ -257,7 +257,7 @@ func TestWriteWarnings(t *testing.T) {
 func TestWriteJSON(t *testing.T) {
 	club(t)
 	var out bytes.Buffer
-	code := Run([]string{"write", "-format", "json", "schema.kanonarch", "liste.kan=liste-renommee.txt"}, &out, &out)
+	code := Run([]string{"write", "-format", "json", "schema.kanonarch", "list.kan=list-renamed.txt"}, &out, &out)
 	if code != 1 {
 		t.Fatalf("write = %d, want 1\n%s", code, out.String())
 	}
@@ -271,16 +271,16 @@ func TestWriteJSON(t *testing.T) {
 		t.Fatalf("%v\n%s", err, out.String())
 	}
 	if got.OK || len(got.Written) != 0 || len(got.Checked) != 1 || len(got.Diagnostics) != 1 ||
-		got.Diagnostics[0]["file"] != "critique.kan" || got.Diagnostics[0]["line"] != 7.0 {
+		got.Diagnostics[0]["file"] != "review.kan" || got.Diagnostics[0]["line"] != 7.0 {
 		t.Errorf("write -format json printed\n%s", out.String())
 	}
 
 	out.Reset()
-	withStdin(t, read(t, "liste.kan"))
-	if code := Run([]string{"write", "-format", "json", "-today", "2026-10-23", "schema.kanonarch", "liste.kan"}, &out, &out); code != 0 {
+	withStdin(t, read(t, "list.kan"))
+	if code := Run([]string{"write", "-format", "json", "-today", "2026-10-23", "schema.kanonarch", "list.kan"}, &out, &out); code != 0 {
 		t.Fatalf("write = %d\n%s", code, out.String())
 	}
-	want := "{\n  \"ok\": true,\n  \"written\": [\n    \"liste.kan\"\n  ],\n  \"checked\": [\n    \"critique.kan\"\n  ],\n  \"diagnostics\": []\n}\n"
+	want := "{\n  \"ok\": true,\n  \"written\": [\n    \"list.kan\"\n  ],\n  \"checked\": [\n    \"review.kan\"\n  ],\n  \"diagnostics\": []\n}\n"
 	if out.String() != want {
 		t.Errorf("write -format json printed\n%s\nwant\n%s", out.String(), want)
 	}
@@ -288,21 +288,21 @@ func TestWriteJSON(t *testing.T) {
 
 func TestWriteFails(t *testing.T) {
 	club(t)
-	os.Mkdir("verrou", 0o555)
-	t.Cleanup(func() { os.Chmod("verrou", 0o755) })
-	withStdin(t, "---\ntype: Critique\n---\n\n# Dune\n\nlivre: [[../liste#dune]]\n")
+	os.Mkdir("locked", 0o555)
+	t.Cleanup(func() { os.Chmod("locked", 0o755) })
+	withStdin(t, "---\ntype: Review\n---\n\n# Tidewater\n\nbook: [[../list#tidewater]]\n")
 	var stdout, stderr bytes.Buffer
-	if code := Run([]string{"write", "schema.kanonarch", "verrou/dune.kan"}, &stdout, &stderr); code != 1 {
+	if code := Run([]string{"write", "schema.kanonarch", "locked/tidewater.kan"}, &stdout, &stderr); code != 1 {
 		t.Fatalf("write = %d, want 1\n%s%s", code, stdout.String(), stderr.String())
 	}
-	if !strings.HasPrefix(stderr.String(), "kan: cannot write verrou/dune.kan: ") {
+	if !strings.HasPrefix(stderr.String(), "kan: cannot write locked/tidewater.kan: ") {
 		t.Errorf("write printed %q", stderr.String())
 	}
 
 	stdout.Reset()
 	stderr.Reset()
-	withStdin(t, read(t, "liste.kan"))
-	if code := Run([]string{"write", "-format", "json", "schema.kanonarch", "liste.kan"}, failingWriter{}, &stderr); code != 1 {
+	withStdin(t, read(t, "list.kan"))
+	if code := Run([]string{"write", "-format", "json", "schema.kanonarch", "list.kan"}, failingWriter{}, &stderr); code != 1 {
 		t.Errorf("write to a broken pipe = %d, want 1", code)
 	}
 	if !strings.Contains(stderr.String(), "broken pipe") {
@@ -316,26 +316,26 @@ func (failingReader) Read([]byte) (int, error) { return 0, os.ErrClosed }
 
 func TestWriteUsage(t *testing.T) {
 	club(t)
-	os.Mkdir("dossier.txt", 0o755)
+	os.Mkdir("folder.txt", 0o755)
 	tests := []struct {
 		args []string
 		want string
 	}{
 		{[]string{"schema.kanonarch"}, "write takes a schema and documents, got 1 argument"},
-		{[]string{"liste.kan", "critique.kan"}, "write takes a schema: a schema file ends in .kanonarch"},
-		{[]string{"schema.yaml", "liste.kan"}, "schema.yaml is not a schema: a schema file ends in .kanonarch"},
-		{[]string{"schema.kanonarch", "liste.md"}, "liste.md is not a document: a document file ends in .kan"},
-		{[]string{"schema.kanonarch", "liste.kan=a.txt", "./liste.kan=b.txt"}, "a.txt does not exist"},
-		{[]string{"schema.kanonarch", "liste.kan=liste-renommee.txt", "./liste.kan=liste-renommee.txt"},
-			"liste.kan is written twice"},
-		{[]string{"schema.kanonarch", "liste.kan", "critique.kan"},
-			"liste.kan and critique.kan both read stdin: give each but one its new text, as in critique.kan=new.txt"},
-		{[]string{"schema.kanonarch", "liste.kan=dossier.txt"}, "cannot read dossier.txt: is a directory"},
+		{[]string{"list.kan", "review.kan"}, "write takes a schema: a schema file ends in .kanonarch"},
+		{[]string{"schema.yaml", "list.kan"}, "schema.yaml is not a schema: a schema file ends in .kanonarch"},
+		{[]string{"schema.kanonarch", "list.md"}, "list.md is not a document: a document file ends in .kan"},
+		{[]string{"schema.kanonarch", "list.kan=a.txt", "./list.kan=b.txt"}, "a.txt does not exist"},
+		{[]string{"schema.kanonarch", "list.kan=list-renamed.txt", "./list.kan=list-renamed.txt"},
+			"list.kan is written twice"},
+		{[]string{"schema.kanonarch", "list.kan", "review.kan"},
+			"list.kan and review.kan both read stdin: give each but one its new text, as in review.kan=new.txt"},
+		{[]string{"schema.kanonarch", "list.kan=folder.txt"}, "cannot read folder.txt: is a directory"},
 		{[]string{"-format"}, "-format takes text or json"},
-		{[]string{"-format", "csv", "schema.kanonarch", "liste.kan"}, "-format is text or json, not csv"},
+		{[]string{"-format", "csv", "schema.kanonarch", "list.kan"}, "-format is text or json, not csv"},
 		{[]string{"-format", "text", "schema.kanonarch"}, "write takes a schema and documents, got 1 argument"},
-		{[]string{"schema.kanonarch", "liste.kan", "-today"}, "-today takes a date, as in -today 2026-10-22"},
-		{[]string{"-today", "23/10/2026", "schema.kanonarch", "liste.kan"}, "write -today 2026-10-22, not \"23/10/2026\""},
+		{[]string{"schema.kanonarch", "list.kan", "-today"}, "-today takes a date, as in -today 2026-10-22"},
+		{[]string{"-today", "23/10/2026", "schema.kanonarch", "list.kan"}, "write -today 2026-10-22, not \"23/10/2026\""},
 	}
 	for _, tt := range tests {
 		withStdin(t, "")
@@ -350,7 +350,7 @@ func TestWriteUsage(t *testing.T) {
 
 	stdin = failingReader{}
 	var stderr bytes.Buffer
-	Run([]string{"write", "schema.kanonarch", "liste.kan"}, &stderr, &stderr)
+	Run([]string{"write", "schema.kanonarch", "list.kan"}, &stderr, &stderr)
 	if !strings.HasPrefix(stderr.String(), "kan: cannot read stdin: ") {
 		t.Errorf("write printed %q", stderr.String())
 	}

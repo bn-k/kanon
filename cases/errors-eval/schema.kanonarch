@@ -1,20 +1,20 @@
 // Working material: a shared expense, split between the people who took part. Each person has a sponsor, who
 // brought them into the group.
 
-schema Personne {
-  nom:     Text @heading
-  parrain: -> Personne?
+schema Person {
+  name:    Text @heading
+  sponsor: -> Person?
 
-  rang: Int = (parrain?.rang ?? 0) + 1
+  rank: Int = (sponsor?.rank ?? 0) + 1
 }
 
-schema Depense {
-  objet:        Text @heading
-  montant:      Money
-  le:           DateTime
-  paye-par:     -> Personne
-  participants: [-> Personne]?
+schema Expense {
+  title:        Text @heading
+  amount:       Money
+  at:           DateTime
+  paid-by:      -> Person
+  participants: [-> Person]?
 
-  part:   Money    = montant / count(participants)
-  rappel: DateTime = le + 1.5 months
+  share:    Money    = amount / count(participants)
+  reminder: DateTime = at + 1.5 months
 }

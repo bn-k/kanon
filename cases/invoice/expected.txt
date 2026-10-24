@@ -1,6 +1,6 @@
-$ kan eval schema.kanonarch f-2026-031.kan
-f-2026-031.kan: total-ht = 7 920.00 EUR
-f-2026-031.kan: tva = 1 584.00 EUR
-f-2026-031.kan: total-ttc = 9 504.00 EUR
-f-2026-031.kan:23:1: montant = 7 800.00 EUR
-f-2026-031.kan:24:1: montant = 120.00 EUR
+$ kan eval schema.kanonarch inv-2026-031.kan
+inv-2026-031.kan: net-total = 7 920.00 EUR
+inv-2026-031.kan: vat = 1 584.00 EUR
+inv-2026-031.kan: gross-total = 9 504.00 EUR
+inv-2026-031.kan:23:1: amount = 7 800.00 EUR
+inv-2026-031.kan:24:1: amount = 120.00 EUR

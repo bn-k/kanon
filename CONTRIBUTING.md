@@ -28,7 +28,8 @@ it exits with another code than 0. `go test ./internal/cli` runs every case. `go
 rewrites the expected outputs, only after a deliberate change of output, and the diff is read. `cases/README.md`
 lists the cases.
 
-Everything is English, except the content of a case, which keeps its own language.
+Everything is English, the content of cases and test fixtures included, with fictional people and places. Only
+third-party data stays as published, with its source and licence.
 
 ## Messages
 
@@ -70,7 +71,7 @@ and rebuild the extension from Zed's extensions page.
 | `internal/schema` | lexer, parser and checker of `.kanonarch` files |
 | `internal/doc` | parser of `.kan` files: front matter, sections, key lines, lists, tables, paragraphs |
 | `internal/sheet` | CSV files and xlsx sheets, read as rows of cells in the canonical format |
-| `internal/pattern` | `reads` patterns such as `"{quantite} [de] {nom}"` |
+| `internal/pattern` | `reads` patterns such as `"{quantity} [of] {name}"` |
 | `internal/value` | literals: numbers, money, percentages, quantities, dates and times, durations, versions |
 | `internal/names` | slugs, the folding of a heading to a name, and "did you mean" suggestions |
 | `internal/diag` | diagnostics |

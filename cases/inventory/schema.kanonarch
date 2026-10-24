@@ -1,32 +1,32 @@
 // Working material: a home computer inventory, fictional.
 
-enum Etat { bon, fragile, mort }
+enum Condition { good, fragile, dead }
 
-schema Disque {
-  modele:   Text
-  capacite: Quantity?
-  etat:     Etat
-  usage:    Text?
+schema Disk {
+  model:     Text
+  capacity:  Quantity?
+  condition: Condition
+  usage:     Text?
 }
 
 schema Machine {
-  nom:             Text @heading
-  role:            Text
-  systeme:         Text
-  processeur:      Text
-  chiffrement:     Bool
-  memoire:         Quantity
-  carte-graphique: Text?
-  bios:            Version?
-  disques:         [Disque]
-  notes:           Prose?
+  name:          Text @heading
+  role:          Text
+  system:        Text
+  processor:     Text
+  encrypted:     Bool
+  memory:        Quantity
+  graphics-card: Text?
+  bios:          Version?
+  disks:         [Disk]
+  notes:         Prose?
 }
 
-schema Parc {
-  titre:    Text @heading
+schema Inventory {
+  title:    Text @heading
   machines: [Machine] @sections
 }
 
-rule bios-a-jour(m: Machine) -> Bool
-  reads fr "{m.nom} a un BIOS en version 2003 ou plus, qui corrige la faille du demarrage securise"
+rule bios-up-to-date(m: Machine) -> Bool
+  reads en "{m.name} has BIOS version 2003 or later, which fixes the secure boot flaw"
   = m.bios == none or m.bios >= 2003

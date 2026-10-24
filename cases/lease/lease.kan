@@ -1,0 +1,48 @@
+---
+type: Lease
+---
+
+# Residential lease — 12 Lilac Street, Larkhaven
+
+start: 2026-09-01
+term: 3 years
+rent: 850.00 EUR
+service-charge: 90.00 EUR
+security-deposit: 850.00 EUR
+rent-controlled: yes
+
+## Landlord {#claire-morton}
+
+name: Claire Morton
+type: individual
+address: 8 Willow Close, Larkhaven
+
+## Tenant {#joel-durrant}
+
+name: Joel Durrant
+type: individual
+
+## Dwelling {#lilac-12}
+
+address: Flat 2, 12 Lilac Street, Larkhaven
+area: 48 m2
+rooms: 2
+
+## Term of the lease {#term}
+
+The lease takes effect on {start} for a term of {term} and ends on {end}. At its end, it renews automatically for
+the same term.
+
+## Rent and service charge {#rent}
+
+The monthly rent is {rent}, service charge excluded, payable in advance on the 5th of each month, plus a service
+charge of {service-charge} paid on account and adjusted each year.
+
+## Deposit {#deposit}
+
+The tenant pays a security deposit of {security-deposit}. It is returned within one month of handing back the
+keys if the check-out report matches the [[check-in-report]].
+
+## Notice {#notice}
+
+The tenant may give notice at any time, with {notice-period} of notice.

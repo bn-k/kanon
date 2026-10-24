@@ -1,4 +1,4 @@
-$ kan lint -today 2026-10-22 schema.kanonarch clio.kan
-clio.kan: error: `vidange-a-jour` fails: "Renault Clio a roule moins de 15 000 km depuis sa derniere vidange"; 15 250 km is not less than 15 000 km
+$ kan lint -today 2026-10-22 schema.kanonarch hatchback.kan
+hatchback.kan: error: `oil-change-up-to-date` fails: "Grey hatchback has covered less than 15 000 km since its last oil change"; 15 250 km is not less than 15 000 km
 1 error
 [exit 1]

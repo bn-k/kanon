@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-var units = NewUnits([]string{"pincee"})
+var units = NewUnits([]string{"pinch"})
 
 func TestParseOK(t *testing.T) {
 	tests := []struct {
@@ -27,10 +27,10 @@ func TestParseOK(t *testing.T) {
 		{Percent, "5.5 %", "11/2", ""},
 		{Quantity, "87 450 km", "87450/1", "km"},
 		{Quantity, "48 m2", "48/1", "m2"},
-		{Quantity, "1 pincee", "1/1", "pincee"},
+		{Quantity, "1 pinch", "1/1", "pinch"},
 		{Quantity, "4", "4/1", ""},
-		{Text, "Garage du Centre", "", ""},
-		{Prose, "Le loyer est de {loyer-hc}.", "", ""},
+		{Text, "Riverside Garage", "", ""},
+		{Prose, "The rent is {base-rent}.", "", ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.kind.String()+" "+tt.s, func(t *testing.T) {
@@ -54,8 +54,8 @@ func TestParseSpaces(t *testing.T) {
 		kind    Kind
 		s, want string
 	}{
-		{Text, "  Berguvsvägen  8  ", "Berguvsvägen  8 "},
-		{Prose, "Loyer : 650.00 EUR", "Loyer : 650.00 EUR"},
+		{Text, "  Ångström Way  8  ", "Ångström Way  8 "},
+		{Prose, "Rent 650.00 EUR", "Rent 650.00 EUR"},
 		{Money, "9 504.00 EUR ", "9 504.00 EUR"},
 		{File, "plan A.pdf ", "plan A.pdf "},
 		{Percent, "20 %", "20 %"},
@@ -89,7 +89,7 @@ func TestParseDate(t *testing.T) {
 }
 
 func TestParseDateTime(t *testing.T) {
-	paris := time.FixedZone("", 2*60*60)
+	plus2 := time.FixedZone("", 2*60*60)
 	tests := []struct {
 		s    string
 		want time.Time
@@ -99,7 +99,7 @@ func TestParseDateTime(t *testing.T) {
 		{"2026-10-22 14:30:00", time.Date(2026, 10, 22, 14, 30, 0, 0, time.UTC), ""},
 		{"2026-10-22 14:30:05", time.Date(2026, 10, 22, 14, 30, 5, 0, time.UTC), ""},
 		{"2026-10-22 14:30 UTC", time.Date(2026, 10, 22, 14, 30, 0, 0, time.UTC), "UTC"},
-		{"2026-10-22 14:30:05 +02:00", time.Date(2026, 10, 22, 14, 30, 5, 0, paris), "+02:00"},
+		{"2026-10-22 14:30:05 +02:00", time.Date(2026, 10, 22, 14, 30, 5, 0, plus2), "+02:00"},
 		{"2026-10-22 14:30 -00:00", time.Date(2026, 10, 22, 14, 30, 0, 0, time.UTC), "-00:00"},
 	}
 	for _, tt := range tests {
@@ -170,15 +170,15 @@ func TestParseErrors(t *testing.T) {
 		{Int, "4.5", `write a whole number (4 or 1 250), not "4.5"`},
 		{Int, "1250", ""},
 		{Int, "1.250", `write a whole number (4 or 1 250), not "1.250"`},
-		{Int, "quatre", `write a whole number (4 or 1 250), not "quatre"`},
+		{Int, "four", `write a whole number (4 or 1 250), not "four"`},
 		{Number, "1,5", `write 1.5, not "1,5"`},
 		{Number, "1.250,50", `write 1 250.50, not "1.250,50"`},
 		{Number, "1,250.50", `write 1 250.50, not "1,250.50"`},
-		{Number, "douze", `write a number (12 or 1 250.50), not "douze"`},
-		{Bool, "oui", `write yes or no, not "oui"`},
+		{Number, "twelve", `write a number (12 or 1 250.50), not "twelve"`},
+		{Bool, "true", `write yes or no, not "true"`},
 		{Date, "22/10/2026", `write a date as YYYY-MM-DD (2026-10-22), not "22/10/2026"`},
 		{Date, "2026-02-30", `"2026-02-30" is not a real date`},
-		{DateTime, "22/10/2026 14h30", `write a date and time as YYYY-MM-DD HH:MM (2026-10-22 14:30), not "22/10/2026 14h30"`},
+		{DateTime, "22/10/2026 2:30 pm", `write a date and time as YYYY-MM-DD HH:MM (2026-10-22 14:30), not "22/10/2026 2:30 pm"`},
 		{DateTime, "2026-10-22", `write a date and time as YYYY-MM-DD HH:MM (2026-10-22 14:30), not "2026-10-22"`},
 		{DateTime, "2026-10-22T14:30", `write 2026-10-22 14:30, not "2026-10-22T14:30"`},
 		{DateTime, "2026-10-22T14:30:05Z", `write 2026-10-22 14:30:05 UTC, not "2026-10-22T14:30:05Z"`},
@@ -192,16 +192,16 @@ func TestParseErrors(t *testing.T) {
 		{Money, "650 euros", `write 650 EUR, not "650 euros"`},
 		{Money, "650.00 eur", `write 650.00 EUR, not "650.00 eur"`},
 		{Money, "650", `write an amount and a currency code (1 250.50 EUR), not "650"`},
-		{Money, "beaucoup €", `write an amount and a currency code (1 250.50 EUR), not "beaucoup €"`},
+		{Money, "plenty €", `write an amount and a currency code (1 250.50 EUR), not "plenty €"`},
 		{Percent, "20%", `write 20 %, not "20%"`},
 		{Percent, "20", `write 20 %, not "20"`},
 		{Percent, "5,5 %", `write 5.5 %, not "5,5 %"`},
-		{Percent, "vingt", `write a percentage (20 %), not "vingt"`},
+		{Percent, "twenty", `write a percentage (20 %), not "twenty"`},
 		{Quantity, "15 000 kms", `unknown unit "kms"; did you mean km?`},
-		{Quantity, "2 bols", `unknown unit "bols"; a schema declares its own units, as in: unit bols`},
-		{Quantity, "2 cuillères", `unknown unit "cuillères"; a schema declares its own units, as in: unit cuilleres`},
+		{Quantity, "2 bowls", `unknown unit "bowls"; a schema declares its own units, as in: unit bowls`},
+		{Quantity, "2 crêpes", `unknown unit "crêpes"; a schema declares its own units, as in: unit crepes`},
 		{Quantity, "km", `write a number and its unit (48 m2 or 1 TB), not "km"`},
-		{Duration, "3 ans", `unknown duration unit "ans"; use min, h, days, weeks, months or years`},
+		{Duration, "3 yrs", `unknown duration unit "yrs"; use min, h, days, weeks, months or years`},
 		{Duration, "3", `write a duration, a number and its unit (15 min or 3 years), not "3"`},
 		{Duration, "min", `write a duration, a number and its unit (15 min or 3 years), not "min"`},
 		{Version, "v580", `write a version, numbers separated by dots (580 or 1.2.3), not "v580"`},
