@@ -14,6 +14,12 @@ schemas, and its entry says how.
   `internal/sheet/testdata` stay as published.
 - A table header or key written with capitals is reported as `names are lowercase ASCII`, as one with accents is.
 
+### Security
+
+- `kan` is built with Go 1.26.10, which fixes vulnerabilities of the standard library of Go 1.26.8 in `net/http`,
+  `net/textproto`, `crypto/tls` and `crypto/x509`. `kan` opens no network connection, but its binaries held that
+  code.
+
 ## [0.1.0] - 2026-10-23
 
 The first release: a folder of `.kan` documents, checked against a `.kanonarch` schema, that people, language
