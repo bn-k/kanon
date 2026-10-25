@@ -15,36 +15,36 @@ import (
 
 func TestRefs(t *testing.T) {
 	write(t, files{
-		"schema.kanonarch": `enum Etat { neuf, use }
-schema Ligne reads "{nom} {etat}" { nom: Text  etat: Etat }
-schema Client { nom: Text }
-schema Part { qte: Int }
-schema Doc { titre: Text @heading  client: -> Client  etat: Etat  lignes: [Ligne]  parts: [Part]  notes: Prose? }
-rule neuve(d: Doc) -> Bool = d.etat == neuf`,
-		"doc.kan":            "not read: the editor gives its text",
-		"clients/dupont.kan": "---\ntype: Client\n---\n# Dupont\nnom: Dupont\n",
-		"photo.png":          "\x89PNG\r\n\x1a\n",
+		"schema.kanonarch": `enum State { new, worn }
+schema Line reads "{name} {state}" { name: Text  state: State }
+schema Client { name: Text }
+schema Part { qty: Int }
+schema Doc { title: Text @heading  client: -> Client  state: State  lines: [Line]  parts: [Part]  notes: Prose? }
+rule brand-new(d: Doc) -> Bool = d.state == new`,
+		"doc.kan":          "not read: the editor gives its text",
+		"clients/acme.kan": "---\ntype: Client\n---\n# Acme\nname: Acme\n",
+		"photo.png":        "\x89PNG\r\n\x1a\n",
 	})
 	open := map[string]string{"doc.kan": `---
 type: Doc
 ---
-# Devis
-client: [[clients/dupont]]
-etat: neuf
+# Quote
+client: [[clients/acme]]
+state: new
 
-## Lignes
+## Lines
 
-- vis use {#l1}
+- screw worn {#l1}
 
 ## Parts
 
-| id | qte |
+| id | qty |
 |----|-----|
 | p1 | 2   |
 
 ## Notes
 
-Voir [[#l1]], {etat} et [photo](photo.png) et [[schema#neuve]].
+See [[#l1]], {state} and [photo](photo.png) and [[schema#brand-new]].
 `}
 	read := func(path string) ([]byte, error) {
 		if src, ok := open[path]; ok {
@@ -82,24 +82,24 @@ Voir [[#l1]], {etat} et [photo](photo.png) et [[schema#neuve]].
 	}
 	slices.Sort(got)
 	want := []string{
-		`clients/dupont.kan:2:7 "Client" -> schema.kanonarch:3 "Client"`,
-		`clients/dupont.kan:5:1 "nom" -> schema.kanonarch:3 "nom"`,
-		`doc.kan:10:13 "l1" -> doc.kan:10 "l1"`,
-		`doc.kan:10:7 "use" -> schema.kanonarch:1 "use"`,
+		`clients/acme.kan:2:7 "Client" -> schema.kanonarch:3 "Client"`,
+		`clients/acme.kan:5:1 "name" -> schema.kanonarch:3 "name"`,
+		`doc.kan:10:16 "l1" -> doc.kan:10 "l1"`,
+		`doc.kan:10:9 "worn" -> schema.kanonarch:1 "worn"`,
 		`doc.kan:12:4 "Parts" -> schema.kanonarch:5 "parts"`,
-		`doc.kan:14:8 "qte" -> schema.kanonarch:4 "qte"`,
+		`doc.kan:14:8 "qty" -> schema.kanonarch:4 "qty"`,
 		`doc.kan:16:3 "p1" -> doc.kan:16 "p1"`,
 		`doc.kan:18:4 "Notes" -> schema.kanonarch:5 "notes"`,
-		`doc.kan:20:16 "etat" -> schema.kanonarch:5 "etat"`,
-		`doc.kan:20:25 "[photo](photo.png)" -> photo.png`,
-		`doc.kan:20:47 "[[schema#neuve]]" -> schema.kanonarch:6 "neuve"`,
-		`doc.kan:20:6 "[[#l1]]" -> doc.kan:10 "l1"`,
+		`doc.kan:20:15 "state" -> schema.kanonarch:5 "state"`,
+		`doc.kan:20:26 "[photo](photo.png)" -> photo.png`,
+		`doc.kan:20:49 "[[schema#brand-new]]" -> schema.kanonarch:6 "brand-new"`,
+		`doc.kan:20:5 "[[#l1]]" -> doc.kan:10 "l1"`,
 		`doc.kan:2:7 "Doc" -> schema.kanonarch:5 "Doc"`,
 		`doc.kan:5:1 "client" -> schema.kanonarch:5 "client"`,
-		`doc.kan:5:9 "[[clients/dupont]]" -> clients/dupont.kan`,
-		`doc.kan:6:1 "etat" -> schema.kanonarch:5 "etat"`,
-		`doc.kan:6:7 "neuf" -> schema.kanonarch:1 "neuf"`,
-		`doc.kan:8:4 "Lignes" -> schema.kanonarch:5 "lignes"`,
+		`doc.kan:5:9 "[[clients/acme]]" -> clients/acme.kan`,
+		`doc.kan:6:1 "state" -> schema.kanonarch:5 "state"`,
+		`doc.kan:6:8 "new" -> schema.kanonarch:1 "new"`,
+		`doc.kan:8:4 "Lines" -> schema.kanonarch:5 "lines"`,
 	}
 	if !slices.Equal(got, want) {
 		t.Errorf("refs differ\n--- got\n%s\n--- want\n%s", strings.Join(got, "\n"), strings.Join(want, "\n"))
@@ -111,10 +111,10 @@ Voir [[#l1]], {etat} et [photo](photo.png) et [[schema#neuve]].
 
 func TestRefsOfItemsOnSeveralLines(t *testing.T) {
 	write(t, files{
-		"schema.kanonarch": `enum Etat { neuf, use }
-schema Ligne reads "{nom} {etat}" { nom: Text  etat: Etat }
-schema Doc { lignes: [Ligne] }`,
-		"doc.kan": "---\ntype: Doc\n---\n## Lignes\n\n- vis\n  use {#a}\n- grosse\n  vis neuf {#b}\n",
+		"schema.kanonarch": `enum State { new, worn }
+schema Line reads "{name} {state}" { name: Text  state: State }
+schema Doc { lines: [Line] }`,
+		"doc.kan": "---\ntype: Doc\n---\n## Lines\n\n- screw\n  worn {#a}\n- big\n  screw new {#b}\n",
 	})
 	r := Run("schema.kanonarch", "doc.kan")
 	check(t, r, nil)
@@ -124,8 +124,8 @@ schema Doc { lignes: [Ligne] }`,
 			got = append(got, fmt.Sprintf("%v %d", ref.Pos, ref.Len))
 		}
 	}
-	// neuf is on the second line of its item; "grosse vis" is on none, so it is placed where the item starts.
-	want := []string{"doc.kan:7:3 3", "doc.kan:9:7 4"}
+	// new is on the second line of its item; "big screw" is on none, so it is placed where the item starts.
+	want := []string{"doc.kan:7:3 4", "doc.kan:9:9 3"}
 	if !slices.Equal(got, want) {
 		t.Errorf("refs to the enum = %q, want %q", got, want)
 	}
@@ -154,19 +154,19 @@ func TestRefsOfValuesOnAKeyLine(t *testing.T) {
 func TestRefsOfAnUnreadableSchemaFile(t *testing.T) {
 	write(t, files{
 		"schema.kanonarch": "schema Doc { notes: Prose? }",
-		"autre.kanonarch":  "rule r() = yes",
-		"doc.kan":          "---\ntype: Doc\n---\n## Notes\n\n[[autre#r]]\n",
+		"other.kanonarch":  "rule r() = yes",
+		"doc.kan":          "---\ntype: Doc\n---\n## Notes\n\n[[other#r]]\n",
 	})
 	read := func(path string) ([]byte, error) {
-		if path == "autre.kanonarch" {
+		if path == "other.kanonarch" {
 			return nil, fs.ErrPermission
 		}
 		return os.ReadFile(path)
 	}
 	_, r := LoadWith("schema.kanonarch", "doc.kan", Options{ReadFile: read})
-	check(t, r, []string{"autre.kanonarch: error: cannot read the file: permission denied"})
+	check(t, r, []string{"other.kanonarch: error: cannot read the file: permission denied"})
 	for _, ref := range r.Refs {
-		if ref.Decl.File == "autre.kanonarch" {
+		if ref.Decl.File == "other.kanonarch" {
 			t.Errorf("ref %v to a schema file that can't be read", ref)
 		}
 	}
@@ -175,8 +175,8 @@ func TestRefsOfAnUnreadableSchemaFile(t *testing.T) {
 func TestRefsOfAnotherSchemaFile(t *testing.T) {
 	write(t, files{
 		"schema.kanonarch": "schema Doc { notes: Prose? }",
-		"autre.kanonarch":  "rule r() = yes",
-		"doc.kan":          "---\ntype: Doc\n---\n## Notes\n\n[[autre]] et [[autre#r]]\n",
+		"other.kanonarch":  "rule r() = yes",
+		"doc.kan":          "---\ntype: Doc\n---\n## Notes\n\n[[other]] and [[other#r]]\n",
 	})
 	r := Run("schema.kanonarch", "doc.kan")
 	check(t, r, nil)
@@ -184,7 +184,7 @@ func TestRefsOfAnotherSchemaFile(t *testing.T) {
 	for _, ref := range r.Refs {
 		got = append(got, fmt.Sprintf("%v %d -> %v", ref.Pos, ref.Len, ref.Decl))
 	}
-	for _, want := range []string{"doc.kan:6:1 9 -> autre.kanonarch", "doc.kan:6:14 11 -> autre.kanonarch:1:6", "autre.kanonarch:1:6 1 -> autre.kanonarch:1:6"} {
+	for _, want := range []string{"doc.kan:6:1 9 -> other.kanonarch", "doc.kan:6:15 11 -> other.kanonarch:1:6", "other.kanonarch:1:6 1 -> other.kanonarch:1:6"} {
 		if !slices.Contains(got, want) {
 			t.Errorf("no ref %s in %q", want, got)
 		}
