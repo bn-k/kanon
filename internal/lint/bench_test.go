@@ -12,8 +12,9 @@ import (
 	"github.com/bn-k/kanon/internal/diag"
 )
 
-// The benchmarks lint two cases on disk and a ledger generated in memory, of 1 000 and 10 000 invoices, to show how
-// lint grows with the number of documents: go test -run '^$' -bench . -benchmem ./internal/lint
+// The benchmarks lint two cases on disk and a ledger generated in memory, of 1 000 and 10 000 invoices, with and
+// without an order list, to show how lint grows with the number of documents:
+// go test -run '^$' -bench . -benchmem ./internal/lint
 
 // benchToday is the date of today for the benchmarks.
 var benchToday = time.Date(2026, 10, 22, 0, 0, 0, 0, time.UTC)
@@ -30,6 +31,15 @@ func BenchmarkLintLedger(b *testing.B) {
 	for _, n := range []int{1000, 10000} {
 		b.Run(fmt.Sprint(n), func(b *testing.B) {
 			benchLint(b, "schema.kanonarch", "ledger.kan", Options{Today: benchToday, FS: newMemFS(ledger(n))})
+		})
+	}
+}
+
+// BenchmarkLintOrdered lints the ledger with an order list of its invoices.
+func BenchmarkLintOrdered(b *testing.B) {
+	for _, n := range []int{1000, 10000} {
+		b.Run(fmt.Sprint(n), func(b *testing.B) {
+			benchLint(b, "schema.kanonarch", "ledger.kan", Options{Today: benchToday, FS: newMemFS(withOrder(ledger(n), n))})
 		})
 	}
 }
@@ -57,6 +67,11 @@ func TestLedger(t *testing.T) {
 	}
 	if got := d.Root.Get("invoices").Objects[0].Get("gross").Values[0].Raw; got != "120.60 EUR" {
 		t.Errorf("the first invoice's gross is %s, want 120.60 EUR", got)
+	}
+	d, r = LoadWith("schema.kanonarch", "ledger.kan", Options{Today: benchToday, FS: newMemFS(withOrder(ledger(40), 40))})
+	check(t, r, nil)
+	if got := d.Root.Get("invoices").Objects[0].ID; got != "inv-00039" {
+		t.Errorf("the order list puts %s first, want inv-00039", got)
 	}
 }
 
@@ -113,6 +128,17 @@ func ledger(n int) map[string]string {
 			"issued: 2026-%02d-%02d\nnet: %d.50 EUR\n\n## Notes\n\nWork for [[/ledger#c-%d]], as agreed.\n",
 			i, statuses[i%3], i/10, i%12+1, i%28+1, 100+i%900, i/10)
 	}
+	return files
+}
+
+// withOrder adds to the ledger of n invoices files an order list of its invoices, the last one first.
+func withOrder(files map[string]string, n int) map[string]string {
+	var w strings.Builder
+	w.WriteString(files["ledger.kan"] + "\n## Invoices\n\n")
+	for i := n - 1; i >= 0; i-- {
+		fmt.Fprintf(&w, "- [[ledger/invoices/inv-%05d]]\n", i)
+	}
+	files["ledger.kan"] = w.String()
 	return files
 }
 

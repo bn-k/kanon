@@ -272,6 +272,11 @@ func (l *linter) orderList(c *doc.Section, f *schema.Field, o *object) *doc.List
 func (l *linter) ordered(list *doc.List, f *schema.Field, o *object, dir string, files []string) []string {
 	rel, _ := filepath.Rel(filepath.Dir(o.file.path), dir)
 	link := func(id string) string { return filepath.ToSlash(rel) + "/" + id } // to an entry, from o's file
+	// the files, looked up once per item: a folder may hold thousands
+	entry := map[string]bool{}
+	for _, id := range files {
+		entry[id] = true
+	}
 	listed := map[string]diag.Pos{}
 	var order []string
 	add := func(id string, pos diag.Pos) {
@@ -284,7 +289,7 @@ func (l *linter) ordered(list *doc.List, f *schema.Field, o *object, dir string,
 		if !ok {
 			guess := names.Slugify(text)
 			l.diags.Errorf(pos, "every item of an order list links to an entry of `%s`: write - [[%s]]", f.Name, link(guess))
-			if _, seen := listed[guess]; !seen && slices.Contains(files, guess) {
+			if _, seen := listed[guess]; !seen && entry[guess] {
 				add(guess, pos)
 			}
 			continue
@@ -298,7 +303,7 @@ func (l *linter) ordered(list *doc.List, f *schema.Field, o *object, dir string,
 		id := strings.TrimSuffix(filepath.Base(file), ".kan")
 		prev, seen := listed[id]
 		switch {
-		case filepath.Dir(file) != dir || !slices.Contains(files, id):
+		case filepath.Dir(file) != dir || !entry[id]:
 			msg := fmt.Sprintf("[[%s]] is not an entry of `%s`", target, f.Name)
 			if c := names.Closest(id, files); c != "" {
 				msg += fmt.Sprintf("; did you mean [[%s]]?", link(c))
