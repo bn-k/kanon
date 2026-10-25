@@ -8,6 +8,8 @@ import (
 	"testing"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/bn-k/kanon/internal/testcases"
 )
 
 // FuzzParse reads a text as a value of each kind Parse reads. It doesn't panic; an error is a message; a value
@@ -84,7 +86,7 @@ func addValues(f *testing.F, root string) {
 			f.Add(s)
 		}
 	}
-	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	err := testcases.Walk(root, func(path string, d fs.DirEntry, err error) error {
 		switch {
 		case err != nil:
 			return err

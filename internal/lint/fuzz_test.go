@@ -13,6 +13,8 @@ import (
 	"time"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/bn-k/kanon/internal/testcases"
 )
 
 // overlay is a folder in memory whose file name holds text in place of what the folder holds.
@@ -37,7 +39,7 @@ func fuzzCases(f *testing.F) (fstest.MapFS, []fuzzCase) {
 	mem := fstest.MapFS{}
 	var cases []fuzzCase
 	command := regexp.MustCompile(`^\$ kan (?:lint|eval) (?:-today \S+ )?(\S+) (\S+)\n`)
-	err := filepath.WalkDir("../../cases", func(path string, d fs.DirEntry, err error) error {
+	err := testcases.Walk("../../cases", func(path string, d fs.DirEntry, err error) error {
 		switch {
 		case err != nil:
 			return err

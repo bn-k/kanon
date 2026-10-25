@@ -10,6 +10,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/testcases"
 )
 
 // FuzzParse parses a schema then, when it parses, checks it, as Load does: neither panics, and every diagnostic is
@@ -39,7 +40,7 @@ func FuzzParse(f *testing.F) {
 
 // addFiles adds the text of each file under root whose name ends with ext to the seed corpus.
 func addFiles(f *testing.F, root, ext string) {
-	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	err := testcases.Walk(root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil || d.IsDir() || filepath.Ext(path) != ext {
 			return err
 		}

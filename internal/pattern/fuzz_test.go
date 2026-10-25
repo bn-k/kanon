@@ -13,6 +13,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/bn-k/kanon/internal/names"
+	"github.com/bn-k/kanon/internal/testcases"
 )
 
 // FuzzPattern parses a pattern and matches a line with it. An error is a message at a column of the pattern; a
@@ -79,7 +80,7 @@ var readsRe = regexp.MustCompile(`reads(?: [a-z]+)? "((?:[^"\\\n]|\\.)*)"`)
 // addReads adds the reads patterns of the schemas under root to the seed corpus, each with the list items of the
 // documents of its folder.
 func addReads(f *testing.F, root string) {
-	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	err := testcases.Walk(root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil || d.IsDir() || filepath.Ext(path) != ".kanonarch" {
 			return err
 		}

@@ -10,6 +10,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/bn-k/kanon/internal/diag"
+	"github.com/bn-k/kanon/internal/testcases"
 )
 
 // FuzzParse parses a document: it doesn't panic, every diagnostic is a message at a place of the text, and every
@@ -62,7 +63,7 @@ func within(pos diag.Pos, lines []string) bool {
 // addFiles adds the text of each file under root whose name ends with ext to the seed corpus. The Northwind sample is
 // left out: its thousand documents are of the same few shapes.
 func addFiles(f *testing.F, root, ext string) {
-	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	err := testcases.Walk(root, func(path string, d fs.DirEntry, err error) error {
 		switch {
 		case err != nil:
 			return err

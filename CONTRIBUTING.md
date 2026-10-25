@@ -52,7 +52,8 @@ with `benchstat $TMPDIR/old.txt $TMPDIR/new.txt` (`go install golang.org/x/perf/
 dependency), or line by line. To see where the time goes, add `-cpuprofile $TMPDIR/cpu.out` or
 `-memprofile $TMPDIR/mem.out` to the run of a single package, then read it with `go tool pprof -top $TMPDIR/cpu.out`.
 
-**Fuzzing.** The parsers and the linter have fuzz targets, seeded from the files of `cases/`: `FuzzParse` in
+**Fuzzing.** The parsers and the linter have fuzz targets, seeded from the files of `cases/` but the folders
+`.gitignore` names there, which may hold data that must stay local: `FuzzParse` in
 `internal/schema`, `internal/doc` and `internal/value`, `FuzzPattern` in `internal/pattern`, `FuzzLint` (a fuzzed
 document) and `FuzzLintSchema` (a fuzzed schema) in `internal/lint`. `go test ./...` runs their seeds only; to fuzz
 one target, name it and its package:
@@ -112,6 +113,7 @@ and rebuild the extension from Zed's extensions page.
 | `internal/value` | literals: numbers, money, percentages, quantities, dates and times, durations, versions |
 | `internal/names` | slugs, the folding of a heading to a name, and "did you mean" suggestions |
 | `internal/diag` | diagnostics |
+| `internal/testcases` | the walk of `cases/` for the tests and the fuzz seeds, without the folders `.gitignore` names |
 
 ## Releases
 
