@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Actions are pinned to a commit, since a tag can be moved; Dependabot keeps the pins up to date.
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
       - run: go test ./...
@@ -24,7 +24,7 @@ jobs:
           v="${GITHUB_REF_NAME#v}"
           awk -v v="[$v]" '/^## / { p = index($0, v) > 0; next } /^\[/ { next } p' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
           grep -q . "$RUNNER_TEMP/notes.md" || { echo "CHANGELOG.md has no section for $v"; exit 1; }
-      - uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a # v6.4.0
+      - uses: goreleaser/goreleaser-action@a4f02ab5355a589de60d917a659ce617ed19b3de # v7.3.0
         with:
           version: "~> v2"
           args: release --clean --release-notes ${{ runner.temp }}/notes.md
