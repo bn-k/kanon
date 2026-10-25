@@ -1,0 +1,26 @@
+// Working material: a bakery, its revenues, its head office and its cafes, with headings written close to the
+// names of the fields they stand for.
+
+schema Company {
+  name:        Text @heading
+  founded:     Int
+  revenues:    [Revenue]
+  head-office: Office
+  cafes:       [Cafe]
+}
+
+schema Revenue {
+  year:   Int
+  amount: Money
+}
+
+schema Office {
+  address:  Text
+  premises: Prose
+}
+
+schema Cafe {
+  name:          Text @heading
+  seats:         Int
+  opening-hours: [Text]
+}

@@ -140,7 +140,9 @@ func (l *linter) stray(b doc.Block, o *object) {
 }
 
 // heading binds a heading under o: the field it names, or else an entry of o's @sections. A heading names a field
-// when its text, folded, is the field's name: "Security Deposit" names security-deposit.
+// when its text, folded, is the field's name: "Security Deposit" names security-deposit. A heading close to a
+// field's name, "Revenue" for revenues, is reported and counts as that field written, as a misspelled key does;
+// what it holds is not read.
 func (l *linter) heading(c *doc.Section, o *object) {
 	h := c.Heading
 	slug := names.Slugify(h.Text)
@@ -159,6 +161,7 @@ func (l *linter) heading(c *doc.Section, o *object) {
 	msg := fmt.Sprintf("unknown heading \"%s\"", h.Text)
 	if c := names.Closest(slug, o.schema.FieldNames()); c != "" {
 		msg += fmt.Sprintf("; did you mean `%s`?", c)
+		reported(o, o.schema.Field(c))
 	} else if hs := headings(o); len(hs) > 0 {
 		msg += fmt.Sprintf("; `%s` takes %s", o.schema.Name, strings.Join(hs, ", "))
 	}

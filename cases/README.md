@@ -21,7 +21,7 @@ companies are fictional, and their content is English, except data published by 
 | `northwind-query/`, `northwind-query-join/` | `kan sql -q` over Northwind: a revenue per customer read from a file, a join through a link column |
 | `public-holidays/` | an array as a CSV file: the bank holidays of England and Wales, GOV.UK's open data |
 | `write-dependent/` | `kan write -n` refusing a reading list whose new text breaks the review that links it |
-| `errors-*/` | the same schemas with mistakes, and what `kan lint` says about them; `errors-eval/` and `errors-schema/`, mistakes in computations, when a document is evaluated and when its schema is checked; `errors-northwind-query*/`, mistakes in a query |
+| `errors-*/` | the same schemas with mistakes, and what `kan lint` says about them; `errors-eval/` and `errors-schema/`, mistakes in computations, when a document is evaluated and when its schema is checked; `errors-northwind-query*/`, mistakes in a query; `errors-heading-close/`, headings a letter off a field's name, each reported once as the field it stands for, and one far from every name, reported with the field it leaves out |
 
 The data of a case keeps its own licence, given in its `source/README.md`.
 

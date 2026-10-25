@@ -1,0 +1,8 @@
+$ kan lint schema.kanonarch harbour-lane-bakery.kan
+harbour-lane-bakery.kan:9:4: error: unknown heading "Revenue"; did you mean `revenues`?
+harbour-lane-bakery.kan:20:5: error: unknown heading "Premisses"; did you mean `premises`?
+harbour-lane-bakery.kan:30:6: error: unknown heading "Opening hour"; did you mean `opening-hours`?
+harbour-lane-bakery.kan:35:1: error: `Cafe` needs `opening-hours`; write it under #### Opening hours
+harbour-lane-bakery.kan:39:6: error: unknown heading "When we open"; `Cafe` takes #### Opening hours
+5 errors
+[exit 1]

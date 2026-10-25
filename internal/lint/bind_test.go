@@ -81,6 +81,27 @@ func TestHeadings(t *testing.T) {
 			want:   []string{`doc.kan:6:4: error: unknown heading "Misc"`},
 		},
 		{
+			name:   "a heading close to a required field counts as it written, and what it holds is not read",
+			schema: chapters,
+			doc:    "---\ntype: Book\n---\n# Hi\n\n## Chapter one {#one}\n\n### Step\n\n- x\n",
+			want:   []string{`doc.kan:8:5: error: unknown heading "Step"; did you mean ` + "`steps`?"},
+		},
+		{
+			name:   "a heading close to a field, then the right one",
+			schema: chapters,
+			doc:    "---\ntype: Book\n---\n# Hi\n\n## Chapter one {#one}\n\n### Step\n\n### Steps\n\n- 1\n",
+			want:   []string{`doc.kan:8:5: error: unknown heading "Step"; did you mean ` + "`steps`?"},
+		},
+		{
+			name:   "a heading far from every field leaves the field missing",
+			schema: chapters,
+			doc:    "---\ntype: Book\n---\n# Hi\n\n## Chapter one {#one}\n\n### How to\n\n- 1\n",
+			want: []string{
+				"doc.kan:6:1: error: `Chapter` needs `steps`; write it under ### Steps",
+				"doc.kan:8:5: error: unknown heading \"How to\"; `Chapter` takes ### Steps",
+			},
+		},
+		{
 			name:   "an id on a heading that is not an object",
 			schema: note,
 			doc:    "---\ntype: Note\n---\n# Hi\n\n## Body {#c}\n\nSome text.\n",
@@ -94,6 +115,19 @@ func TestHeadings(t *testing.T) {
 		},
 	})
 }
+
+// chapters holds its chapters as @sections: a heading in a chapter names a field of the chapter, or nothing.
+const chapters = `
+schema Book {
+  title:    Text @heading
+  chapters: [Chapter] @sections
+}
+
+schema Chapter {
+  title: Text @heading
+  steps: [Int]
+}
+`
 
 const list = `
 schema List {

@@ -1,0 +1,41 @@
+---
+type: Company
+---
+
+# Harbour Lane Bakery
+
+founded: 2011
+
+## Revenue
+
+| id | year | amount |
+|---|---|---|
+| fy-2024 | 2024 | 412,000.00 £ |
+| fy-2025 | 2025 | 455 000.00 GBP |
+
+## Head Office {#mill-yard}
+
+address: 3 Mill Yard, Larkhaven
+
+### Premisses
+
+A former flour mill, with the bakehouse on the ground floor and the offices above.
+
+## Cafés
+
+### Quayside {#quayside}
+
+seats: 40
+
+#### Opening hour
+
+- Monday to Friday, 7:00 to 17:00
+- Saturday, 8:00 to 14:00
+
+### Market Hall {#market-hall}
+
+seats: 24
+
+#### When we open
+
+- Every day, 8:00 to 15:00
