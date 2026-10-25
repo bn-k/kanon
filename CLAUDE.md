@@ -34,5 +34,6 @@ Diagnostics are written for someone who edits documents, not code:
 
 - lowercase, no trailing period; names in backticks, written values in double quotes;
 - say what to write: `write 650.00 EUR, not "650,00 €"`, and `did you mean …?` when a name is close;
-- one mistake, one message: a misspelled key that plainly stands for a field also counts as that field written;
+- one mistake, one message: a misspelled key, heading, table header or folder that plainly stands for a field also
+  counts as that field written;
 - build a message once and pass it as `Errorf(pos, "%s", msg)`.
