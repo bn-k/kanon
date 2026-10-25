@@ -40,6 +40,18 @@ it exits with another code than 0. `go test ./internal/cli` runs every case. `go
 rewrites the expected outputs, only after a deliberate change of output, and the diff is read. `cases/README.md`
 lists the cases.
 
+**Benchmarks** measure lint, eval, the SQL export and the two parsers; lint and eval also on a generated folder of
+1 000 and 10 000 documents, to show how they grow. They run only with `-bench`, never with `go test ./...`:
+
+```
+$ go test -run '^$' -bench . -benchmem -count 5 ./internal/... > $TMPDIR/new.txt
+```
+
+To compare two runs, save each to a file outside the repository, one before the change and one after, and read them
+with `benchstat $TMPDIR/old.txt $TMPDIR/new.txt` (`go install golang.org/x/perf/cmd/benchstat@latest`; it is not a
+dependency), or line by line. To see where the time goes, add `-cpuprofile $TMPDIR/cpu.out` or
+`-memprofile $TMPDIR/mem.out` to the run of a single package, then read it with `go tool pprof -top $TMPDIR/cpu.out`.
+
 Everything is English, the content of cases and test fixtures included, with fictional people and places. Only
 third-party data stays as published, with its source and licence.
 
