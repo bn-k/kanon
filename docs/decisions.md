@@ -106,6 +106,12 @@ as it stands is in `docs/language.md`, the design of data and SQL in `docs/data.
 - **A written computed field that differs from its computation is an error** (2026-10-22).
 - **`today` comes from the `-today YYYY-MM-DD` flag**, or the local date without it; a case that depends on the date
   writes the flag in its command (2026-10-22).
+- **A date ordered against a date and time stands for the start of its day**, 00:00, as SQL compares a date with a
+  timestamp (2026-10-25). A schedule of meetings or deadlines is what people check against `today`, a date:
+  `m.at >= today` was refused, and now holds for a meeting held earlier today. Only `<`, `<=`, `>` and `>=` mix
+  them; `==` and `!=` between a day and an instant stay errors, since one is almost never equal to the other and
+  the test is a trap: the message says to compare with `>=` and `<`, or to compare two dates. Against a date and
+  time with a zone, the day starts at 00:00 UTC, as a date and time without a zone already compares as UTC.
 
 ## Editors
 

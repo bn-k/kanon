@@ -117,7 +117,9 @@ one is found when the schema is checked, before any document is read: ``cannot a
   units of one dimension (`500 g + 1 kg` is `1 500 g`), and a unit a schema declares converts to none. A sum of
   nothing is a zero without a currency or a unit, which adds to and compares with any amount; a percentage
   applies to what it multiplies. A date moves by a duration (`start + 3 months`); a date and time moves by whole
-  months only.
+  months only. A date compared with a date and time by `<`, `<=`, `>` or `>=` stands for the start of its day, as
+  in SQL: `at >= today` holds for any time today, and `==` between them is an error. Against a date and time with
+  a zone, the day starts at 00:00 UTC, as a date and time without a zone is read as UTC against one with a zone.
 - `if c then a else b`, `x ?? y` (`y` when `x` is none), `o?.f` (none when `o` is), `o with { f: v }` (a copy of
   `o`), `and`, `or`, `not` and comparisons.
 - Builtins: `today`, `none`, `yes`, `no`; `sum(xs)` and `sum(xs, x => …)`, `count(xs)` and
