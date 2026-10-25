@@ -17,6 +17,7 @@ companies are fictional, and their content is English, except data published by 
 | `car/` | an array as a folder: one file per entry |
 | `ordered-folder/` | a folder whose order is given by an order list, and links from the schema's folder (`[[/training#dawson]]`) |
 | `listing/` | links and lists of links to other documents, inverses, photos as a folder, a PDF, code, a date and time |
+| `meetings/` | dates and times ordered against `today`, a date that stands for the start of its day: a meeting held yesterday fails a rule |
 | `northwind/` | the Northwind database, as `kan import` writes it from `create.sql` |
 | `northwind-query/`, `northwind-query-join/` | `kan sql -q` over Northwind: a revenue per customer read from a file, a join through a link column |
 | `public-holidays/` | an array as a CSV file: the bank holidays of England and Wales, GOV.UK's open data |

@@ -1,0 +1,26 @@
+---
+type: Schedule
+---
+
+# Design team
+
+## Kick-off {#kick-off}
+
+at: 2026-10-21 16:00
+room: Blue room
+
+## Weekly review {#weekly-review}
+
+at: 2026-10-22 09:30
+room: Blue room
+within-a-week: yes
+
+## Client demo {#client-demo}
+
+at: 2026-10-27 14:00 UTC
+
+## Quarterly planning {#quarterly-planning}
+
+at: 2026-11-03 10:00
+room: Library
+within-a-week: no

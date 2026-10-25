@@ -1,0 +1,20 @@
+// Working material: the meetings of a team, fictional. A meeting has a date and time; today is a date, which
+// stands for the start of its day when the two are compared.
+
+schema Meeting {
+  title: Text @heading
+  at:    DateTime
+  room:  Text?
+
+  within-a-week: Bool = at < today + 7 days
+}
+
+schema Schedule {
+  team:     Text @heading
+  meetings: [Meeting] @sections
+}
+
+// A meeting that is over leaves the schedule for its minutes; one held earlier today stays until tomorrow.
+rule not-in-the-past(m: Meeting) -> Bool
+  reads en "{m.title} is not in the past"
+  = m.at >= today

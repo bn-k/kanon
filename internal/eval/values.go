@@ -276,7 +276,9 @@ func zero(k value.Kind) value.Value {
 	return value.Value{Kind: k, Num: new(big.Rat)}
 }
 
-// compare returns -1, 0 or 1 as x is less than, equal to or more than y, whose kinds have an order.
+// compare returns -1, 0 or 1 as x is less than, equal to or more than y, whose kinds have an order. A date is held
+// at 00:00 UTC and a date and time without a zone in UTC, so a date compares with a date and time as the start of
+// its day, and as 00:00 UTC with one that has a zone.
 func compare(x, y value.Value) int {
 	switch {
 	case x.Kind == value.Version || y.Kind == value.Version:

@@ -63,17 +63,17 @@ func percentOf(k value.Kind) (value.Kind, bool) {
 }
 
 // Ordered reports whether a value of kind x compares with one of kind y by < and >. A version compares with a
-// number: 580.95 < 595.
+// number: 580.95 < 595; a date with a date and time, as the start of its day: at >= today.
 func Ordered(x, y value.Kind) bool {
 	switch {
-	case isNum(x) && isNum(y):
+	case isNum(x) && isNum(y), isTime(x) && isTime(y):
 		return true
 	case x == value.Version:
 		return y == value.Version || isNum(y)
 	case y == value.Version:
 		return isNum(x)
 	}
-	return x == y && (isScaled(x) || x == value.Date || x == value.DateTime || x == value.Text)
+	return x == y && (isScaled(x) || x == value.Text)
 }
 
 func isNum(k value.Kind) bool { return k == value.Int || k == value.Number }

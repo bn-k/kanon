@@ -1,0 +1,4 @@
+$ kan lint -today 2026-10-22 schema.kanonarch meetings.kan
+meetings.kan:7:1: error: `not-in-the-past` fails: "Kick-off is not in the past"; 2026-10-21 16:00 is before 2026-10-22
+1 error
+[exit 1]

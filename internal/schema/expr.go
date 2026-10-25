@@ -186,7 +186,13 @@ func (c *checker) binary(e *Binary, sc *scope) *Type {
 	single := x.Native && y.Native && !x.Array && !y.Array
 	switch e.Op {
 	case "==", "!=":
-		if _, ok := join(x, y); !ok && x != noneType && y != noneType && !(single && Ordered(x.Kind, y.Kind)) {
+		// A date is a day, a date and time an instant: one is almost never equal to the other.
+		_, ok := join(x, y)
+		switch {
+		case ok || x == noneType || y == noneType:
+		case single && isTime(x.Kind) && isTime(y.Kind):
+			c.errorf(e.Pos, "cannot test a `%s` and a `%s` for equality: compare with >= and <, or compare two dates", x, y)
+		case !(single && Ordered(x.Kind, y.Kind)):
 			c.errorf(e.Pos, "cannot compare `%s` with `%s`", x, y)
 		}
 		return boolean

@@ -195,6 +195,41 @@ schema T {
 			},
 		},
 		{
+			// A date stands for the start of its day, a date and time without a zone at 00:00, so a date and time with
+			// a zone compares with it as with 00:00 UTC.
+			name: "dates against dates and times",
+			schema: `
+schema T {
+  day:      Date
+  at:       DateTime
+  midnight: DateTime
+  utc:      DateTime
+  paris:    DateTime
+
+  c1: Bool = at >= day and at < day + 1 day
+  c2: Bool = day <= at and day + 1 day > at
+  c3: Bool = at >= today and at < today + 1 day
+  c4: Bool = midnight >= day and midnight <= day
+  c5: Bool = midnight > day or midnight < day
+  c6: Bool = utc >= day and utc <= day
+  c7: Bool = paris < day
+  c8: Bool = max(day, today) < at
+}
+`,
+			doc: head("T") + "day: 2026-10-22\nat: 2026-10-22 09:00\nmidnight: 2026-10-22 00:00\n" +
+				"utc: 2026-10-22 00:00 UTC\nparis: 2026-10-22 01:00 +02:00\n",
+			want: []string{
+				"doc.kan: c1 = yes",
+				"doc.kan: c2 = yes",
+				"doc.kan: c3 = yes",
+				"doc.kan: c4 = yes",
+				"doc.kan: c5 = no",
+				"doc.kan: c6 = yes",
+				"doc.kan: c7 = yes",
+				"doc.kan: c8 = yes",
+			},
+		},
+		{
 			name: "sums of nothing",
 			schema: `
 schema T {
@@ -505,6 +540,7 @@ rule line(l: Line) -> Bool
 schema T {
   a: Int
   j: Date
+  k: DateTime
   v: Version
 }
 
@@ -518,10 +554,12 @@ rule jlt(t: T) -> Bool = t.j < t.j
 rule jgt(t: T) -> Bool = t.j > t.j
 rule jge(t: T) -> Bool = t.j >= t.j + 1 day
 rule jle(t: T) -> Bool = t.j <= t.j - 1 day
+rule kge(t: T) -> Bool = t.k >= today
+rule klt(t: T) -> Bool = t.j < t.k
 rule vge(t: T) -> Bool = t.v >= 2003
 rule vle(t: T) -> Bool = 2 003.1 <= t.v
 `,
-			doc: head("T") + "a: 2\nj: 2026-10-22\nv: 1907\n",
+			doc: head("T") + "a: 2\nj: 2026-10-22\nk: 2026-10-21 23:30\nv: 1907\n",
 			want: []string{
 				"doc.kan: error: `lt` fails; 2 is not less than 1",
 				"doc.kan: error: `le` fails; 2 is more than 1",
@@ -533,6 +571,8 @@ rule vle(t: T) -> Bool = 2 003.1 <= t.v
 				"doc.kan: error: `jgt` fails; 2026-10-22 is not after 2026-10-22",
 				"doc.kan: error: `jge` fails; 2026-10-22 is before 2026-10-23",
 				"doc.kan: error: `jle` fails; 2026-10-22 is after 2026-10-21",
+				"doc.kan: error: `kge` fails; 2026-10-21 23:30 is before 2026-10-22",
+				"doc.kan: error: `klt` fails; 2026-10-22 is not before 2026-10-21 23:30",
 				"doc.kan: error: `vge` fails; 1907 is less than 2003",
 				"doc.kan: error: `vle` fails; 2003.1 is more than 1907",
 			},
