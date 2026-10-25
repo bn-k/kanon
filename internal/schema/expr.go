@@ -191,7 +191,7 @@ func (c *checker) binary(e *Binary, sc *scope) *Type {
 		switch {
 		case ok || x == noneType || y == noneType:
 		case single && isTime(x.Kind) && isTime(y.Kind):
-			c.errorf(e.Pos, "cannot test a `%s` and a `%s` for equality: compare with >= and <, or compare two dates", x, y)
+			c.errorf(e.Pos, "cannot test a `%s` and a `%s` for equality: compare with `>=` and `<`, or compare two dates", x, y)
 		case !(single && Ordered(x.Kind, y.Kind)):
 			c.errorf(e.Pos, "cannot compare `%s` with `%s`", x, y)
 		}

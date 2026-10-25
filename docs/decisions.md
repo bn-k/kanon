@@ -209,6 +209,9 @@ Obsidian and Markdoc for the editing.
   says to give the section another title.
 - **A single sub-object as a file**: `hatchback/logbook.kan` would be named after a field, not an id. Allowed, or
   arrays only?
+- **A floating date and time against one with a zone**: `2026-10-22 14:30` is a local time, not UTC (rule 19), yet
+  it compares with `2026-10-22 14:30 UTC` as if it were UTC, and a date against a zoned time starts at 00:00 UTC.
+  Refusing the comparison, or taking the zone from the command line as `-today` gives the date, would be truer.
 - **Where schemas live**: the command line takes the schema as an argument; the language server finds it in the
   nearest folder that holds one (see Editors). Should `kan lint` find it the same way, or is an explicit `use` or a
   project file better?

@@ -10,7 +10,7 @@ schemas, and its entry says how.
 
 - A `DateTime` is ordered against a `Date`, which stands for the start of its day, as in SQL: `m.at >= today` holds
   for a meeting held earlier today (`cases/meetings`). `==` and `!=` between them stay errors, with a message that
-  says to compare with >= and <, or to compare two dates.
+  says to compare with `>=` and `<`, or to compare two dates.
 
 ### Changed
 
