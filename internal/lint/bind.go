@@ -482,7 +482,8 @@ func (l *linter) grid(g grid, in *schema.Field, parent *object, level int) {
 	cols := make([]*schema.Field, len(g.header))
 	idCol := -1
 	seen := map[string]bool{}
-	unread := false // a header cell can't be read: it may stand for any column, so none is reported missing
+	meant := map[string]bool{} // the fields a misspelled header stands for: reported once, not again as missing columns
+	unread := false            // a header cell can't be read: it may stand for any column, so none is reported missing
 	for i, h := range g.header {
 		f := s.Field(h.Text)
 		if f != nil && !g.broken[h.Pos] {
@@ -498,10 +499,10 @@ func (l *linter) grid(g grid, in *schema.Field, parent *object, level int) {
 		case h.Text == "id":
 			idCol = i
 		case f == nil:
-			msg, meant := unknownField(h.Text, s)
+			msg, m := unknownField(h.Text, s)
 			l.diags.Errorf(h.Pos, "%s", msg)
-			if meant != nil {
-				seen[meant.Name] = true // reported once, not again as a missing column
+			if m != nil {
+				meant[m.Name] = true
 			}
 		case f.Inverse != "":
 			l.diags.Errorf(h.Pos, "%s", inverse(f))
@@ -524,7 +525,7 @@ func (l *linter) grid(g grid, in *schema.Field, parent *object, level int) {
 		}
 		absent = append(absent, f)
 		switch {
-		case seen[f.Name] || !f.Required():
+		case seen[f.Name] || meant[f.Name] || !f.Required():
 		case f.Type.Array || owned(f.Type):
 			l.diags.Errorf(g.pos, "a %s can't hold `%s`, which `%s` needs: write one section per entry", g.what, f.Name, s.Name)
 		case unread:
@@ -762,7 +763,7 @@ func split(s string, pos diag.Pos) []piece {
 }
 
 // unknownField is the message for a key, a column or a folder that names no field of s. When the name plainly
-// stands for a field, its name with accents or capitals, meant is that field.
+// stands for a field, its name with accents or capitals or close to it, meant is that field.
 func unknownField(name string, s *schema.Schema) (msg string, meant *schema.Field) {
 	if name == "id" {
 		return "an object's id is written in its heading ({#id}) or its file name, not as a key", nil
@@ -773,8 +774,9 @@ func unknownField(name string, s *schema.Schema) (msg string, meant *schema.Fiel
 	msg = fmt.Sprintf("`%s` has no field `%s`", s.Name, name)
 	if c := names.Closest(name, s.FieldNames()); c != "" {
 		msg += fmt.Sprintf("; did you mean `%s`?", c)
+		meant = s.Field(c)
 	}
-	return msg, nil
+	return msg, meant
 }
 
 // value checks a value written for the field f of o against its type, and adds it to o's model.
@@ -1193,8 +1195,11 @@ func (l *linter) folder(o *object, dir string) {
 				l.diags.Errorf(pos, "this document belongs to no list: %s", lists(o, dir, name))
 			}
 		case f == nil:
-			msg, _ := unknownField(name, o.schema)
+			msg, meant := unknownField(name, o.schema)
 			l.diags.Errorf(pos, "%s", msg)
+			if meant != nil {
+				reported(o, meant)
+			}
 		case f.Inverse != "":
 			l.diags.Errorf(pos, "%s", inverse(f))
 		case !f.Type.Array || !owned(f.Type) && !fileKind(f.Type):

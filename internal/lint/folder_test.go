@@ -62,6 +62,13 @@ func TestFolders(t *testing.T) {
 			},
 		},
 		{
+			name:   "a folder close to a required list counts as it written",
+			schema: "schema Journal {\n  title: Text @heading\n  entries: [Entry]\n}\n\nschema Entry {\n  title: Text @heading\n}\n",
+			doc:    "---\ntype: Journal\n---\n# Journal\n",
+			more:   files{"doc/entrie/one.kan": "# One\n"},
+			want:   []string{"doc/entrie: error: `Journal` has no field `entrie`; did you mean `entries`?"},
+		},
+		{
 			name:   "a folder for a field that is not a list of objects",
 			schema: notebook,
 			doc:    notebookDoc,

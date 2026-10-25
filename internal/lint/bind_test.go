@@ -612,6 +612,24 @@ func TestNamesAndValues(t *testing.T) {
 			},
 		},
 		{
+			name:   "a key close to a required field counts as it written",
+			schema: menu,
+			doc:    head + "entres: 2\n",
+			want:   []string{"doc.kan:6:1: error: `Menu` has no field `entres`; did you mean `entrees`?"},
+		},
+		{
+			name:   "a column close to a required field counts as it",
+			schema: menu,
+			doc:    head + "entrees: 2\n\n## Lines\n\n| id | name | entres |\n|---|---|---|\n| a | Soup | 2 |\n",
+			want:   []string{"doc.kan:10:15: error: `Line` has no field `entres`; did you mean `entrees`?"},
+		},
+		{
+			name:   "a misspelled column, then the right one",
+			schema: menu,
+			doc:    head + "entrees: 2\n\n## Lines\n\n| id | name | entres | entrees |\n|---|---|---|---|\n| a | Soup | 2 | 2 |\n",
+			want:   []string{"doc.kan:10:15: error: `Line` has no field `entres`; did you mean `entrees`?"},
+		},
+		{
 			name:   "a title as a column",
 			schema: menu,
 			doc:    head + "entrees: 2\n\n## Lines\n\n| id | name | Entrées |\n|---|---|---|\n| a | Soup | 2 |\n",

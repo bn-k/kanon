@@ -13,8 +13,9 @@ schemas, and its entry says how.
   from GOV.UK), and the other cases keep their folder with English documents. Northwind and the workbooks of
   `internal/sheet/testdata` stay as published.
 - A table header or key written with capitals is reported as `names are lowercase ASCII`, as one with accents is.
-- A heading close to a field's name (`## Revenue` for `revenues`) is reported once, with its `did you mean`, and
-  counts as that field written: the field is no longer reported missing as well.
+- A heading, a key, a table header or a folder close to a field's name (`## Revenue` for `revenues`, `foundd:` for
+  `founded`) is reported once, with its `did you mean`, and counts as that field written: the field is no longer
+  reported missing as well.
 
 ### Security
 
