@@ -1,0 +1,10 @@
+$ kan lint ../suppliers/schema.kanonarch register.kan
+register/suppliers/harbour-cables.kan:3:8: error: "iso-900" is not a `Norm`; did you mean iso-9001?
+register/suppliers/harbour-cables.kan:4:21: error: `audits` has an empty item: write a value before this comma, or remove it
+register/suppliers/harbour-cables.kan:5:1: error: `sites` is a list of `Text`, and a text may hold a comma: write it under its heading, ## Sites
+register/suppliers/linden-metalworks.kan:3:27: error: `norms` ends with a comma: write a value after it, or remove it
+register/suppliers/linden-metalworks.kan:4:9: error: write a date as YYYY-MM-DD (2026-10-22), not "20/05/2026"
+register/suppliers/linden-metalworks.kan:6:4: error: `norms` is already written, at line 3
+register/suppliers/oakridge-plastics.kan:3:18: error: write iso-14001, not "ISO 14001"
+7 errors
+[exit 1]

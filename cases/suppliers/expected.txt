@@ -1,0 +1,6 @@
+$ kan eval schema.kanonarch register.kan
+register/suppliers/harbour-cables.kan: norm-count = 2
+register/suppliers/harbour-cables.kan: last-audit = 2026-03-10
+register/suppliers/linden-metalworks.kan: norm-count = 3
+register/suppliers/linden-metalworks.kan: last-audit = 2026-05-20
+register/suppliers/oakridge-plastics.kan: norm-count = 1

@@ -1,0 +1,6 @@
+$ kan sql -q "SELECT s.name, max(a.value) AS last_audit FROM supplier s JOIN supplier_norms n ON n.supplier_id = s.id LEFT JOIN supplier_audits a ON a.supplier_id = s.id WHERE n.value = 'iso-14001' GROUP BY s.id ORDER BY s.name" ../suppliers/schema.kanonarch ../suppliers/register.kan
+name               last_audit
+-----------------  ----------
+Harbour Cables     2026-03-10
+Linden Metalworks  2026-05-20
+2 rows

@@ -66,6 +66,16 @@ func TestRelations(t *testing.T) {
 			},
 		},
 		{
+			name:   "a key line of links with an empty item and a trailing comma",
+			schema: listing,
+			doc:    listingDoc + "contacts: [[agents/claire]],, [[agents/paul]],\n",
+			more:   agents,
+			want: []string{
+				"doc.kan:8:29: error: `contacts` has an empty item: write a link before this comma, or remove it",
+				"doc.kan:8:46: error: `contacts` ends with a comma: write a link after it, or remove it",
+			},
+		},
+		{
 			name:   "a link written as an object",
 			schema: listing,
 			doc:    "---\ntype: Listing\n---\n# House\n\nprice: 250 000.00 EUR\n\n## Agent {#claire}\n\nname: Claire\n",

@@ -716,12 +716,12 @@ func (l *linter) keyLine(k *doc.KeyLine, o *object) {
 		l.mark(o, f, k.Pos)
 		target, _ := linkValue(k.Value)
 		l.spreadsheet(target, k.ValuePos, f, o, o.level+2)
-	case f.Type.Array && !f.Type.Link && !fileKind(f.Type):
-		msg := fmt.Sprintf("`%s` is a list: write it under its heading, %s", f.Name, o.under(f))
-		if owned(f.Type) {
-			msg += fmt.Sprintf(", or link to a spreadsheet, as in %s: [[%s.csv]]", f.Name, f.Name)
-		}
-		l.diags.Errorf(k.Pos, "%s", msg)
+	case f.Type.Array && owned(f.Type):
+		l.diags.Errorf(k.Pos, "`%s` is a list: write it under its heading, %s, or link to a spreadsheet, as in %s: [[%s.csv]]",
+			f.Name, o.under(f), f.Name, f.Name)
+		reported(o, f)
+	case f.Type.Array && textual(f.Type):
+		l.diags.Errorf(k.Pos, "`%s` is %s, and a text may hold a comma: write it under its heading, %s", f.Name, kind(f.Type), o.under(f))
 		reported(o, f)
 	case owned(f.Type):
 		l.diags.Errorf(k.Pos, "`%s` holds its own `%s`, not a link: write it under %s {#id}", f.Name, f.Type.Name, o.under(f))
@@ -731,13 +731,41 @@ func (l *linter) keyLine(k *doc.KeyLine, o *object) {
 		l.diags.Errorf(k.Pos, "`%s` has no value; write one, as in %s: %s", f.Name, f.Name, example(f.Type))
 	case f.Type.Array:
 		l.mark(o, f, k.Pos)
-		for _, v := range split(k.Value, k.ValuePos) {
-			l.value(f, v.text, v.pos, o)
+		item := "a value"
+		if f.Type.Link || fileKind(f.Type) {
+			item = "a link"
+		}
+		ps := split(k.Value, k.ValuePos, numeric(f.Type))
+		for i, p := range ps {
+			switch {
+			case p.text != "" || len(ps) == 1:
+				l.value(f, p.text, p.pos, o)
+			case i < len(ps)-1:
+				l.diags.Errorf(p.pos, "`%s` has an empty item: write %s before this comma, or remove it", f.Name, item)
+			case ps[i-1].text != "": // else its comma is the one already reported
+				l.diags.Errorf(p.pos, "`%s` ends with a comma: write %s after it, or remove it", f.Name, item)
+			}
 		}
 	default:
 		l.mark(o, f, k.Pos)
 		l.value(f, k.Value, k.ValuePos, o)
 	}
+}
+
+// textual reports whether a value of type t is text, which may hold a comma: an array of it is never written on a
+// key line.
+func textual(t *schema.Type) bool {
+	return t.Native && (t.Kind == value.Text || t.Kind == value.Prose)
+}
+
+// numeric reports whether a value of type t is a number, where a comma between two digits is a decimal comma or a
+// thousands separator, not one between two items.
+func numeric(t *schema.Type) bool {
+	switch t.Kind {
+	case value.Int, value.Number, value.Money, value.Percent, value.Quantity, value.Duration:
+		return t.Native
+	}
+	return false
 }
 
 // piece is one value of a key line that holds several, and where it starts.
@@ -746,17 +774,23 @@ type piece struct {
 	pos  diag.Pos
 }
 
-// split cuts the value of a key line at the commas between its links: [[a]], [[b]].
-func split(s string, pos diag.Pos) []piece {
+// split cuts the value of a key line at the commas between its items: iso-9001, iso-14001 or [[a]], [[b]]. Among
+// numbers, a comma between two digits stays in its item, which is then told to write 2.5 %, not "2,5 %". An empty
+// item is where the comma after it is, or the last one when nothing follows it.
+func split(s string, pos diag.Pos, numbers bool) []piece {
 	var ps []piece
 	rs := []rune(s)
 	start, depth := 0, 0
 	for i := 0; i <= len(rs); i++ {
+		decimal := numbers && i > 0 && i+1 < len(rs) && digit(rs[i-1]) && digit(rs[i+1])
 		switch {
-		case i == len(rs) || rs[i] == ',' && depth == 0:
+		case i == len(rs) || rs[i] == ',' && depth == 0 && !decimal:
 			text := string(rs[start:i])
-			lead := len([]rune(text)) - len([]rune(strings.TrimLeft(text, " ")))
-			ps = append(ps, piece{strings.TrimSpace(text), diag.Pos{File: pos.File, Line: pos.Line, Col: pos.Col + start + lead}})
+			col := start + len([]rune(text)) - len([]rune(strings.TrimLeft(text, " ")))
+			if strings.TrimSpace(text) == "" && i == len(rs) && start > 0 {
+				col = start - 1
+			}
+			ps = append(ps, piece{strings.TrimSpace(text), diag.Pos{File: pos.File, Line: pos.Line, Col: pos.Col + col}})
 			start = i + 1
 		case strings.HasPrefix(string(rs[i:]), "[["):
 			depth++
@@ -766,6 +800,8 @@ func split(s string, pos diag.Pos) []piece {
 	}
 	return ps
 }
+
+func digit(r rune) bool { return r >= '0' && r <= '9' }
 
 // unknownField is the message for a key, a column or a folder that names no field of s. When the name plainly
 // stands for a field, its name with accents or capitals or close to it, meant is that field.

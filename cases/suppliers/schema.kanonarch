@@ -1,0 +1,22 @@
+// Working material: the approved suppliers of a workshop, fictional. Norms and audit dates are arrays of values,
+// written on a key line, separated by commas; sites are texts, which may hold a comma, so they are lists.
+
+enum Norm { iso-9001, iso-14001, iso-27001 }
+
+schema Register {
+  title:     Text @heading
+  suppliers: [Supplier]
+}
+
+schema Supplier {
+  name:       Text @heading
+  norms:      [Norm]
+  audits:     [Date]?
+  sites:      [Text]?
+  norm-count: Int = count(norms)
+  last-audit: Date? = max(audits)
+}
+
+rule audited(s: Supplier) -> Bool
+  reads en "{s.name} holds iso-27001, so it has been audited"
+  = count(s.norms, n => n == iso-27001) == 0 or count(s.audits) > 0

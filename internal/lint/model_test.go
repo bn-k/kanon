@@ -261,6 +261,26 @@ func TestModelFolder(t *testing.T) {
 	}
 }
 
+func TestModelSuppliers(t *testing.T) {
+	d, dir := load(t, "suppliers", "register.kan")
+	ss := d.Root.Get("suppliers")
+	if ss == nil || len(ss.Objects) != 3 {
+		t.Fatalf("suppliers = %v", ss)
+	}
+	// Values written on a key line, separated by commas, are the items they would be under a heading.
+	checkModel(t, dumpModel(t, &model.Doc{Root: ss.Objects[0]}, dir), `Supplier harbour-cables register/suppliers/harbour-cables.kan
+  name: "Harbour Cables"
+  norms: "iso-9001" "iso-14001"
+  audits: "2025-03-12" "2026-03-10"
+  sites: "Unit 4, Quarry Lane, Eastbrook" "Dock Road, Saltmere"
+  norm-count: "2"
+  last-audit: "2026-03-10"
+`)
+	if a := ss.Objects[0].Get("audits"); a.Values[1].Kind != value.Date || a.Pos.Line != 4 {
+		t.Errorf("audits = %+v", a)
+	}
+}
+
 func TestModelSheet(t *testing.T) {
 	write(t, files{
 		"schema.kanonarch": readings,

@@ -180,6 +180,86 @@ func TestValues(t *testing.T) {
 	})
 }
 
+const supplier = `
+enum Norm { iso-9001, iso-14001 }
+
+schema Supplier {
+  name:      Text @heading
+  norms:     [Norm]
+  audits:    [Date]?
+  discounts: [Percent]?
+  notes:     [Prose]?
+}
+`
+
+func TestValuesOnAKeyLine(t *testing.T) {
+	head := "---\ntype: Supplier\n---\n# Hi\n\n"
+	runCases(t, []lintCase{
+		{
+			name:   "values separated by commas",
+			schema: supplier,
+			doc:    head + "norms: iso-9001, iso-14001\naudits: 2026-03-10,2026-05-20\n",
+		},
+		{
+			name:   "a wrong item, at its column",
+			schema: supplier,
+			doc:    head + "norms: iso-9001, iso-1400\naudits: 2026-03-10, 10/05/2026\n",
+			want: []string{
+				"doc.kan:6:18: error: \"iso-1400\" is not a `Norm`; did you mean iso-14001?",
+				`doc.kan:7:21: error: write a date as YYYY-MM-DD (2026-10-22), not "10/05/2026"`,
+			},
+		},
+		{
+			name:   "an empty item",
+			schema: supplier,
+			doc:    head + "norms: iso-9001, , iso-14001\n",
+			want:   []string{"doc.kan:6:18: error: `norms` has an empty item: write a value before this comma, or remove it"},
+		},
+		{
+			name:   "a trailing comma",
+			schema: supplier,
+			doc:    head + "norms: iso-9001,\n",
+			want:   []string{"doc.kan:6:16: error: `norms` ends with a comma: write a value after it, or remove it"},
+		},
+		{
+			name:   "an empty item before a trailing comma is one mistake",
+			schema: supplier,
+			doc:    head + "norms: iso-9001, ,\n",
+			want:   []string{"doc.kan:6:18: error: `norms` has an empty item: write a value before this comma, or remove it"},
+		},
+		{
+			name:   "a comma alone",
+			schema: supplier,
+			doc:    head + "norms: ,\n",
+			want:   []string{"doc.kan:6:8: error: `norms` has an empty item: write a value before this comma, or remove it"},
+		},
+		{
+			name:   "a decimal comma is part of its item",
+			schema: supplier,
+			doc:    head + "norms: iso-9001\ndiscounts: 5 %, 2,5 %\n",
+			want:   []string{`doc.kan:7:17: error: write 2.5 %, not "2,5 %"`},
+		},
+		{
+			name:   "a thousands comma is part of its item",
+			schema: list,
+			doc:    "---\ntype: List\n---\n# Hi\n\nsteps: 1,250, 3\n",
+			want:   []string{`doc.kan:6:8: error: write a whole number (4 or 1 250), not "1,250"`},
+		},
+		{
+			name:   "on a key line and under its heading",
+			schema: supplier,
+			doc:    head + "norms: iso-9001\n\n## Norms\n\n- iso-14001\n",
+			want:   []string{"doc.kan:8:4: error: `norms` is already written, at line 6"},
+		},
+		{
+			name:   "prose, which may hold a comma",
+			schema: supplier,
+			doc:    head + "norms: iso-9001\nnotes: a, b\n",
+			want:   []string{"doc.kan:7:1: error: `notes` is a list of `Prose`, and a text may hold a comma: write it under its heading, ## Notes"},
+		},
+	})
+}
+
 const recipe = `
 schema Recipe {
   title:       Text @heading
@@ -427,16 +507,16 @@ func TestKeyLines(t *testing.T) {
 			},
 		},
 		{
-			name:   "a list as a key",
+			name:   "a list of texts as a key",
 			schema: card,
 			doc:    head + "tags: a, b\n",
-			want:   []string{"doc.kan:6:1: error: `tags` is a list: write it under its heading, ## Tags"},
+			want:   []string{"doc.kan:6:1: error: `tags` is a list of `Text`, and a text may hold a comma: write it under its heading, ## Tags"},
 		},
 		{
-			name:   "a required list as a key counts as written",
-			schema: list,
-			doc:    "---\ntype: List\n---\n# Hi\n\nsteps: 1, 2\n",
-			want:   []string{"doc.kan:6:1: error: `steps` is a list: write it under its heading, ## Steps"},
+			name:   "a required list of texts as a key counts as written",
+			schema: "schema List {\n  title: Text @heading\n  steps: [Text]\n}\n",
+			doc:    "---\ntype: List\n---\n# Hi\n\nsteps: one, two\n",
+			want:   []string{"doc.kan:6:1: error: `steps` is a list of `Text`, and a text may hold a comma: write it under its heading, ## Steps"},
 		},
 		{
 			name:   "an id as a key",
@@ -810,7 +890,7 @@ func TestLevels(t *testing.T) {
 			schema: levels,
 			doc:    head + "notes: a, b\n\nSome text.\n",
 			want: []string{
-				"doc.kan:8:1: error: `notes` is a list: write it under its heading, ### Notes",
+				"doc.kan:8:1: error: `notes` is a list of `Text`, and a text may hold a comma: write it under its heading, ### Notes",
 				"doc.kan:10:1: error: this text fills no field; write it under ### Bio",
 			},
 		},

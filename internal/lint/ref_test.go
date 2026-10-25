@@ -131,6 +131,26 @@ schema Doc { lignes: [Ligne] }`,
 	}
 }
 
+func TestRefsOfValuesOnAKeyLine(t *testing.T) {
+	write(t, files{
+		"schema.kanonarch": "enum Norm { iso-9001, iso-14001 }\nschema Supplier { name: Text @heading  norms: [Norm] }",
+		"doc.kan":          "---\ntype: Supplier\n---\n# Harbour Cables\n\nnorms: iso-9001,  iso-14001\n",
+	})
+	r := Run("schema.kanonarch", "doc.kan")
+	check(t, r, nil)
+	var got []string
+	for _, ref := range r.Refs {
+		if ref.Pos.File == "doc.kan" && ref.Decl.Line == 1 {
+			got = append(got, fmt.Sprintf("%v %d %v", ref.Pos, ref.Len, ref.Decl))
+		}
+	}
+	// Each value points to its own declaration, from its own column.
+	want := []string{"doc.kan:6:8 8 schema.kanonarch:1:13", "doc.kan:6:19 9 schema.kanonarch:1:23"}
+	if !slices.Equal(got, want) {
+		t.Errorf("refs to the enum = %q, want %q", got, want)
+	}
+}
+
 func TestRefsOfAnUnreadableSchemaFile(t *testing.T) {
 	write(t, files{
 		"schema.kanonarch": "schema Doc { notes: Prose? }",
