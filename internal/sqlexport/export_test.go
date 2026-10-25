@@ -16,7 +16,7 @@ import (
 )
 
 // doc loads a document that lints without errors.
-func doc(t *testing.T, schemaPath, docPath string) *model.Doc {
+func doc(t testing.TB, schemaPath, docPath string) *model.Doc {
 	t.Helper()
 	d, r := lint.Load(schemaPath, docPath)
 	if d == nil || r.Diags.Count(diag.Error) > 0 {
@@ -26,7 +26,7 @@ func doc(t *testing.T, schemaPath, docPath string) *model.Doc {
 }
 
 // export lays out a document that exports without errors.
-func export(t *testing.T, d *model.Doc) *Export {
+func export(t testing.TB, d *model.Doc) *Export {
 	t.Helper()
 	e, ds := New(d)
 	if len(ds) > 0 {
