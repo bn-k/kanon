@@ -11,6 +11,10 @@ schemas, and its entry says how.
 - A `DateTime` is ordered against a `Date`, which stands for the start of its day, as in SQL: `m.at >= today` holds
   for a meeting held earlier today (`cases/meetings`). `==` and `!=` between them stay errors, with a message that
   says to compare with `>=` and `<`, or to compare two dates.
+- An array of values is written on a key line, separated by commas, when no value of its type holds a comma:
+  `norms: iso-9001, iso-14001`, `audits: 2025-03-12, 2026-03-10`. Each item is checked as on its own key line; an
+  empty item and a trailing comma are reported. An array of `Text` or `Prose` stays a list under its heading, and
+  the message says why. Among numbers, a comma between two digits stays in its item: `1,250` is reported.
 
 ### Changed
 

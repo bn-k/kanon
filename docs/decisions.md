@@ -77,6 +77,13 @@ as it stands is in `docs/language.md`, the design of data and SQL in `docs/data.
 - **Children of a file object go in a sibling folder** named after the object, then the field: `hatchback.kan` +
   `hatchback/services/` (2026-10-22).
 - **Both forms for an array**: inline (table, list, sections) or a folder (2026-10-22).
+- **An array of values may be written on a key line**, separated by commas: `norms: iso-9001, iso-14001`
+  (2026-10-25). A heading and a list are a lot for two short values, and a key line already held links and files
+  separated by commas. The canonical form of an enum value, a number, a date, an amount, a duration or a version
+  never holds a comma, so a comma there only separates items, each checked as on its own key line. A text may hold
+  one: `Unit 4, Quarry Lane` would be read as two items, so an array of `Text` or `Prose` stays a list under its
+  heading. Among numbers, a comma between two digits stays in its item: `1,250` is reported, not read as `1` and
+  `250`.
 
 ## Data, relations and SQL
 

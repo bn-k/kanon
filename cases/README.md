@@ -21,6 +21,8 @@ companies are fictional, and their content is English, except data published by 
 | `northwind/` | the Northwind database, as `kan import` writes it from `create.sql` |
 | `northwind-query/`, `northwind-query-join/` | `kan sql -q` over Northwind: a revenue per customer read from a file, a join through a link column |
 | `public-holidays/` | an array as a CSV file: the bank holidays of England and Wales, GOV.UK's open data |
+| `suppliers/` | arrays of enum values and of dates on a key line, separated by commas, read by computed fields and a rule; a list of texts under its heading |
+| `suppliers-query/` | `kan sql -q` over the suppliers: the last audit of those that hold a norm, through the table of an array of values |
 | `write-dependent/` | `kan write -n` refusing a reading list whose new text breaks the review that links it |
 | `errors-*/` | the same schemas with mistakes, and what `kan lint` says about them; `errors-eval/` and `errors-schema/`, mistakes in computations, when a document is evaluated and when its schema is checked; `errors-northwind-query*/`, mistakes in a query; `errors-heading-close/`, headings a letter off a field's name, each reported once as the field it stands for, and one far from every name, reported with the field it leaves out |
 

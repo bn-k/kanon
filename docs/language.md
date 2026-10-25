@@ -60,7 +60,11 @@ This page defines both, rule by rule; `cases/` holds examples, with what `kan li
 13. Under a field heading, a table fills an array of objects (one column per field, plus `id`); a list fills an
     array of values, or of objects when their schema has a `reads` pattern; paragraphs fill a `Prose` field. The
     value of a `Prose` field is its text as written: the lines of a paragraph stay separate lines, and paragraphs
-    are separated by a blank line. A renderer may reflow it; the data doesn't.
+    are separated by a blank line. A renderer may reflow it; the data doesn't. An array of values may instead be
+    written on a key line, separated by commas: `norms: iso-9001, iso-14001`. An enum value, a number or a date
+    never holds a comma (rule 19), but a text may: an array of `Text` or `Prose` is always a list under its
+    heading. Among numbers, a comma between two digits is no separator: `1,250` is an error, `1 250` one number,
+    `1, 250` two.
 14. Any other heading becomes an object of the field marked `@sections`: the heading text fills the field marked
     `@heading`, the content fills the field marked `@body` or the object's own fields.
 15. The H1 is the document's title; it fills the root field marked `@heading`, if there is one. Only the front
