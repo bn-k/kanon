@@ -1,6 +1,9 @@
 package lint
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestTitle(t *testing.T) {
 	runCases(t, []lintCase{
@@ -97,7 +100,7 @@ func TestHeadings(t *testing.T) {
 			schema: chapters,
 			doc:    "---\ntype: Book\n---\n# Hi\n\n## Chapter one {#one}\n\n### How to\n\n- 1\n",
 			want: []string{
-				"doc.kan:6:1: error: `Chapter` needs `steps`; write it under ### Steps",
+				"doc.kan:6:1: error: `Chapter` needs `steps`; write it under ### Steps, or on a key line: steps: 4, 12",
 				"doc.kan:8:5: error: unknown heading \"How to\"; `Chapter` takes ### Steps",
 			},
 		},
@@ -860,6 +863,52 @@ schema All {
 		"doc.kan: error: `All` needs `q`; write q: [[…]]",
 		"doc.kan: error: `All` needs `r`; write r: [[…]], [[…]]",
 	})
+}
+
+func TestListExamples(t *testing.T) {
+	schema := `
+enum Condition { new, good, worn }
+enum Grade { only }
+
+schema All {
+  b: [Int]
+  c: [Number]
+  d: [Bool]
+  e: [Date]
+  f: [Duration]
+  g: [Money]
+  h: [Percent]
+  i: [Quantity]
+  j: [Version]
+  k: [Condition]
+  l: [DateTime]
+  m: [Grade]
+}
+`
+	want := []string{
+		"doc.kan: error: `All` needs `b`; write it under ## B, or on a key line: b: 4, 12",
+		"doc.kan: error: `All` needs `c`; write it under ## C, or on a key line: c: 12.5, 3",
+		"doc.kan: error: `All` needs `d`; write it under ## D, or on a key line: d: yes, no",
+		"doc.kan: error: `All` needs `e`; write it under ## E, or on a key line: e: 2026-10-22, 2026-11-05",
+		"doc.kan: error: `All` needs `f`; write it under ## F, or on a key line: f: 3 years, 6 months",
+		"doc.kan: error: `All` needs `g`; write it under ## G, or on a key line: g: 1 250.50 EUR, 40.00 EUR",
+		"doc.kan: error: `All` needs `h`; write it under ## H, or on a key line: h: 20 %, 5.5 %",
+		"doc.kan: error: `All` needs `i`; write it under ## I, or on a key line: i: 48 m2, 12 m2",
+		"doc.kan: error: `All` needs `j`; write it under ## J, or on a key line: j: 1.2, 1.3",
+		"doc.kan: error: `All` needs `k`; write it under ## K, or on a key line: k: new, good",
+		"doc.kan: error: `All` needs `l`; write it under ## L, or on a key line: l: 2026-10-22 14:30, 2026-10-23 09:00",
+		"doc.kan: error: `All` needs `m`; write it under ## M, or on a key line: m: only",
+	}
+	check(t, lint(t, files{"schema.kanonarch": schema, "doc.kan": "---\ntype: All\n---\n"}), want)
+
+	// Each key line, written as its message says, is right.
+	var doc strings.Builder
+	doc.WriteString("---\ntype: All\n---\n")
+	for _, w := range want {
+		_, line, _ := strings.Cut(w, "on a key line: ")
+		doc.WriteString(line + "\n")
+	}
+	check(t, lint(t, files{"schema.kanonarch": schema, "doc.kan": doc.String()}), nil)
 }
 
 const levels = `

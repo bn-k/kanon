@@ -1167,6 +1167,8 @@ func howTo(f *schema.Field, o *object) string {
 		return "write it as text under the heading"
 	case t.Array && (owned(t) || fileKind(t)) && o.pos.Line == 0:
 		return fmt.Sprintf("write it under %s, or as the folder %s/%s/", o.under(f), o.id, f.Name)
+	case t.Array && t.Schema == nil && !textual(t) && !fileKind(t):
+		return fmt.Sprintf("write it under %s, or on a key line: %s: %s", o.under(f), f.Name, items(t))
 	case t.Array && !t.Link, t.Native && t.Kind == value.Prose:
 		return fmt.Sprintf("write it under %s", o.under(f))
 	case owned(t):
@@ -1194,6 +1196,22 @@ func example(t *schema.Type) string {
 		return linkExample(t)
 	}
 	return examples[t.Kind]
+}
+
+var listExamples = map[value.Kind]string{
+	value.Int: "4, 12", value.Number: "12.5, 3", value.Bool: "yes, no", value.Date: "2026-10-22, 2026-11-05",
+	value.DateTime: "2026-10-22 14:30, 2026-10-23 09:00", value.Duration: "3 years, 6 months",
+	value.Money: "1 250.50 EUR, 40.00 EUR", value.Percent: "20 %, 5.5 %", value.Quantity: "48 m2, 12 m2",
+	value.Version: "1.2, 1.3",
+}
+
+// items is two values of type t separated by a comma, to show an array of values written on a key line.
+func items(t *schema.Type) string {
+	if t.Enum != nil {
+		vs := t.Enum.ValueNames()
+		return strings.Join(vs[:min(2, len(vs))], ", ")
+	}
+	return listExamples[t.Kind]
 }
 
 // linkExample is a link a field of type t holds: [[…]] to a document, [[photo.jpg]] to a file.

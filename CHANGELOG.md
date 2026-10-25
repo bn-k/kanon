@@ -13,8 +13,9 @@ schemas, and its entry says how.
   says to compare with `>=` and `<`, or to compare two dates.
 - An array of values is written on a key line, separated by commas, when no value of its type holds a comma:
   `norms: iso-9001, iso-14001`, `audits: 2025-03-12, 2026-03-10`. Each item is checked as on its own key line; an
-  empty item and a trailing comma are reported. An array of `Text` or `Prose` stays a list under its heading, and
-  the message says why. Among numbers, a comma between two digits stays in its item: `1,250` is reported.
+  empty item and a trailing comma are reported; a required array left out is shown both ways, under its heading or
+  on a key line. An array of `Text` or `Prose` stays a list under its heading, and the message says why. Among
+  numbers, a comma between two digits stays in its item: `1,250` is reported.
 
 ### Changed
 
