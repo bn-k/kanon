@@ -1,6 +1,9 @@
 package sheet
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func TestParseFormat(t *testing.T) {
 	tests := []struct {
@@ -100,7 +103,7 @@ func TestDecimal(t *testing.T) {
 		{0.07, 2, "7"},
 		{0.0001, 2, "0.01"},
 		{-0.5, 2, "-50"},
-		{-0.0, 0, "0"},
+		{math.Copysign(0, -1), 0, "0"},
 	}
 	for _, tt := range tests {
 		if got := decimal(tt.f, tt.shift); got != tt.want {
