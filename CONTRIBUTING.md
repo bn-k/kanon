@@ -52,6 +52,18 @@ with `benchstat $TMPDIR/old.txt $TMPDIR/new.txt` (`go install golang.org/x/perf/
 dependency), or line by line. To see where the time goes, add `-cpuprofile $TMPDIR/cpu.out` or
 `-memprofile $TMPDIR/mem.out` to the run of a single package, then read it with `go tool pprof -top $TMPDIR/cpu.out`.
 
+**Fuzzing.** The parsers and the linter have fuzz targets, seeded from the files of `cases/`: `FuzzParse` in
+`internal/schema`, `internal/doc` and `internal/value`, `FuzzPattern` in `internal/pattern`, `FuzzLint` (a fuzzed
+document) and `FuzzLintSchema` (a fuzzed schema) in `internal/lint`. `go test ./...` runs their seeds only; to fuzz
+one target, name it and its package:
+
+```
+$ go test ./internal/doc -run '^$' -fuzz '^FuzzParse$' -fuzztime 5m
+```
+
+Go writes an input that fails to `testdata/fuzz/<target>/` in the package. A unit test reproduces it first, then the
+fix; the input is kept there as a regression seed, once read: fuzzer bytes and fictional text only.
+
 Everything is English, the content of cases and test fixtures included, with fictional people and places. Only
 third-party data stays as published, with its source and licence.
 
