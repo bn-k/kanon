@@ -200,6 +200,8 @@ func TestParseErrors(t *testing.T) {
 		{Quantity, "15 000 kms", `unknown unit "kms"; did you mean km?`},
 		{Quantity, "2 bowls", `unknown unit "bowls"; a schema declares its own units, as in: unit bowls`},
 		{Quantity, "2 crêpes", `unknown unit "crêpes"; a schema declares its own units, as in: unit crepes`},
+		{Quantity, "2 hand-fuls", `unknown unit "hand-fuls"; a schema declares its own units, as in: unit handfuls`},
+		{Quantity, "12 5000", `write a number and its unit (48 m2 or 1 TB), not "12 5000"`},
 		{Quantity, "km", `write a number and its unit (48 m2 or 1 TB), not "km"`},
 		{Duration, "3 yrs", `unknown duration unit "yrs"; use min, h, days, weeks, months or years`},
 		{Duration, "3", `write a duration, a number and its unit (15 min or 3 years), not "3"`},

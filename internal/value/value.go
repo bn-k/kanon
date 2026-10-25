@@ -272,7 +272,10 @@ func parseQuantity(v Value, units Units) (Value, error) {
 		}
 		decl := unit
 		if !UnitName.MatchString(decl) {
-			decl = names.Slugify(decl)
+			decl = strings.ReplaceAll(names.Slugify(decl), "-", "")
+		}
+		if !UnitName.MatchString(decl) { // 12 5000 is a number badly grouped, not a unit
+			return v, wrong("a number and its unit (48 m2 or 1 TB)", s, "")
 		}
 		return v, fmt.Errorf("unknown unit %q; a schema declares its own units, as in: unit %s", unit, decl)
 	}
