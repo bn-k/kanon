@@ -13,30 +13,56 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Not Windows yet: paths, line endings and error messages differ there (issue #1).
+        # Windows has its own job below, which doesn't block: paths, line endings and error messages differ there (issue #1).
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      # Actions are pinned to a commit, since a tag can be moved; Dependabot keeps the pins up to date.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
         with:
           go-version-file: go.mod
       - name: gofmt
         if: runner.os == 'Linux'
         run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - name: go.mod and go.sum are tidy
+        if: runner.os == 'Linux'
+        run: go mod tidy && git diff --exit-code -- go.mod go.sum
       - name: vet
         run: go vet ./...
-      - name: test
+      # The tools run at a fixed version with go run: they are not dependencies of the module.
+      - name: staticcheck
+        if: runner.os == 'Linux'
+        run: go run honnef.co/go/tools/cmd/staticcheck@v0.8.2 ./...
+      - name: govulncheck, over the modules required and the Go of go.mod
+        if: runner.os == 'Linux'
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
+      - name: test, in a random order
         if: runner.os != 'Linux'
-        run: go test ./...
-      - name: test, with the race detector and 95% coverage per package
+        run: go test -shuffle=on ./...
+      - name: test, in a random order, with the race detector and 95% coverage per package
         if: runner.os == 'Linux'
         run: |
-          go test -race -cover ./... | tee test.out
+          set -o pipefail # a failed test must not pass as the status of tee
+          go test -race -shuffle=on -cover ./... | tee test.out
           awk '/^ok/ && match($0, /coverage: [0-9.]+%/) {
             c = substr($0, RSTART + 10, RLENGTH - 11)
             if (c + 0 < 95) { print "coverage of " $2 " is " c "%, under 95%"; bad = 1 }
           } END { exit bad }' test.out
+
+  # Measures how far Windows is from passing (issue #1); it fails without blocking.
+  windows:
+    runs-on: windows-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version-file: go.mod
+      - name: vet
+        run: go vet ./...
+      - name: test
+        run: go test ./...
 
   grammar:
     runs-on: ubuntu-latest
@@ -44,8 +70,8 @@ jobs:
       run:
         working-directory: editors/tree-sitter-kanonarch
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
       - run: npm install -g tree-sitter-cli@0.27.1

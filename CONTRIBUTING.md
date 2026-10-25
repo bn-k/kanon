@@ -20,7 +20,19 @@ $ gofmt -l . && go vet ./... && go test -cover ./...
 ```
 
 `gofmt -l .` prints nothing, `go vet ./...` is clean, and every package keeps its coverage at 95% or more. The CI
-runs the same checks on Linux and macOS, with `-race`; Windows is not supported yet (issue #1).
+runs the same checks on Linux and macOS, the tests in a random order (`-shuffle=on`), and with `-race` on Linux.
+On Linux it also checks that `go mod tidy` changes nothing, and runs staticcheck and govulncheck at the versions
+pinned in `.github/workflows/ci.yml`, as tools rather than dependencies of the module:
+
+```
+$ go run honnef.co/go/tools/cmd/staticcheck@v0.8.2 ./...
+$ go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
+```
+
+govulncheck checks the Go release named in `go.mod` too, which the CI and the release build with: a vulnerability
+fixed in a newer Go release fails it until `go.mod` names that release. Windows is not supported yet (issue #1): a
+job runs `go vet` and the tests there to measure how far it is, and its failure blocks nothing. The actions are
+pinned to a commit, and Dependabot proposes their updates, and those of the Go modules, once a week.
 
 **Test first.** A new use case is a folder of `cases/` with its schema, its documents and an `expected.txt` written by
 hand before running the linter: the command on its first line, after `$ `, then what kan prints, and `[exit N]` when
