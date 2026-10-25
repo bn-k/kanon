@@ -1,6 +1,6 @@
 module github.com/bn-k/kanon
 
-go 1.26.8
+go 1.26.10
 
 require (
 	modernc.org/libc v1.79.0
