@@ -1,0 +1,337 @@
+$ kan eval -format json ../board/schema.kanonarch ../board/board.kan
+{
+  "ok": true,
+  "checked": [
+    "../board/schema.kanonarch",
+    "../board/board.kan",
+    "../board/board/tasks/2026-10-20-brief.kan",
+    "../board/board/tasks/2026-10-30-pricing-page.kan",
+    "../board/board/tasks/2026-11-06-launch-email.kan"
+  ],
+  "diagnostics": [],
+  "documents": [
+    {
+      "id": "board",
+      "type": "Board",
+      "file": "../board/board.kan",
+      "fields": [
+        {
+          "name": "name",
+          "type": "Text",
+          "kind": "text",
+          "text": "Website relaunch",
+          "value": "Website relaunch",
+          "line": 5,
+          "col": 3,
+          "end_line": 5,
+          "end_col": 19
+        },
+        {
+          "name": "people",
+          "type": "[Person]",
+          "kind": "object",
+          "text": [
+            "ana",
+            "sam"
+          ],
+          "value": [
+            {
+              "id": "ana",
+              "type": "Person",
+              "file": "../board/board.kan",
+              "line": 11,
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Ana Silva",
+                  "value": "Ana Silva",
+                  "line": 11,
+                  "col": 9,
+                  "end_line": 11,
+                  "end_col": 18
+                },
+                {
+                  "name": "email",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "ana@example.com",
+                  "value": "ana@example.com",
+                  "line": 11,
+                  "col": 21,
+                  "end_line": 11,
+                  "end_col": 36
+                },
+                {
+                  "name": "tasks",
+                  "type": "[Task]",
+                  "kind": "link",
+                  "inverse": true,
+                  "text": [
+                    "[[/board/tasks/2026-10-30-pricing-page]]"
+                  ],
+                  "value": [
+                    {
+                      "file": "../board/board/tasks/2026-10-30-pricing-page.kan",
+                      "id": "2026-10-30-pricing-page"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "sam",
+              "type": "Person",
+              "file": "../board/board.kan",
+              "line": 12,
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Sam Lee",
+                  "value": "Sam Lee",
+                  "line": 12,
+                  "col": 9,
+                  "end_line": 12,
+                  "end_col": 16
+                },
+                {
+                  "name": "email",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "sam@example.com",
+                  "value": "sam@example.com",
+                  "line": 12,
+                  "col": 19,
+                  "end_line": 12,
+                  "end_col": 34
+                },
+                {
+                  "name": "tasks",
+                  "type": "[Task]",
+                  "kind": "link",
+                  "inverse": true,
+                  "text": [
+                    "[[/board/tasks/2026-10-20-brief]]",
+                    "[[/board/tasks/2026-11-06-launch-email]]"
+                  ],
+                  "value": [
+                    {
+                      "file": "../board/board/tasks/2026-10-20-brief.kan",
+                      "id": "2026-10-20-brief"
+                    },
+                    {
+                      "file": "../board/board/tasks/2026-11-06-launch-email.kan",
+                      "id": "2026-11-06-launch-email"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tasks",
+          "type": "[Task]",
+          "kind": "object",
+          "text": [
+            "2026-10-20-brief",
+            "2026-10-30-pricing-page",
+            "2026-11-06-launch-email"
+          ],
+          "value": [
+            {
+              "id": "2026-10-20-brief",
+              "type": "Task",
+              "file": "../board/board/tasks/2026-10-20-brief.kan",
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Write the brief",
+                  "value": "Write the brief",
+                  "line": 1,
+                  "col": 3,
+                  "end_line": 1,
+                  "end_col": 18
+                },
+                {
+                  "name": "status",
+                  "type": "Status",
+                  "kind": "enum",
+                  "text": "done",
+                  "value": "done",
+                  "line": 3,
+                  "col": 9,
+                  "end_line": 3,
+                  "end_col": 13
+                },
+                {
+                  "name": "owner",
+                  "type": "-> Person",
+                  "kind": "link",
+                  "text": "[[/board#sam]]",
+                  "value": {
+                    "file": "../board/board.kan",
+                    "id": "sam"
+                  },
+                  "line": 4,
+                  "col": 8,
+                  "end_line": 4,
+                  "end_col": 22
+                },
+                {
+                  "name": "due",
+                  "type": "Date",
+                  "kind": "date",
+                  "text": "2026-10-20",
+                  "value": "2026-10-20",
+                  "line": 5,
+                  "col": 6,
+                  "end_line": 5,
+                  "end_col": 16
+                },
+                {
+                  "name": "notes",
+                  "type": "Prose?",
+                  "kind": "prose",
+                  "text": null,
+                  "value": null
+                }
+              ]
+            },
+            {
+              "id": "2026-10-30-pricing-page",
+              "type": "Task",
+              "file": "../board/board/tasks/2026-10-30-pricing-page.kan",
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Pricing page",
+                  "value": "Pricing page",
+                  "line": 1,
+                  "col": 3,
+                  "end_line": 1,
+                  "end_col": 15
+                },
+                {
+                  "name": "status",
+                  "type": "Status",
+                  "kind": "enum",
+                  "text": "doing",
+                  "value": "doing",
+                  "line": 3,
+                  "col": 9,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                {
+                  "name": "owner",
+                  "type": "-> Person",
+                  "kind": "link",
+                  "text": "[[/board#ana]]",
+                  "value": {
+                    "file": "../board/board.kan",
+                    "id": "ana"
+                  },
+                  "line": 4,
+                  "col": 8,
+                  "end_line": 4,
+                  "end_col": 22
+                },
+                {
+                  "name": "due",
+                  "type": "Date",
+                  "kind": "date",
+                  "text": "2026-10-30",
+                  "value": "2026-10-30",
+                  "line": 5,
+                  "col": 6,
+                  "end_line": 5,
+                  "end_col": 16
+                },
+                {
+                  "name": "notes",
+                  "type": "Prose?",
+                  "kind": "prose",
+                  "text": "Three plans, yearly prices first.\nThe copy waits for the brief.",
+                  "value": "Three plans, yearly prices first.\nThe copy waits for the brief.",
+                  "line": 9,
+                  "col": 1,
+                  "end_line": 10,
+                  "end_col": 30
+                }
+              ]
+            },
+            {
+              "id": "2026-11-06-launch-email",
+              "type": "Task",
+              "file": "../board/board/tasks/2026-11-06-launch-email.kan",
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Launch email",
+                  "value": "Launch email",
+                  "line": 1,
+                  "col": 3,
+                  "end_line": 1,
+                  "end_col": 15
+                },
+                {
+                  "name": "status",
+                  "type": "Status",
+                  "kind": "enum",
+                  "text": "todo",
+                  "value": "todo",
+                  "line": 3,
+                  "col": 9,
+                  "end_line": 3,
+                  "end_col": 13
+                },
+                {
+                  "name": "owner",
+                  "type": "-> Person",
+                  "kind": "link",
+                  "text": "[[/board#sam]]",
+                  "value": {
+                    "file": "../board/board.kan",
+                    "id": "sam"
+                  },
+                  "line": 4,
+                  "col": 8,
+                  "end_line": 4,
+                  "end_col": 22
+                },
+                {
+                  "name": "due",
+                  "type": "Date",
+                  "kind": "date",
+                  "text": "2026-11-06",
+                  "value": "2026-11-06",
+                  "line": 5,
+                  "col": 6,
+                  "end_line": 5,
+                  "end_col": 16
+                },
+                {
+                  "name": "notes",
+                  "type": "Prose?",
+                  "kind": "prose",
+                  "text": null,
+                  "value": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -17,8 +17,8 @@ import (
 	"github.com/bn-k/kanon/internal/sqlimport"
 )
 
-const usage = `usage: kan lint [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>
-       kan eval [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>
+const usage = `usage: kan lint [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>
+       kan eval [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>
        kan write [-n] [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>[=<new.txt>]...
        kan import <database.sqlite|dump.sql> <out-dir>
        kan sql <schema.kanonarch> <document.kan> [-o out.sql|out.sqlite|out.db]
@@ -69,12 +69,15 @@ func runLSP(args []string, stdout, stderr io.Writer) int {
 }
 
 func runLint(args []string, stdout, stderr io.Writer) int {
-	schemaPath, docPath, today, err := lintArgs("lint", args)
+	o, err := lintArgs("lint", args)
 	if err != nil {
 		fmt.Fprintf(stderr, "kan: %v\n%s\n", err, usage)
 		return 2
 	}
-	_, r := lint.LoadOn(schemaPath, docPath, today)
+	_, r := lint.LoadOn(o.schema, o.doc, o.today)
+	if o.json {
+		return report(stdout, stderr, r, nil)
+	}
 	for _, d := range r.Diags {
 		fmt.Fprintln(stdout, d)
 	}

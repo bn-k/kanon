@@ -1,0 +1,251 @@
+$ kan eval -format json -today 2026-10-22 ../meetings/schema.kanonarch ../meetings/meetings.kan
+{
+  "ok": false,
+  "checked": [
+    "../meetings/schema.kanonarch",
+    "../meetings/meetings.kan"
+  ],
+  "diagnostics": [
+    {
+      "file": "../meetings/meetings.kan",
+      "line": 7,
+      "col": 1,
+      "severity": "error",
+      "message": "`not-in-the-past` fails: \"Kick-off is not in the past\"; 2026-10-21 16:00 is before 2026-10-22"
+    }
+  ],
+  "documents": [
+    {
+      "id": "meetings",
+      "type": "Schedule",
+      "file": "../meetings/meetings.kan",
+      "fields": [
+        {
+          "name": "team",
+          "type": "Text",
+          "kind": "text",
+          "text": "Design team",
+          "value": "Design team",
+          "line": 5,
+          "col": 3,
+          "end_line": 5,
+          "end_col": 14
+        },
+        {
+          "name": "meetings",
+          "type": "[Meeting]",
+          "kind": "object",
+          "text": [
+            "kick-off",
+            "weekly-review",
+            "client-demo",
+            "quarterly-planning"
+          ],
+          "value": [
+            {
+              "id": "kick-off",
+              "type": "Meeting",
+              "file": "../meetings/meetings.kan",
+              "line": 7,
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Kick-off",
+                  "value": "Kick-off",
+                  "line": 7,
+                  "col": 4,
+                  "end_line": 7,
+                  "end_col": 12
+                },
+                {
+                  "name": "at",
+                  "type": "DateTime",
+                  "kind": "datetime",
+                  "text": "2026-10-21 16:00",
+                  "value": "2026-10-21T16:00:00",
+                  "line": 9,
+                  "col": 5,
+                  "end_line": 9,
+                  "end_col": 21
+                },
+                {
+                  "name": "room",
+                  "type": "Text?",
+                  "kind": "text",
+                  "text": "Blue room",
+                  "value": "Blue room",
+                  "line": 10,
+                  "col": 7,
+                  "end_line": 10,
+                  "end_col": 16
+                },
+                {
+                  "name": "within-a-week",
+                  "type": "Bool",
+                  "kind": "bool",
+                  "computed": true,
+                  "text": "yes",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "weekly-review",
+              "type": "Meeting",
+              "file": "../meetings/meetings.kan",
+              "line": 12,
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Weekly review",
+                  "value": "Weekly review",
+                  "line": 12,
+                  "col": 4,
+                  "end_line": 12,
+                  "end_col": 17
+                },
+                {
+                  "name": "at",
+                  "type": "DateTime",
+                  "kind": "datetime",
+                  "text": "2026-10-22 09:30",
+                  "value": "2026-10-22T09:30:00",
+                  "line": 14,
+                  "col": 5,
+                  "end_line": 14,
+                  "end_col": 21
+                },
+                {
+                  "name": "room",
+                  "type": "Text?",
+                  "kind": "text",
+                  "text": "Blue room",
+                  "value": "Blue room",
+                  "line": 15,
+                  "col": 7,
+                  "end_line": 15,
+                  "end_col": 16
+                },
+                {
+                  "name": "within-a-week",
+                  "type": "Bool",
+                  "kind": "bool",
+                  "computed": true,
+                  "text": "yes",
+                  "value": true,
+                  "line": 16,
+                  "col": 16,
+                  "end_line": 16,
+                  "end_col": 19
+                }
+              ]
+            },
+            {
+              "id": "client-demo",
+              "type": "Meeting",
+              "file": "../meetings/meetings.kan",
+              "line": 18,
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Client demo",
+                  "value": "Client demo",
+                  "line": 18,
+                  "col": 4,
+                  "end_line": 18,
+                  "end_col": 15
+                },
+                {
+                  "name": "at",
+                  "type": "DateTime",
+                  "kind": "datetime",
+                  "text": "2026-10-27 14:00 UTC",
+                  "value": "2026-10-27T14:00:00Z",
+                  "line": 20,
+                  "col": 5,
+                  "end_line": 20,
+                  "end_col": 25
+                },
+                {
+                  "name": "room",
+                  "type": "Text?",
+                  "kind": "text",
+                  "text": null,
+                  "value": null
+                },
+                {
+                  "name": "within-a-week",
+                  "type": "Bool",
+                  "kind": "bool",
+                  "computed": true,
+                  "text": "yes",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "quarterly-planning",
+              "type": "Meeting",
+              "file": "../meetings/meetings.kan",
+              "line": 22,
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Quarterly planning",
+                  "value": "Quarterly planning",
+                  "line": 22,
+                  "col": 4,
+                  "end_line": 22,
+                  "end_col": 22
+                },
+                {
+                  "name": "at",
+                  "type": "DateTime",
+                  "kind": "datetime",
+                  "text": "2026-11-03 10:00",
+                  "value": "2026-11-03T10:00:00",
+                  "line": 24,
+                  "col": 5,
+                  "end_line": 24,
+                  "end_col": 21
+                },
+                {
+                  "name": "room",
+                  "type": "Text?",
+                  "kind": "text",
+                  "text": "Library",
+                  "value": "Library",
+                  "line": 25,
+                  "col": 7,
+                  "end_line": 25,
+                  "end_col": 14
+                },
+                {
+                  "name": "within-a-week",
+                  "type": "Bool",
+                  "kind": "bool",
+                  "computed": true,
+                  "text": "no",
+                  "value": false,
+                  "line": 26,
+                  "col": 16,
+                  "end_line": 26,
+                  "end_col": 18
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+[exit 1]

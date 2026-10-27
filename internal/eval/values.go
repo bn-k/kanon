@@ -2,6 +2,7 @@ package eval
 
 import (
 	"cmp"
+	"encoding/json"
 	"math/big"
 	"slices"
 	"strconv"
@@ -187,6 +188,35 @@ func (d dur) String() string {
 		ws = append(ws, number(t.Num)+" "+unit)
 	}
 	s := strings.Join(ws, " ")
+	if negative {
+		s = "-" + s
+	}
+	return s
+}
+
+// iso writes d in ISO 8601: P1Y6M, PT1H45M, P2DT3H, PT0M when it is zero, a minus before it when it is negative.
+func (d dur) iso() string {
+	ts, negative := d.parts()
+	var date, clock string
+	for _, t := range ts {
+		n := decimal(t.Num, 0)
+		switch t.Unit {
+		case "year":
+			date += n + "Y"
+		case "month":
+			date += n + "M"
+		case "day":
+			date += n + "D"
+		case "h":
+			clock += n + "H"
+		default:
+			clock += n + "M"
+		}
+	}
+	s := "P" + date
+	if clock != "" || date == "" {
+		s += "T" + cmp.Or(clock, "0M")
+	}
 	if negative {
 		s = "-" + s
 	}
@@ -399,23 +429,49 @@ func withUnit(s, unit string) string {
 }
 
 // number writes r with up to 6 decimals, its thousands apart: 1 250.5.
-func number(r *big.Rat) string {
-	s := strings.TrimSuffix(strings.TrimRight(r.FloatString(6), "0"), ".")
-	if s == "-0" {
-		s = "0"
-	}
-	return group(s)
-}
+func number(r *big.Rat) string { return group(decimal(r, 0)) }
 
 // money writes an amount with 2 to 6 decimals: 1 250.50.
-func money(r *big.Rat) string {
+func money(r *big.Rat) string { return group(decimal(r, 2)) }
+
+// decimal writes r as a plain decimal, with at least least decimals and at most 6: 1250.5, or 1250.50 with 2.
+func decimal(r *big.Rat, least int) string {
 	whole, frac, _ := strings.Cut(r.FloatString(6), ".")
 	frac = strings.TrimRight(frac, "0")
-	frac += strings.Repeat("0", max(0, 2-len(frac)))
+	frac += strings.Repeat("0", max(0, least-len(frac)))
 	if whole == "-0" && strings.Trim(frac, "0") == "" {
 		whole = "0"
 	}
-	return group(whole + "." + frac)
+	if frac == "" {
+		return whole
+	}
+	return whole + "." + frac
+}
+
+// JSON returns v as a program reads it: a number for Int, Number and Percent (20 for 20 %); for Money and Quantity,
+// the amount as a plain decimal in a string, exact, with its currency or unit; a bool for Bool; ISO 8601 for a date,
+// a date and time (without a zone for a local time) and a duration; the text of any other value.
+func JSON(v value.Value) any {
+	switch v.Kind {
+	case value.Int, value.Number, value.Percent:
+		return json.Number(decimal(v.Num, 0))
+	case value.Money:
+		return map[string]string{"amount": decimal(v.Num, 2), "currency": v.Unit}
+	case value.Quantity:
+		return map[string]string{"amount": decimal(v.Num, 0), "unit": v.Unit}
+	case value.Bool:
+		return v.Bool
+	case value.Date:
+		return v.Date.Format(time.DateOnly)
+	case value.DateTime:
+		if v.Zone == "" {
+			return v.Date.Format("2006-01-02T15:04:05")
+		}
+		return v.Date.Format(time.RFC3339)
+	case value.Duration:
+		return durOf(v).iso()
+	}
+	return v.Raw
 }
 
 // group writes the thousands of a plain number apart: 1250.50 becomes 1 250.50.

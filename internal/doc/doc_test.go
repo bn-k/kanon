@@ -368,10 +368,17 @@ func TestHelpers(t *testing.T) {
 	if len(u.Blocks) != len(at) {
 		t.Fatalf("got %d blocks, want %d", len(u.Blocks), len(at))
 	}
+	ends := []int{4, 6, 8, 10}
 	for i, b := range u.Blocks {
 		if got := pos(b.At()); got != at[i] || b.At().File != "t.kan" {
 			t.Errorf("block %d At() = %v, want t.kan:%s", i, b.At(), at[i])
 		}
+		if b.End() != ends[i] {
+			t.Errorf("block %d End() = %d, want %d", i, b.End(), ends[i])
+		}
+	}
+	if got := d.LineEnd(3); got != (diag.Pos{File: "t.kan", Line: 3, Col: 9}) {
+		t.Errorf("LineEnd(3) = %v, want t.kan:3:9", got)
 	}
 	if got := u.Blocks[0].(*Paragraph).Text(); got != "para one\ntwo" {
 		t.Errorf("Paragraph.Text() = %q", got)

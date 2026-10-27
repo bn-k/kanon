@@ -1,0 +1,281 @@
+$ kan eval -format json ../recipe/schema.kanonarch ../recipe/crepes.kan
+{
+  "ok": true,
+  "checked": [
+    "../recipe/schema.kanonarch",
+    "../recipe/crepes.kan"
+  ],
+  "diagnostics": [],
+  "documents": [
+    {
+      "id": "crepes",
+      "type": "Recipe",
+      "file": "../recipe/crepes.kan",
+      "fields": [
+        {
+          "name": "title",
+          "type": "Text",
+          "kind": "text",
+          "text": "Crêpes",
+          "value": "Crêpes",
+          "line": 5,
+          "col": 3,
+          "end_line": 5,
+          "end_col": 9
+        },
+        {
+          "name": "servings",
+          "type": "Int",
+          "kind": "int",
+          "text": "4",
+          "value": 4,
+          "line": 7,
+          "col": 11,
+          "end_line": 7,
+          "end_col": 12
+        },
+        {
+          "name": "preparation",
+          "type": "Duration",
+          "kind": "duration",
+          "text": "15 min",
+          "value": "PT15M",
+          "line": 8,
+          "col": 14,
+          "end_line": 8,
+          "end_col": 20
+        },
+        {
+          "name": "resting",
+          "type": "Duration?",
+          "kind": "duration",
+          "text": "1 h",
+          "value": "PT1H",
+          "line": 9,
+          "col": 10,
+          "end_line": 9,
+          "end_col": 13
+        },
+        {
+          "name": "cooking",
+          "type": "Duration?",
+          "kind": "duration",
+          "text": "30 min",
+          "value": "PT30M",
+          "line": 10,
+          "col": 10,
+          "end_line": 10,
+          "end_col": 16
+        },
+        {
+          "name": "ingredients",
+          "type": "[Ingredient]",
+          "kind": "object",
+          "text": [
+            "flour",
+            "eggs",
+            "milk",
+            "butter",
+            "salt"
+          ],
+          "value": [
+            {
+              "id": "flour",
+              "type": "Ingredient",
+              "file": "../recipe/crepes.kan",
+              "line": 14,
+              "fields": [
+                {
+                  "name": "quantity",
+                  "type": "Quantity",
+                  "kind": "quantity",
+                  "text": "250 g",
+                  "value": {
+                    "amount": "250",
+                    "unit": "g"
+                  },
+                  "line": 14,
+                  "col": 3,
+                  "end_line": 14,
+                  "end_col": 8
+                },
+                {
+                  "name": "name",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "flour",
+                  "value": "flour",
+                  "line": 14,
+                  "col": 12,
+                  "end_line": 14,
+                  "end_col": 17
+                }
+              ]
+            },
+            {
+              "id": "eggs",
+              "type": "Ingredient",
+              "file": "../recipe/crepes.kan",
+              "line": 15,
+              "fields": [
+                {
+                  "name": "quantity",
+                  "type": "Quantity",
+                  "kind": "quantity",
+                  "text": "4",
+                  "value": {
+                    "amount": "4",
+                    "unit": ""
+                  },
+                  "line": 15,
+                  "col": 3,
+                  "end_line": 15,
+                  "end_col": 4
+                },
+                {
+                  "name": "name",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "eggs",
+                  "value": "eggs",
+                  "line": 15,
+                  "col": 5,
+                  "end_line": 15,
+                  "end_col": 9
+                }
+              ]
+            },
+            {
+              "id": "milk",
+              "type": "Ingredient",
+              "file": "../recipe/crepes.kan",
+              "line": 16,
+              "fields": [
+                {
+                  "name": "quantity",
+                  "type": "Quantity",
+                  "kind": "quantity",
+                  "text": "50 cl",
+                  "value": {
+                    "amount": "50",
+                    "unit": "cl"
+                  },
+                  "line": 16,
+                  "col": 3,
+                  "end_line": 16,
+                  "end_col": 8
+                },
+                {
+                  "name": "name",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "milk",
+                  "value": "milk",
+                  "line": 16,
+                  "col": 12,
+                  "end_line": 16,
+                  "end_col": 16
+                }
+              ]
+            },
+            {
+              "id": "butter",
+              "type": "Ingredient",
+              "file": "../recipe/crepes.kan",
+              "line": 17,
+              "fields": [
+                {
+                  "name": "quantity",
+                  "type": "Quantity",
+                  "kind": "quantity",
+                  "text": "50 g",
+                  "value": {
+                    "amount": "50",
+                    "unit": "g"
+                  },
+                  "line": 17,
+                  "col": 3,
+                  "end_line": 17,
+                  "end_col": 7
+                },
+                {
+                  "name": "name",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "melted butter",
+                  "value": "melted butter",
+                  "line": 17,
+                  "col": 11,
+                  "end_line": 17,
+                  "end_col": 24
+                }
+              ]
+            },
+            {
+              "id": "salt",
+              "type": "Ingredient",
+              "file": "../recipe/crepes.kan",
+              "line": 18,
+              "fields": [
+                {
+                  "name": "quantity",
+                  "type": "Quantity",
+                  "kind": "quantity",
+                  "text": "1 pinch",
+                  "value": {
+                    "amount": "1",
+                    "unit": "pinch"
+                  },
+                  "line": 18,
+                  "col": 3,
+                  "end_line": 18,
+                  "end_col": 10
+                },
+                {
+                  "name": "name",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "salt",
+                  "value": "salt",
+                  "line": 18,
+                  "col": 14,
+                  "end_line": 18,
+                  "end_col": 18
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "steps",
+          "type": "[Prose]",
+          "kind": "prose",
+          "text": [
+            "Put the flour in a mixing bowl, make a well in the centre and break the eggs into it.",
+            "Whisk in the milk a little at a time, then the melted butter and the salt.",
+            "Leave the batter to rest for {resting}.",
+            "Cook each crêpe for about a minute on each side, in a hot buttered pan."
+          ],
+          "value": [
+            "Put the flour in a mixing bowl, make a well in the centre and break the eggs into it.",
+            "Whisk in the milk a little at a time, then the melted butter and the salt.",
+            "Leave the batter to rest for {resting}.",
+            "Cook each crêpe for about a minute on each side, in a hot buttered pan."
+          ],
+          "line": 22,
+          "col": 1,
+          "end_line": 25,
+          "end_col": 75
+        },
+        {
+          "name": "total-time",
+          "type": "Duration",
+          "kind": "duration",
+          "computed": true,
+          "text": "1 h 45 min",
+          "value": "PT1H45M"
+        }
+      ]
+    }
+  ]
+}

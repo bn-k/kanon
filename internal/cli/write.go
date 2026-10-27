@@ -312,9 +312,15 @@ func writeJSON(w io.Writer, ok bool, written, checked []string, diags diag.List)
 		Checked     []string          `json:"checked"`
 		Diagnostics []diag.Diagnostic `json:"diagnostics"`
 	}{ok, nonNil(written), nonNil(checked), nonNil(diags)}
+	return printJSON(w, out)
+}
+
+// printJSON prints v as indented JSON, its strings as they are: <, > and & are not escaped.
+func printJSON(w io.Writer, v any) error {
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
-	return enc.Encode(out)
+	enc.SetEscapeHTML(false)
+	return enc.Encode(v)
 }
 
 // nonNil is s, or an empty slice for nil: JSON says [] rather than null.
@@ -330,32 +336,23 @@ func nonNil[S ~[]E, E any](s S) S {
 func writeArgs(args []string) (writeOptions, error) {
 	o := writeOptions{texts: map[string][]byte{}, today: time.Now()}
 	var rest []string
-	for i := 0; i < len(args); i++ {
+	var err error
+	for i := 0; i < len(args) && err == nil; i++ {
 		switch args[i] {
 		case "-n":
 			o.dry = true
 		case "-format":
-			if i++; i == len(args) {
-				return o, errors.New("-format takes text or json")
-			}
-			switch args[i] {
-			case "text":
-			case "json":
-				o.json = true
-			default:
-				return o, fmt.Errorf("-format is text or json, not %s", args[i])
-			}
+			i++
+			o.json, err = formatArg(args, i)
 		case "-today":
-			if i++; i == len(args) {
-				return o, errors.New("-today takes a date, as in -today 2026-10-22")
-			}
-			var err error
-			if o.today, err = time.ParseInLocation(time.DateOnly, args[i], time.Local); err != nil {
-				return o, fmt.Errorf("write -today 2026-10-22, not %q", args[i])
-			}
+			i++
+			o.today, err = todayArg(args, i)
 		default:
 			rest = append(rest, args[i])
 		}
+	}
+	if err != nil {
+		return o, err
 	}
 	if len(rest) < 2 {
 		return o, fmt.Errorf("write takes a schema and documents, got %s", plural(len(rest), "argument"))
@@ -381,7 +378,6 @@ func writeArgs(args []string) (writeOptions, error) {
 			return o, fmt.Errorf("%s is written twice", path)
 		}
 		var text []byte
-		var err error
 		switch {
 		case !hasSrc && fromStdin != "":
 			return o, fmt.Errorf("%s and %s both read stdin: give each but one its new text, as in %s=new.txt",

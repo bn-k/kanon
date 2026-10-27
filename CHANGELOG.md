@@ -8,6 +8,13 @@ schemas, and its entry says how.
 
 ### Added
 
+- `kan lint -format json` and `kan eval -format json`, for a program: `{"ok", "checked", "diagnostics"}` as
+  `kan write` prints them, and for `kan eval` the `documents`, every object of the document and of those it links
+  to, with every field of its schema: its value in canonical text and typed (numbers, `{"amount", "currency"}`, ISO
+  dates and durations, links as `{"file", "id"}`), whether it is computed or an inverse, and where it is written
+  (`line`, `col`, `end_line`, `end_col`). See `docs/kan.md`; cases `invoice-json`, `board-json`, `meetings-json`,
+  `recipe-json`, `errors-invoice-json`.
+
 - A `DateTime` is ordered against a `Date`, which stands for the start of its day, as in SQL: `m.at >= today` holds
   for a meeting held earlier today (`cases/meetings`). `==` and `!=` between them stay errors, with a message that
   says to compare with `>=` and `<`, or to compare two dates.
@@ -19,6 +26,8 @@ schemas, and its entry says how.
 
 ### Changed
 
+- The JSON of `kan write -format json` keeps `<`, `>` and `&` as they are, instead of `<`, `>` and
+  `&`; JSON readers read both the same.
 - The cases, the examples of the documentation and the test fixtures are in English, with fictional people and
   places: `annonce/` is `listing/`, `jours-feries/` is `public-holidays/` (the bank holidays of England and Wales,
   from GOV.UK), and the other cases keep their folder with English documents. Northwind and the workbooks of

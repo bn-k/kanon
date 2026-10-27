@@ -1,0 +1,325 @@
+$ kan eval -format json ../invoice/schema.kanonarch ../invoice/inv-2026-031.kan
+{
+  "ok": true,
+  "checked": [
+    "../invoice/schema.kanonarch",
+    "../invoice/inv-2026-031.kan",
+    "../invoice/clients/ashgrove-builders.kan"
+  ],
+  "diagnostics": [],
+  "documents": [
+    {
+      "id": "inv-2026-031",
+      "type": "Invoice",
+      "file": "../invoice/inv-2026-031.kan",
+      "fields": [
+        {
+          "name": "number",
+          "type": "Text",
+          "kind": "text",
+          "text": "INV-2026-031",
+          "value": "INV-2026-031",
+          "line": 7,
+          "col": 9,
+          "end_line": 7,
+          "end_col": 21
+        },
+        {
+          "name": "date",
+          "type": "Date",
+          "kind": "date",
+          "text": "2026-10-22",
+          "value": "2026-10-22",
+          "line": 8,
+          "col": 7,
+          "end_line": 8,
+          "end_col": 17
+        },
+        {
+          "name": "due",
+          "type": "Date",
+          "kind": "date",
+          "text": "2026-11-21",
+          "value": "2026-11-21",
+          "line": 9,
+          "col": 6,
+          "end_line": 9,
+          "end_col": 16
+        },
+        {
+          "name": "issuer",
+          "type": "Party",
+          "kind": "object",
+          "text": "halfmoon-studio",
+          "value": {
+            "id": "halfmoon-studio",
+            "type": "Party",
+            "file": "../invoice/inv-2026-031.kan",
+            "line": 14,
+            "fields": [
+              {
+                "name": "name",
+                "type": "Text",
+                "kind": "text",
+                "text": "Halfmoon Studio Ltd",
+                "value": "Halfmoon Studio Ltd",
+                "line": 16,
+                "col": 7,
+                "end_line": 16,
+                "end_col": 26
+              },
+              {
+                "name": "address",
+                "type": "Text",
+                "kind": "text",
+                "text": "8 Mist Quay, Larkhaven",
+                "value": "8 Mist Quay, Larkhaven",
+                "line": 17,
+                "col": 10,
+                "end_line": 17,
+                "end_col": 32
+              },
+              {
+                "name": "vat-number",
+                "type": "Text?",
+                "kind": "text",
+                "text": null,
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "client",
+          "type": "-> Party",
+          "kind": "link",
+          "text": "[[/clients/ashgrove-builders]]",
+          "value": {
+            "file": "../invoice/clients/ashgrove-builders.kan",
+            "id": "ashgrove-builders"
+          },
+          "line": 10,
+          "col": 9,
+          "end_line": 10,
+          "end_col": 38
+        },
+        {
+          "name": "lines",
+          "type": "[Line]",
+          "kind": "object",
+          "text": [
+            "booking-api",
+            "hosting"
+          ],
+          "value": [
+            {
+              "id": "booking-api",
+              "type": "Line",
+              "file": "../invoice/inv-2026-031.kan",
+              "line": 23,
+              "fields": [
+                {
+                  "name": "description",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Booking API development (days)",
+                  "value": "Booking API development (days)",
+                  "line": 23,
+                  "col": 17,
+                  "end_line": 23,
+                  "end_col": 47
+                },
+                {
+                  "name": "quantity",
+                  "type": "Number",
+                  "kind": "number",
+                  "text": "12",
+                  "value": 12,
+                  "line": 23,
+                  "col": 50,
+                  "end_line": 23,
+                  "end_col": 52
+                },
+                {
+                  "name": "unit-price",
+                  "type": "Money",
+                  "kind": "money",
+                  "text": "650.00 EUR",
+                  "value": {
+                    "amount": "650.00",
+                    "currency": "EUR"
+                  },
+                  "line": 23,
+                  "col": 55,
+                  "end_line": 23,
+                  "end_col": 65
+                },
+                {
+                  "name": "amount",
+                  "type": "Money",
+                  "kind": "money",
+                  "computed": true,
+                  "text": "7 800.00 EUR",
+                  "value": {
+                    "amount": "7800.00",
+                    "currency": "EUR"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "hosting",
+              "type": "Line",
+              "file": "../invoice/inv-2026-031.kan",
+              "line": 24,
+              "fields": [
+                {
+                  "name": "description",
+                  "type": "Text",
+                  "kind": "text",
+                  "text": "Hosting, October to December (months)",
+                  "value": "Hosting, October to December (months)",
+                  "line": 24,
+                  "col": 13,
+                  "end_line": 24,
+                  "end_col": 50
+                },
+                {
+                  "name": "quantity",
+                  "type": "Number",
+                  "kind": "number",
+                  "text": "3",
+                  "value": 3,
+                  "line": 24,
+                  "col": 53,
+                  "end_line": 24,
+                  "end_col": 54
+                },
+                {
+                  "name": "unit-price",
+                  "type": "Money",
+                  "kind": "money",
+                  "text": "40.00 EUR",
+                  "value": {
+                    "amount": "40.00",
+                    "currency": "EUR"
+                  },
+                  "line": 24,
+                  "col": 57,
+                  "end_line": 24,
+                  "end_col": 66
+                },
+                {
+                  "name": "amount",
+                  "type": "Money",
+                  "kind": "money",
+                  "computed": true,
+                  "text": "120.00 EUR",
+                  "value": {
+                    "amount": "120.00",
+                    "currency": "EUR"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "vat-rate",
+          "type": "Percent",
+          "kind": "percent",
+          "text": "20 %",
+          "value": 20,
+          "line": 11,
+          "col": 11,
+          "end_line": 11,
+          "end_col": 15
+        },
+        {
+          "name": "terms",
+          "type": "Prose",
+          "kind": "prose",
+          "text": "Please pay {gross-total} by bank transfer no later than {due}, quoting {number} as the reference. Late payment\nbears interest at three times the statutory rate, plus a fixed charge of 40 EUR for recovery costs, which the\nlaw allows between businesses.",
+          "value": "Please pay {gross-total} by bank transfer no later than {due}, quoting {number} as the reference. Late payment\nbears interest at three times the statutory rate, plus a fixed charge of 40 EUR for recovery costs, which the\nlaw allows between businesses.",
+          "line": 28,
+          "col": 1,
+          "end_line": 30,
+          "end_col": 31
+        },
+        {
+          "name": "net-total",
+          "type": "Money",
+          "kind": "money",
+          "computed": true,
+          "text": "7 920.00 EUR",
+          "value": {
+            "amount": "7920.00",
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "vat",
+          "type": "Money",
+          "kind": "money",
+          "computed": true,
+          "text": "1 584.00 EUR",
+          "value": {
+            "amount": "1584.00",
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "gross-total",
+          "type": "Money",
+          "kind": "money",
+          "computed": true,
+          "text": "9 504.00 EUR",
+          "value": {
+            "amount": "9504.00",
+            "currency": "EUR"
+          },
+          "line": 12,
+          "col": 14,
+          "end_line": 12,
+          "end_col": 26
+        }
+      ]
+    },
+    {
+      "id": "ashgrove-builders",
+      "type": "Party",
+      "file": "../invoice/clients/ashgrove-builders.kan",
+      "fields": [
+        {
+          "name": "name",
+          "type": "Text",
+          "kind": "text",
+          "text": "Ashgrove Builders Ltd",
+          "value": "Ashgrove Builders Ltd",
+          "line": 7,
+          "col": 7,
+          "end_line": 7,
+          "end_col": 28
+        },
+        {
+          "name": "address",
+          "type": "Text",
+          "kind": "text",
+          "text": "14 Linden Avenue, Fernhollow",
+          "value": "14 Linden Avenue, Fernhollow",
+          "line": 8,
+          "col": 10,
+          "end_line": 8,
+          "end_col": 38
+        },
+        {
+          "name": "vat-number",
+          "type": "Text?",
+          "kind": "text",
+          "text": null,
+          "value": null
+        }
+      ]
+    }
+  ]
+}

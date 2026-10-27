@@ -189,6 +189,25 @@ Design in `docs/serve.md`.
   building an app that keeps its tender answers in Kanon, where each program had grown its own lint-then-write.
   An entry of a folder, which has no type of its own, is checked through the document that owns the folder, with
   the new text in its place, in a folder that may not exist yet: an agent adds a task as one new file (2026-10-23).
+- **`kan eval -format json` gives a program the values as Kanon reads them** (2026-10-27): a server that shows a
+  document's values, or an agent, reads them from `kan` instead of parsing Kanon in another language, so there is
+  one reading of the data. `kan lint -format json` prints `{"ok", "checked", "diagnostics"}`, as `kan write` does;
+  `kan eval` adds `documents`, the objects of the document and of every document it links to. Its shape:
+  - **Every field of the schema is listed**, in the schema's order, so a program needs no schema to know what an
+    object can hold: one not written gives `null`, an empty array `[]`. Its `type` is the schema's text and its
+    `kind` says how to read the value (`object`, `link`, `enum`, or the native type).
+  - **Each value twice**: `text`, canonical, as `kan eval` prints it and a person writes it, and `value`, typed, so
+    a program computes without parsing Kanon. An amount stays a string (`"9504.00"`), since a JSON number loses
+    decimals in most readers; dates, date-times and durations are ISO 8601, a link is `{"file", "id"}`.
+  - **Where a value is written**, `line`, `col`, `end_line` and `end_col`, flat in the field, for an editor that
+    highlights it or a program that edits it there. A field that holds objects has none (each object has its
+    `line`), nor has a value that is not written in the text: an inverse, a computed field left out, a folder.
+  - **No documents when lint finds errors before it evaluates**: the values of a document that doesn't parse are
+    not Kanon's reading. One whose rules fail keeps them, with `"ok": false`, as `kan eval` prints its values.
+  - **No stable diagnostic code yet** (roadmap 0.2): it needs a code for every message of the linter, not one
+    field of the output.
+- **JSON output keeps `<`, `>` and `&` as they are** (2026-10-27): a type reads `-> Person`, not `-> Person`.
+  JSON readers take both; a person reading the output only the first.
 
 ## Prior art
 

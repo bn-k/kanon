@@ -16,7 +16,7 @@ cases (`cases/board*`), the language in `docs/language.md`, `CONTRIBUTING.md`, `
 The writer the project exists for, and the one that makes the most mistakes.
 
 - `-format json` on `kan lint` and `kan eval`, as `kan write` has it: a program reads diagnostics without parsing
-  text.
+  text. Done on 2026-10-27; `kan eval` also gives every object with its values, typed, and where each is written.
 - A stable code on each diagnostic, in the JSON only, so that an agent can act on a kind of mistake; the wording
   stays free to improve.
 - `docs/agents.md`: how an agent reads a schema, writes through `kan write` and repairs from the diagnostics, tested

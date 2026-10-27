@@ -1,8 +1,8 @@
 # The kan command
 
 ```
-kan lint [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>
-kan eval [-today YYYY-MM-DD] <schema.kanonarch> <document.kan>
+kan lint [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>
+kan eval [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>
 kan write [-n] [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>[=<new.txt>]...
 kan import <database.sqlite|dump.sql> <out-dir>
 kan sql <schema.kanonarch> <document.kan> [-o out.sql|out.sqlite|out.db]
@@ -45,6 +45,10 @@ hatchback.kan: error: `oil-change-up-to-date` fails: "Grey hatchback has covered
 `kan lint -today 2026-10-22 schema.kanonarch hatchback.kan`. A case whose output depends on the date passes it, so its
 output stays the same.
 
+`-format json` prints the same for a program, as `kan write` does: `{"ok", "checked", "diagnostics"}`, where `ok`
+says that lint found no error, `checked` lists the files it read and each diagnostic is
+`{"file", "line", "col", "severity", "message"}` (the case `errors-invoice-json`). The exit codes stay the same.
+
 ## kan eval
 
 ```
@@ -58,6 +62,67 @@ inv-2026-031.kan:24:1: amount = 120.00 EUR
 
 `kan eval` lints like `kan lint`, then prints the value of every computed field, where its object is written; the
 diagnostics follow.
+
+With `-format json` it prints, after what `kan lint -format json` prints, the `documents`: the objects of the
+document, then of every document it links to, with all their fields, as Kanon reads them. A program (a server that
+shows a document's values, an agent) reads them there instead of parsing Kanon itself. From the case `board-json`,
+shortened:
+
+```
+$ kan eval -format json schema.kanonarch board.kan
+{
+  "ok": true,
+  "checked": ["schema.kanonarch", "board.kan", "board/tasks/2026-10-20-brief.kan", …],
+  "diagnostics": [],
+  "documents": [
+    {"id": "board", "type": "Board", "file": "board.kan", "fields": [
+      {"name": "name", "type": "Text", "kind": "text", "text": "Website relaunch", "value": "Website relaunch",
+       "line": 5, "col": 3, "end_line": 5, "end_col": 19},
+      {"name": "people", "type": "[Person]", "kind": "object", "text": ["ana", "sam"], "value": [
+        {"id": "ana", "type": "Person", "file": "board.kan", "line": 11, "fields": [
+          …,
+          {"name": "tasks", "type": "[Task]", "kind": "link", "inverse": true,
+           "text": ["[[/board/tasks/2026-10-30-pricing-page]]"],
+           "value": [{"file": "board/tasks/2026-10-30-pricing-page.kan", "id": "2026-10-30-pricing-page"}]}]},
+        …]},
+      {"name": "tasks", "type": "[Task]", "kind": "object", "text": ["2026-10-20-brief", …], "value": [
+        {"id": "2026-10-30-pricing-page", "type": "Task", "file": "board/tasks/2026-10-30-pricing-page.kan",
+         "fields": [
+          {"name": "status", "type": "Status", "kind": "enum", "text": "doing", "value": "doing",
+           "line": 3, "col": 9, "end_line": 3, "end_col": 14},
+          {"name": "owner", "type": "-> Person", "kind": "link", "text": "[[/board#ana]]",
+           "value": {"file": "board.kan", "id": "ana"}, "line": 4, "col": 8, "end_line": 4, "end_col": 22},
+          …]},
+        …]}]}
+  ]
+}
+```
+
+- An object has its `id`, its `type` (the schema's name), the `file` it is written in, the `line` where it starts
+  (none for an object that is a whole file), and its `fields`: every field of its schema, in the schema's order.
+- A field has its `name`, its `type` as the schema writes it (`Money`, `[Line]`, `-> Party`, `Text?`), and its
+  `kind`: `object` for objects of its own, `link` for objects written elsewhere (a link, an inverse, or a computed
+  field that gives objects), `enum`, or the native type in lowercase (`text`, `int`, `money`, `date`, `prose`…).
+  `"computed": true` marks a field computed by `=`, `"inverse": true` an inverse; both are left out otherwise.
+- `text` is the value in Kanon's canonical text, the one `kan eval` prints: `"9 504.00 EUR"`, `"2026-10-30"`,
+  `"doing"`, `"1 h 45 min"`, a link as `"[[/board#ana]]"` from the schema's folder, a file as
+  `"[[/house-elm-grove/ground-floor.pdf]]"`, an object of its own by its id. Prose and code are their text, as
+  written.
+- `value` is the same value typed for a program: a number for `Int`, `Number` and `Percent` (20 for `20 %`), a bool
+  for `Bool`, `{"amount": "9504.00", "currency": "EUR"}` for money and `{"amount": "250", "unit": "g"}` for a
+  quantity (the amount a string, so no decimal is lost), ISO 8601 for dates, date-times and durations (`"2026-10-30"`,
+  `"2026-10-27T14:00:00Z"`, `"2026-10-21T16:00:00"` with no zone, `"PT1H45M"`), `{"file", "id"}` for a link (the
+  file as in `checked`), the object itself for an object of its own, the path for a file, `{"lang", "text"}` for
+  code, a string otherwise.
+- An array field gives arrays, `[]` when it holds nothing. A field not written and not computed gives `null`, as
+  does a computed field with no value.
+- When the value is written in the document, `line`, `col`, `end_line` and `end_col` say where, `end_col` being the
+  column just after its last character: the value of its key line, its table cell, its heading's text for a
+  `@heading`, what its heading holds (a prose, a list, a code block), its `@body`, or its part of a list item. An
+  editor highlights it or jumps to it there. A field that holds objects has none (each object has its `line`),
+  nor has an inverse, a computed field not written, or a field read from a folder.
+- When lint finds errors before it evaluates, `documents` is `[]`; a document whose rules fail still has them, with
+  `"ok": false`.
 
 ## kan write
 

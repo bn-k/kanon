@@ -1,7 +1,9 @@
 package eval_test
 
 import (
+	"encoding/json"
 	"maps"
+	"math/big"
 	"os"
 	"path/filepath"
 	"slices"
@@ -12,6 +14,7 @@ import (
 	"github.com/bn-k/kanon/internal/eval"
 	"github.com/bn-k/kanon/internal/lint"
 	"github.com/bn-k/kanon/internal/model"
+	"github.com/bn-k/kanon/internal/value"
 )
 
 // today is the day the rules of these tests take as today.
@@ -732,4 +735,44 @@ schema A {
 			},
 		},
 	})
+}
+
+func TestJSON(t *testing.T) {
+	units := value.NewUnits(nil)
+	for _, c := range []struct {
+		kind value.Kind
+		text string
+		want string
+	}{
+		{value.Int, "1 250", `1250`},
+		{value.Number, "-0.50", `-0.5`},
+		{value.Number, "2.333333", `2.333333`},
+		{value.Percent, "20 %", `20`},
+		{value.Money, "1 250.50 EUR", `{"amount":"1250.50","currency":"EUR"}`},
+		{value.Money, "3 EUR", `{"amount":"3.00","currency":"EUR"}`},
+		{value.Quantity, "2.5 kg", `{"amount":"2.5","unit":"kg"}`},
+		{value.Bool, "yes", `true`},
+		{value.Date, "2026-10-22", `"2026-10-22"`},
+		{value.DateTime, "2026-10-22 14:30", `"2026-10-22T14:30:00"`},
+		{value.DateTime, "2026-10-22 14:30 UTC", `"2026-10-22T14:30:00Z"`},
+		{value.DateTime, "2026-10-22 14:30:05 +02:00", `"2026-10-22T14:30:05+02:00"`},
+		{value.Duration, "1 h 45 min", `"PT1H45M"`},
+		{value.Duration, "1 year 6 months", `"P1Y6M"`},
+		{value.Duration, "2 weeks 3 h", `"P14DT3H"`},
+		{value.Duration, "0 min", `"PT0M"`},
+		{value.Version, "1.2.10", `"1.2.10"`},
+		{value.Text, "Blue room", `"Blue room"`},
+	} {
+		v, err := value.Parse(c.kind, c.text, units)
+		if err != nil {
+			t.Fatalf("%s %q: %v", c.kind, c.text, err)
+		}
+		if got, _ := json.Marshal(eval.JSON(v)); string(got) != c.want {
+			t.Errorf("JSON(%s %q) = %s, want %s", c.kind, c.text, got, c.want)
+		}
+	}
+	back := value.Value{Kind: value.Duration, Terms: []value.Term{{Num: big.NewRat(-90, 1), Unit: "min"}}}
+	if got := eval.JSON(back); got != "-PT1H30M" {
+		t.Errorf("JSON(-90 min) = %v, want -PT1H30M", got)
+	}
 }

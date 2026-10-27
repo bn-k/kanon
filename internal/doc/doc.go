@@ -45,9 +45,14 @@ func (d *Doc) Text(keys []*KeyLine, blocks []Block) string {
 		add(k.Pos.Line, k.Pos.Line)
 	}
 	for _, bl := range blocks {
-		add(bl.At().Line, bl.end())
+		add(bl.At().Line, bl.End())
 	}
 	return b.String()
+}
+
+// LineEnd returns the position just after the last rune of line n, its trailing spaces left out.
+func (d *Doc) LineEnd(n int) diag.Pos {
+	return diag.Pos{File: d.Path, Line: n, Col: utf8.RuneCountInString(trimRight(d.lines[n-1])) + 1}
 }
 
 // Section is a heading and what follows it, up to the next heading of the same or a higher level.
@@ -93,13 +98,14 @@ type KeyLine struct {
 // Block is a paragraph, a list, a table or a code block.
 type Block interface {
 	At() diag.Pos
-	end() int
+	End() int // the line it ends on
 }
 
 // span holds the line a block ends on.
 type span struct{ last int }
 
-func (s span) end() int { return s.last }
+// End returns the line the block ends on.
+func (s span) End() int { return s.last }
 
 // Paragraph is a run of consecutive lines of text.
 type Paragraph struct {

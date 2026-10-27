@@ -1,0 +1,74 @@
+$ kan lint -format json ../invoice/schema.kanonarch ../errors-invoice/inv-2026-032.kan
+{
+  "ok": false,
+  "checked": [
+    "../invoice/schema.kanonarch",
+    "../errors-invoice/inv-2026-032.kan"
+  ],
+  "diagnostics": [
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 8,
+      "col": 7,
+      "severity": "error",
+      "message": "write a date as YYYY-MM-DD (2026-10-22), not \"22/10/2026\""
+    },
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 10,
+      "col": 9,
+      "severity": "error",
+      "message": "no document `../invoice/clients/ashgrove-builder`; did you mean `../invoice/clients/ashgrove-builders`?"
+    },
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 11,
+      "col": 11,
+      "severity": "error",
+      "message": "write 20 %, not \"20\""
+    },
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 12,
+      "col": 1,
+      "severity": "error",
+      "message": "`Invoice` has no field `discount`"
+    },
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 14,
+      "col": 1,
+      "severity": "error",
+      "message": "`Party` needs `address`; write address: …"
+    },
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 20,
+      "col": 8,
+      "severity": "error",
+      "message": "names are lowercase ASCII: write description, not \"Description\""
+    },
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 22,
+      "col": 40,
+      "severity": "error",
+      "message": "write 650.00 EUR, not \"650,00 €\""
+    },
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 23,
+      "col": 2,
+      "severity": "error",
+      "message": "every object has an id: this `Line` needs one; write its id in the id column"
+    },
+    {
+      "file": "../errors-invoice/inv-2026-032.kan",
+      "line": 27,
+      "col": 13,
+      "severity": "error",
+      "message": "{gross} inserts no field; did you mean {gross-total}?"
+    }
+  ]
+}
+[exit 1]

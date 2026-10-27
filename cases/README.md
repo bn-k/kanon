@@ -24,6 +24,9 @@ companies are fictional, and their content is English, except data published by 
 | `suppliers/` | arrays of enum values and of dates on a key line, separated by commas, read by computed fields and a rule; a list of texts under its heading |
 | `suppliers-query/` | `kan sql -q` over the suppliers: the last audit of those that hold a norm, through the table of an array of values |
 | `write-dependent/` | `kan write -n` refusing a reading list whose new text breaks the review that links it |
+| `invoice-json/`, `board-json/`, `recipe-json/` | `kan eval -format json` over the invoice, the board and the recipe: every object with its values, canonical and typed, and where each is written; table rows, a sub-object, list items, folder entries, inverses |
+| `meetings-json/` | `kan eval -format json` on a document whose rule fails: the values still come, with `"ok": false` and exit code 1 |
+| `errors-invoice-json/` | `kan lint -format json` over the invoice with mistakes |
 | `errors-*/` | the same schemas with mistakes, and what `kan lint` says about them; `errors-eval/` and `errors-schema/`, mistakes in computations, when a document is evaluated and when its schema is checked; `errors-northwind-query*/`, mistakes in a query; `errors-heading-close/`, headings a letter off a field's name, each reported once as the field it stands for, and one far from every name, reported with the field it leaves out |
 
 The data of a case keeps its own licence, given in its `source/README.md`.

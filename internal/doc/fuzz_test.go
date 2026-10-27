@@ -41,9 +41,10 @@ func FuzzParse(f *testing.F) {
 				}
 			}
 			for _, b := range s.Blocks {
-				if !within(b.At(), lines) || b.end() < b.At().Line || b.end() > len(lines) {
-					t.Errorf("block at %s to line %d: outside the text", b.At(), b.end())
+				if !within(b.At(), lines) || b.End() < b.At().Line || b.End() > len(lines) {
+					t.Errorf("block at %s to line %d: outside the text", b.At(), b.End())
 				}
+				d.LineEnd(b.End())
 			}
 			d.Text(s.Keys, s.Blocks)
 			for _, c := range s.Children {
