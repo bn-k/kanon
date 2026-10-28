@@ -1,0 +1,13 @@
+---
+type: Garden
+---
+
+# Allotment
+
+## Beds
+
+| id         | plant       | sown       | rows | note        |
+|------------|-------------|------------|------|-------------|
+| north      | Broad beans | 2026-03-14 | 4    |             |
+| south      | Leeks       | 2026-04-02 | 6    | under a net |
+| greenhouse | Tomatoes    | 2026-04-20 | 2    |             |

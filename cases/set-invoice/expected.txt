@@ -1,0 +1,8 @@
+$ kan set -n -format json ../invoice/schema.kanonarch ../invoice/inv-2026-031.kan "#booking-api.quantity=14" "#halfmoon-studio.vat-number=VAT-0042" "gross-total=11 064.00 EUR"
+{
+  "ok": true,
+  "written": [],
+  "checked": [],
+  "text": "---\ntype: Invoice\n---\n\n# Invoice INV-2026-031\n\nnumber: INV-2026-031\ndate: 2026-10-22\ndue: 2026-11-21\nclient: [[clients/ashgrove-builders]]\nvat-rate: 20 %\ngross-total: 11 064.00 EUR\n\n## Issuer {#halfmoon-studio}\n\nname: Halfmoon Studio Ltd\naddress: 8 Mist Quay, Larkhaven\nvat-number: VAT-0042\n\n## Lines\n\n| id | description | quantity | unit-price |\n|---|---|---|---|\n| booking-api | Booking API development (days) | 14 | 650.00 EUR |\n| hosting | Hosting, October to December (months) | 3 | 40.00 EUR |\n\n## Terms\n\nPlease pay {gross-total} by bank transfer no later than {due}, quoting {number} as the reference. Late payment\nbears interest at three times the statutory rate, plus a fixed charge of 40 EUR for recovery costs, which the\nlaw allows between businesses.\n",
+  "diagnostics": []
+}

@@ -1,0 +1,10 @@
+$ kan set -n -format json ../board/schema.kanonarch ../board/board/tasks/2026-10-30-pricing-page.kan status=done due=2026-11-02
+{
+  "ok": true,
+  "written": [],
+  "checked": [
+    "../board/board.kan"
+  ],
+  "text": "# Pricing page\n\nstatus: done\nowner: [[/board#ana]]\ndue: 2026-11-02\n\n## Notes\n\nThree plans, yearly prices first.\nThe copy waits for the brief.\n",
+  "diagnostics": []
+}

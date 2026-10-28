@@ -4,6 +4,7 @@
 kan lint [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>
 kan eval [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>
 kan write [-n] [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>[=<new.txt>]...
+kan set [-n] [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan> <path>=<value>...
 kan import <database.sqlite|dump.sql> <out-dir>
 kan sql <schema.kanonarch> <document.kan> [-o out.sql|out.sqlite|out.db]
 kan sql -q <query|@query.sql> [-format table|csv] <schema.kanonarch> <document.kan>
@@ -150,6 +151,55 @@ reader never sees half of it.
   `{"file", "line", "col", "severity", "message"}`.
 - It exits with 0 when it wrote (or, with `-n`, would write), 1 when it found an error or could not write, 2 when it
   is misused. Hidden folders are not searched for documents.
+
+## kan set
+
+A program that changes one field behind a form, or an agent that moves a task on, gives `kan set` the fields to
+change instead of writing the whole text itself:
+
+```
+$ kan set -n -format json schema.kanonarch board/tasks/2026-10-30-pricing-page.kan status=done due=2026-11-02
+{
+  "ok": true,
+  "written": [],
+  "checked": ["board.kan"],
+  "text": "# Pricing page\n\nstatus: done\nowner: [[/board#ana]]\ndue: 2026-11-02\n\n## Notes\n\n…",
+  "diagnostics": []
+}
+```
+
+`kan set` changes each field in the text of the document by the least edit that does it, and leaves the rest as it
+is written, byte for byte. Then it checks and writes the new text as `kan write` does: with every document that links
+to it, through a file renamed over it, and only when that finds no error (the case `set-board`; a task that breaks a
+rule of the board, `set-board-rule`).
+
+- `status` is a field of the document's object; `#ana.email` a field of an object written in the document with its
+  id: a section `{#ana}`, a row of a table, an item of a list. An entry of a folder is set through the document that
+  owns the folder, as with `kan write`.
+- The value is written as the document writes it, in Kanon's canonical text (`"gross-total=11 064.00 EUR"`,
+  `"owner=[[/board#ana]]"`), on one line; the spaces around it are dropped. A value the field can't hold is reported
+  by lint, in the new text (`set-wrong-value`).
+- On a key line, only the value changes. A `@heading` field changes the text of its heading, its `{#id}` kept. In a
+  table, the cell changes: a table aligned by hand, every line with its pipes in the same columns, stays aligned, its
+  column widened on every line when the value doesn't fit; a table that isn't aligned keeps its other cells as they
+  are (`set-garden`, `set-invoice`). In a list item read through a `reads` pattern, the part the field is read from
+  changes (`set-recipe`), and the change is refused when the item would then read differently.
+- A field not written yet gets its key line where a person would write it: after the key line of the field before it
+  in the schema, or else before the first key line of its object, or else under its heading (the title, for the
+  document's object), or else after the front matter. A title not written yet becomes the document's `# ` line.
+- `field=` removes an optional field: its key line, and a blank line beside it left in excess; its cell, left empty;
+  the title line of the document. A section keeps its heading with its id alone, `## {#tidewater}`. A field the schema
+  needs can't be removed.
+- What isn't a value written in place is refused, with what to do instead: a computed field not written in the
+  document (a computed field written in the document is set like any other, and lint checks it), an inverse, a field
+  that holds objects, prose, code, a list or a folder, a row read from a spreadsheet, and an unknown field or id, with
+  the closest name (`set-refused`, `set-refused-task`, `set-refused-invoice`). When a change is refused, none is
+  made: the text stays as it was, and nothing is written.
+- `-n` checks and writes nothing. A text that doesn't change, the values being those already written, is checked
+  but not written: `ok  task.kan` instead of `wrote task.kan`.
+- `-format json` prints what `kan write` prints, with `text`, the new text of the document: the one it wrote, or
+  would write; the text as it was when a change is refused.
+- The exit codes are those of `kan write`.
 
 ## kan import and kan sql
 

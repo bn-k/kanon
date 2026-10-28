@@ -1,0 +1,6 @@
+$ kan set -n ../board/schema.kanonarch ../board/board/tasks/2026-10-30-pricing-page.kan "notes=Later" due= stauts=done
+../board/board/tasks/2026-10-30-pricing-page.kan: error: `Task` has no field `stauts`; did you mean `status`?
+../board/board/tasks/2026-10-30-pricing-page.kan:5:1: error: `Task` needs `due`, so it can't be removed
+../board/board/tasks/2026-10-30-pricing-page.kan:7:4: error: `notes` is prose, written under its heading; change it with kan write
+3 errors
+[exit 1]

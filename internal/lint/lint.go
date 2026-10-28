@@ -35,6 +35,7 @@ type Options struct {
 	Today    time.Time                    // the date of today for the rules
 	FS       FS                           // reads the files and the folders; Disk when nil
 	ReadFile func(string) ([]byte, error) // reads the schema and the documents, an editor's unsaved texts; FS when nil
+	Partial  bool                         // keeps the model of a document with errors, its computed fields not evaluated
 }
 
 // FS is what a lint run reads: the disk, or the disk with edits in front of it that are not written yet.
@@ -104,10 +105,11 @@ func LoadWith(schemaPath, docPath string, opts Options) (*model.Doc, Result) {
 		if f.root != nil {
 			d = l.model(f)
 			l.inverses(d)
-			if l.diags.Count(diag.Error) > 0 {
-				d = nil
-			} else {
+			switch {
+			case l.diags.Count(diag.Error) == 0:
 				l.diags = append(l.diags, eval.Eval(d, opts.Today)...)
+			case !opts.Partial:
+				d = nil
 			}
 		}
 	}

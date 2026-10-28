@@ -17,6 +17,8 @@ The writer the project exists for, and the one that makes the most mistakes.
 
 - `-format json` on `kan lint` and `kan eval`, as `kan write` has it: a program reads diagnostics without parsing
   text. Done on 2026-10-27; `kan eval` also gives every object with its values, typed, and where each is written.
+- `kan set`, so that a program changes a field (`status=done`) without writing Kanon itself: the least edit of the
+  text, checked and written as `kan write` does. Done on 2026-10-27.
 - A stable code on each diagnostic, in the JSON only, so that an agent can act on a kind of mistake; the wording
   stays free to improve.
 - `docs/agents.md`: how an agent reads a schema, writes through `kan write` and repairs from the diagnostics, tested

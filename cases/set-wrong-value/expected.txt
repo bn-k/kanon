@@ -1,0 +1,19 @@
+$ kan set -n -format json ../board/schema.kanonarch ../board/board/tasks/2026-11-06-launch-email.kan due=06/11/2026
+{
+  "ok": false,
+  "written": [],
+  "checked": [
+    "../board/board.kan"
+  ],
+  "text": "# Launch email\n\nstatus: todo\nowner: [[/board#sam]]\ndue: 06/11/2026\n",
+  "diagnostics": [
+    {
+      "file": "../board/board/tasks/2026-11-06-launch-email.kan",
+      "line": 5,
+      "col": 6,
+      "severity": "error",
+      "message": "write a date as YYYY-MM-DD (2026-10-22), not \"06/11/2026\""
+    }
+  ]
+}
+[exit 1]

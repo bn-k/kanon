@@ -8,13 +8,19 @@ schemas, and its entry says how.
 
 ### Added
 
+- `kan set schema.kanonarch task.kan status=done #ana.email=…`, for a program that changes a field without
+  rewriting the text: each value changes in place (a key line, a table cell, a heading, the part of a list item its
+  field is read from), a field not written yet gets its key line where a person would write it, an empty value
+  removes an optional field, and the rest of the text stays byte for byte; an aligned table stays aligned. The new
+  text is checked and written as `kan write` does, with `-n` and `-format json`, which adds the new `text`. Inverses,
+  computed fields not written, objects, prose, code, lists and folders are refused, with what to do instead. See
+  `docs/kan.md`; cases `set-*`.
 - `kan lint -format json` and `kan eval -format json`, for a program: `{"ok", "checked", "diagnostics"}` as
   `kan write` prints them, and for `kan eval` the `documents`, every object of the document and of those it links
   to, with every field of its schema: its value in canonical text and typed (numbers, `{"amount", "currency"}`, ISO
   dates and durations, links as `{"file", "id"}`), whether it is computed or an inverse, and where it is written
   (`line`, `col`, `end_line`, `end_col`). See `docs/kan.md`; cases `invoice-json`, `board-json`, `meetings-json`,
   `recipe-json`, `errors-invoice-json`.
-
 - A `DateTime` is ordered against a `Date`, which stands for the start of its day, as in SQL: `m.at >= today` holds
   for a meeting held earlier today (`cases/meetings`). `==` and `!=` between them stay errors, with a message that
   says to compare with `>=` and `<`, or to compare two dates.

@@ -1,0 +1,8 @@
+$ kan set -n -format json ../recipe/schema.kanonarch ../recipe/crepes.kan servings=6 "#flour.quantity=375 g" "#eggs.quantity=6" "#milk.quantity=75 cl" cooking=
+{
+  "ok": true,
+  "written": [],
+  "checked": [],
+  "text": "---\ntype: Recipe\n---\n\n# Crêpes\n\nservings: 6\npreparation: 15 min\nresting: 1 h\n\n## Ingredients\n\n- 375 g of flour {#flour}\n- 6 eggs {#eggs}\n- 75 cl of milk {#milk}\n- 50 g of melted butter {#butter}\n- 1 pinch of salt {#salt}\n\n## Steps\n\n1. Put the flour in a mixing bowl, make a well in the centre and break the eggs into it.\n2. Whisk in the milk a little at a time, then the melted butter and the salt.\n3. Leave the batter to rest for {resting}.\n4. Cook each crêpe for about a minute on each side, in a hot buttered pan.\n",
+  "diagnostics": []
+}

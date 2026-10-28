@@ -1,0 +1,6 @@
+$ kan set -n ../invoice/schema.kanonarch ../invoice/inv-2026-031.kan "net-total=7 920.00 EUR" "#hosting.amount=120.00 EUR" lines=none
+../invoice/inv-2026-031.kan: error: `net-total` is computed; set the fields it is computed from instead
+../invoice/inv-2026-031.kan:19:4: error: `lines` holds `Line` objects, not a value; set their fields one at a time, or change them with kan write
+../invoice/inv-2026-031.kan:24:1: error: `amount` is computed; set the fields it is computed from instead
+3 errors
+[exit 1]

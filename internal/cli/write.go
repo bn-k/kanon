@@ -48,35 +48,55 @@ func runWrite(args []string, stdout, stderr io.Writer) int {
 			written = append(written, path)
 		}
 	}
-	if o.json {
-		if err := writeJSON(stdout, errs == 0, written, dependents, diags); err != nil {
-			fmt.Fprintf(stderr, "kan: %v\n", err)
-			return 1
-		}
-	} else {
-		for _, d := range diags {
-			fmt.Fprintln(stdout, d)
-		}
-		if warns := diags.Count(diag.Warning); errs+warns > 0 {
-			fmt.Fprintln(stdout, summary(errs, warns))
-		}
-		if errs == 0 {
-			for _, path := range o.docs {
-				if o.dry {
-					fmt.Fprintf(stdout, "ok  %s\n", path)
-				} else {
-					fmt.Fprintf(stdout, "wrote %s\n", path)
-				}
-			}
-			for _, path := range dependents {
-				fmt.Fprintf(stdout, "ok  %s\n", path)
-			}
-		}
+	out := outcome{OK: errs == 0, Written: written, Checked: dependents, Diagnostics: diags}
+	if err := out.print(stdout, o.json, o.docs); err != nil {
+		fmt.Fprintf(stderr, "kan: %v\n", err)
+		return 1
 	}
 	if errs > 0 {
 		return 1
 	}
 	return 0
+}
+
+// outcome is what a write or a set did: whether it found no error, the documents it wrote, the documents it checked
+// besides, the new text of the document of a set with -format json, and the diagnostics.
+type outcome struct {
+	OK          bool              `json:"ok"`
+	Written     []string          `json:"written"`
+	Checked     []string          `json:"checked"`
+	Text        *string           `json:"text,omitempty"`
+	Diagnostics []diag.Diagnostic `json:"diagnostics"`
+}
+
+// print prints out as JSON for a program, or else for a person: the diagnostics and their count then, when there is
+// no error, each of docs, written or only checked, and each document checked besides.
+func (out outcome) print(w io.Writer, json bool, docs []string) error {
+	if json {
+		out.Written, out.Checked, out.Diagnostics = nonNil(out.Written), nonNil(out.Checked), nonNil(out.Diagnostics)
+		return printJSON(w, out)
+	}
+	diags := diag.List(out.Diagnostics)
+	for _, d := range diags {
+		fmt.Fprintln(w, d)
+	}
+	if errs, warns := diags.Count(diag.Error), diags.Count(diag.Warning); errs+warns > 0 {
+		fmt.Fprintln(w, summary(errs, warns))
+	}
+	if !out.OK {
+		return nil
+	}
+	for _, path := range docs {
+		if slices.Contains(out.Written, path) {
+			fmt.Fprintf(w, "wrote %s\n", path)
+		} else {
+			fmt.Fprintf(w, "ok  %s\n", path)
+		}
+	}
+	for _, path := range out.Checked {
+		fmt.Fprintf(w, "ok  %s\n", path)
+	}
+	return nil
 }
 
 // checkWrite lints the new texts of o, an entry of a folder through the document that owns the folder, then the
@@ -301,18 +321,6 @@ func replace(path string, text []byte) error {
 		os.Remove(tmp.Name())
 	}
 	return err
-}
-
-// writeJSON prints the outcome of a write for a program: whether it is ok, the documents written and checked, and
-// the diagnostics.
-func writeJSON(w io.Writer, ok bool, written, checked []string, diags diag.List) error {
-	out := struct {
-		OK          bool              `json:"ok"`
-		Written     []string          `json:"written"`
-		Checked     []string          `json:"checked"`
-		Diagnostics []diag.Diagnostic `json:"diagnostics"`
-	}{ok, nonNil(written), nonNil(checked), nonNil(diags)}
-	return printJSON(w, out)
 }
 
 // printJSON prints v as indented JSON, its strings as they are: <, > and & are not escaped.

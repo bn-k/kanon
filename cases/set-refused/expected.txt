@@ -1,0 +1,8 @@
+$ kan set -n ../board/schema.kanonarch ../board/board.kan "#ana.tasks=[[/board/tasks/2026-11-06-launch-email]]" "#anna.email=anna@example.com" "#sam.mail=sam@example.org" tasks=none name=
+../board/board.kan: error: unknown id `anna`; did you mean `ana`?
+../board/board.kan:5:3: error: `Board` needs `name`, so it can't be removed
+../board/board.kan:11:1: error: `tasks` is the inverse of `Task.owner`, computed from the documents; set `owner` on each `Task` instead
+../board/board.kan:12:1: error: `Person` has no field `mail`; did you mean `email`?
+../board/board/tasks: error: `tasks` holds `Task` objects, not a value; set their fields one at a time, or change them with kan write
+5 errors
+[exit 1]

@@ -208,6 +208,36 @@ Design in `docs/serve.md`.
     field of the output.
 - **JSON output keeps `<`, `>` and `&` as they are** (2026-10-27): a type reads `-> Person`, not `-> Person`.
   JSON readers take both; a person reading the output only the first.
+- **`kan set` changes a field without the program rewriting the text** (2026-10-27): a program that edits one field
+  behind a form gives `kan set` `status=done` or `#ana.email=…`, and `kan` makes the edit, so the program reads and
+  writes no Kanon of its own. The new text is checked and written as `kan write` does, with the same `-n`, the same
+  `-format json` (plus `text`, the new text) and the same exit codes. Its edits:
+  - **The least edit, the rest byte for byte**: on a key line the value alone, in a table the cell alone, for a
+    `@heading` the heading's text alone, its `{#id}` kept. A person's layout, comments and line endings stay.
+  - **A table stays aligned only if it was**: aligned means every line of the table has its pipes in the same
+    columns. Such a table keeps them there, and a value that doesn't fit widens its column on every line, dashes
+    added to the separator, colons kept. A table that isn't aligned is edited in place, as a person typing would.
+  - **A field not written yet goes where a person would write it**: after the key line of the field before it in
+    the schema, so the order of the schema is kept; or else before the first key line of the object; or else under
+    its heading, the title for the document's object; or else after the front matter. A blank line sets it apart
+    from a heading.
+  - **An empty value removes the field**: its key line, and a blank line beside it when two would follow; its cell
+    left empty; the document's title line. A section keeps its heading, with its id alone (`## {#tidewater}`),
+    since the id is what makes it an object. A field the schema needs can't be removed, and the refusal says so.
+  - **A list item read through a `reads` pattern is edited in the part its field is read from**, then read again:
+    if it would read other values than those given (a `{friend}` that takes in an ` until …` added after it), the
+    change is refused. An item that no longer reads at all is not refused: lint says why, as for any value.
+  - **What isn't one value written in place is refused**, with what to do: an inverse, a computed field not written
+    in the document, a field that holds objects, prose, code, a list or a folder (`kan write`), a row read from a
+    spreadsheet. A computed field written in the document can be set, since a person can write it; lint checks it
+    as always.
+  - **One refusal and nothing is changed**: the changes are planned one after the other on the text, each on the
+    text the ones before made, and if one is refused, the text stays as it was and every refusal is reported.
+  - **A text that doesn't change is not written**: setting the values already written prints `ok`, and touches no
+    file.
+  - **The value is canonical text, on one line**: a program writes `11 064.00 EUR` or `[[/board#ana]]` as a person
+    does, and lint reports a value the field can't hold, in the new text. Spaces around it are dropped; a line break
+    is refused, as text over lines is prose, changed with `kan write`.
 
 ## Prior art
 

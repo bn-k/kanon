@@ -27,6 +27,10 @@ companies are fictional, and their content is English, except data published by 
 | `invoice-json/`, `board-json/`, `recipe-json/` | `kan eval -format json` over the invoice, the board and the recipe: every object with its values, canonical and typed, and where each is written; table rows, a sub-object, list items, folder entries, inverses |
 | `meetings-json/` | `kan eval -format json` on a document whose rule fails: the values still come, with `"ok": false` and exit code 1 |
 | `errors-invoice-json/` | `kan lint -format json` over the invoice with mistakes |
+| `set-board/`, `set-invoice/`, `set-recipe/` | `kan set -n -format json`: key lines changed and added in a task of the board's folder; a table cell, a key line added to a sub-object and a written computed field in the invoice; parts of list items read through a `reads` pattern, and a key line removed, in the recipe |
+| `set-garden/` | `kan set` in a table aligned by hand: the column widened on every line, a cell emptied |
+| `set-board-rule/`, `set-wrong-value/` | `kan set -n` whose new text breaks a rule of the board, and one whose value is not a date |
+| `set-refused/`, `set-refused-task/`, `set-refused-invoice/` | what `kan set` refuses, with what to do instead: an unknown id or field, a required field removed, an inverse, objects, a folder, prose, computed fields |
 | `errors-*/` | the same schemas with mistakes, and what `kan lint` says about them; `errors-eval/` and `errors-schema/`, mistakes in computations, when a document is evaluated and when its schema is checked; `errors-northwind-query*/`, mistakes in a query; `errors-heading-close/`, headings a letter off a field's name, each reported once as the field it stands for, and one far from every name, reported with the field it leaves out |
 
 The data of a case keeps its own licence, given in its `source/README.md`.

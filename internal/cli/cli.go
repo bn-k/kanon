@@ -20,6 +20,7 @@ import (
 const usage = `usage: kan lint [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>
        kan eval [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>
        kan write [-n] [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan>[=<new.txt>]...
+       kan set [-n] [-today YYYY-MM-DD] [-format text|json] <schema.kanonarch> <document.kan> <path>=<value>...
        kan import <database.sqlite|dump.sql> <out-dir>
        kan sql <schema.kanonarch> <document.kan> [-o out.sql|out.sqlite|out.db]
        kan sql -q <query|@query.sql> [-format table|csv] <schema.kanonarch> <document.kan>
@@ -41,6 +42,8 @@ func Run(args []string, stdout, stderr io.Writer) int {
 			return runEval(args[1:], stdout, stderr)
 		case "write":
 			return runWrite(args[1:], stdout, stderr)
+		case "set":
+			return runSet(args[1:], stdout, stderr)
 		case "import":
 			return runImport(args[1:], stdout, stderr)
 		case "sql":

@@ -1,0 +1,4 @@
+$ kan set -n ../board/schema.kanonarch ../board/board/tasks/2026-11-06-launch-email.kan "owner=[[/board#ana]]" status=doing
+../board/board.kan:11:1: error: `one-at-a-time` fails: "Ana Silva works on one task at a time"; 2 is more than 1
+1 error
+[exit 1]

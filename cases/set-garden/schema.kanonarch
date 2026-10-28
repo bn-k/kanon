@@ -1,0 +1,13 @@
+// Working material: the beds of an allotment, in a table aligned by hand.
+
+schema Garden {
+  name: Text @heading
+  beds: [Bed]
+}
+
+schema Bed {
+  plant: Text
+  sown:  Date
+  rows:  Int
+  note:  Text?
+}

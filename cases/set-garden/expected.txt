@@ -1,0 +1,8 @@
+$ kan set -n -format json schema.kanonarch garden.kan "#north.note=thinned to one plant every 15 cm" "#south.note=" "#greenhouse.rows=3"
+{
+  "ok": true,
+  "written": [],
+  "checked": [],
+  "text": "---\ntype: Garden\n---\n\n# Allotment\n\n## Beds\n\n| id         | plant       | sown       | rows | note                             |\n|------------|-------------|------------|------|----------------------------------|\n| north      | Broad beans | 2026-03-14 | 4    | thinned to one plant every 15 cm |\n| south      | Leeks       | 2026-04-02 | 6    |                                  |\n| greenhouse | Tomatoes    | 2026-04-20 | 3    |                                  |\n",
+  "diagnostics": []
+}

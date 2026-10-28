@@ -513,6 +513,14 @@ func TestLoadWithErrors(t *testing.T) {
 	if d != nil || r.Diags.Count(diag.Error) != 1 {
 		t.Errorf("Load = %v, %v; want no model and one error", d, r.Diags)
 	}
+	// Partial keeps the model: the field whose value is wrong is there, where it is written, with no value.
+	d, r = LoadWith("schema.kanonarch", "doc.kan", Options{Partial: true})
+	if d == nil || r.Diags.Count(diag.Error) != 1 {
+		t.Fatalf("LoadWith Partial = %v, %v; want a model and one error", d, r.Diags)
+	}
+	if f := d.Root.Get("date"); f == nil || f.Pos.Line != 6 || len(f.Values) != 0 {
+		t.Errorf("date = %+v, want it written on line 6, with no value", f)
+	}
 	write(t, files{"schema.kanonarch": note})
 	if d, _ := Load("schema.kanonarch", "doc.kan"); d != nil {
 		t.Errorf("Load of a missing document = %v, want nil", d)

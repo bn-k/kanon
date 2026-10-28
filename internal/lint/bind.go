@@ -803,6 +803,13 @@ func split(s string, pos diag.Pos, numbers bool) []piece {
 
 func digit(r rune) bool { return r >= '0' && r <= '9' }
 
+// UnknownField is the message for a name that names no field of s, as lint reports a key that does: kan set
+// reports a field to set that way.
+func UnknownField(name string, s *schema.Schema) string {
+	msg, _ := unknownField(name, s)
+	return msg
+}
+
 // unknownField is the message for a key, a column or a folder that names no field of s. When the name plainly
 // stands for a field, its name with accents or capitals or close to it, meant is that field.
 func unknownField(name string, s *schema.Schema) (msg string, meant *schema.Field) {
