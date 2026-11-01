@@ -3,7 +3,7 @@ module github.com/bn-k/kanon
 go 1.26.10
 
 require (
-	modernc.org/libc v1.79.0
+	modernc.org/libc v1.79.1
 	modernc.org/sqlite v1.61.0
 )
 
