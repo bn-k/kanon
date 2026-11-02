@@ -23,6 +23,13 @@ func IsSlug(s string) bool {
 	return true
 }
 
+// IsDocID reports whether s can name a document: a slug, or what is done and where, two slugs joined by an @
+// (roof@harbour-street), the way a team speaks of a job. Sections, rows and items keep plain slugs.
+func IsDocID(s string) bool {
+	subject, place, qualified := strings.Cut(s, "@")
+	return IsSlug(subject) && (!qualified || IsSlug(place))
+}
+
 // IsName reports whether s is a name: a slug that starts with a letter (unit-price, oil-change).
 func IsName(s string) bool {
 	return IsSlug(s) && s[0] >= 'a' && s[0] <= 'z'
@@ -113,6 +120,20 @@ func Slugify(s string) string {
 		}
 	}
 	return b.String()
+}
+
+// SlugifyDocID proposes a document id for s: "Roof @ Harbour Street" becomes roof@harbour-street, cut at its last
+// @. Without an @, or with nothing on one side of it, it is Slugify.
+func SlugifyDocID(s string) string {
+	i := strings.LastIndex(s, "@")
+	if i < 0 {
+		return Slugify(s)
+	}
+	subject, place := Slugify(s[:i]), Slugify(s[i+1:])
+	if subject == "" || place == "" {
+		return subject + place
+	}
+	return subject + "@" + place
 }
 
 // Closest returns the candidate nearest to s, ignoring case and accents, or "" when none is near enough.

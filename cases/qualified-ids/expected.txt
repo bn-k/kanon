@@ -1,0 +1,6 @@
+$ kan sql -q "SELECT j.id, j.title, j.follows_id AS follows, n.text AS note FROM job j LEFT JOIN note n ON n.job_id = j.id" schema.kanonarch builder.kan
+id                   title                  follows              note
+-------------------  ---------------------  -------------------  ------------------------------
+roof@harbour-street  Roof @ Harbour Street  NULL                 NULL
+boiler@mill-lane     Boiler @ Mill Lane     roof@harbour-street  The flue runs through the loft
+2 rows

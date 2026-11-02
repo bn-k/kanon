@@ -27,6 +27,29 @@ func TestIsSlug(t *testing.T) {
 	}
 }
 
+func TestIsDocID(t *testing.T) {
+	tests := []struct {
+		s    string
+		want bool
+	}{
+		{"crepes", true},
+		{"roof@harbour-street", true},
+		{"creche@rue-des-pres", true},
+		{"2026-roof@12-mill-lane", true},
+		{"@harbour-street", false},
+		{"roof@", false},
+		{"roof@harbour@street", false},
+		{"roof @ harbour-street", false},
+		{"Roof@harbour-street", false},
+		{"", false},
+	}
+	for _, tt := range tests {
+		if got := IsDocID(tt.s); got != tt.want {
+			t.Errorf("IsDocID(%q) = %v, want %v", tt.s, got, tt.want)
+		}
+	}
+}
+
 func TestIsName(t *testing.T) {
 	tests := []struct {
 		s    string
@@ -151,6 +174,27 @@ func TestSlugify(t *testing.T) {
 	for _, tt := range tests {
 		if got := Slugify(tt.s); got != tt.want {
 			t.Errorf("Slugify(%q) = %q, want %q", tt.s, got, tt.want)
+		}
+	}
+}
+
+func TestSlugifyDocID(t *testing.T) {
+	tests := []struct{ s, want string }{
+		{"Roof @ Harbour Street", "roof@harbour-street"},
+		{"Crèche @ Rue des Prés", "creche@rue-des-pres"},
+		{"roof@harbour-street", "roof@harbour-street"},
+		{"Rosé of the day", "rose-of-the-day"},
+		{"gate@yard@north", "gate-yard@north"},
+		{"shed@", "shed"},
+		{"@ Mill Lane", "mill-lane"},
+	}
+	for _, tt := range tests {
+		got := SlugifyDocID(tt.s)
+		if got != tt.want {
+			t.Errorf("SlugifyDocID(%q) = %q, want %q", tt.s, got, tt.want)
+		}
+		if !IsDocID(got) {
+			t.Errorf("SlugifyDocID(%q) = %q, not a document id", tt.s, got)
 		}
 	}
 }

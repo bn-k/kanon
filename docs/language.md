@@ -14,7 +14,10 @@ This page defines both, rule by rule; `cases/` holds examples, with what `kan li
    `reads en "the deposit covers the decor"`, not "décor". A character outside ASCII is
    reported at its position, with the letter to write.
 2. **Every object has an id**, a slug of the same shape. A UUID is valid; a meaningful slug is better. Plain values
-   (the steps of a recipe) are not objects and have no id.
+   (the steps of a recipe) are not objects and have no id. The id of a whole file may also say what is done and
+   where: two slugs joined by one `@`, `roof@harbour-street.kan`, the way a team speaks of a job. Its title keeps
+   the name as written (`# Roof @ Harbour Street`), its links and its folder use the id
+   (`[[jobs/roof@harbour-street]]`, `roof@harbour-street/notes/`). A section, a row or an item keeps a plain slug.
 3. An id is **always written**, never derived from a title:
 
    | Where the object is | How its id is written |

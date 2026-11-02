@@ -28,8 +28,8 @@ func (l *linter) root(f *file, s *schema.Schema, in *schema.Field, parent *objec
 	if parent != nil {
 		parent.hold(in, o)
 	}
-	if !names.IsSlug(id) {
-		l.diags.Errorf(o.pos, "the file name is the object's id: write %s.kan, not \"%s\"", names.Slugify(id), filepath.Base(f.path))
+	if !names.IsDocID(id) {
+		l.diags.Errorf(o.pos, "the file name is the object's id: write %s.kan, not \"%s\"", names.SlugifyDocID(id), filepath.Base(f.path))
 	} else {
 		f.ids[id] = o
 	}
@@ -287,7 +287,7 @@ func (l *linter) ordered(list *doc.List, f *schema.Field, o *object, dir string,
 		pos, text := it.Lines[0].Pos, it.Text()
 		target, ok := linkValue(text)
 		if !ok {
-			guess := names.Slugify(text)
+			guess := names.SlugifyDocID(text)
 			l.diags.Errorf(pos, "every item of an order list links to an entry of `%s`: write - [[%s]]", f.Name, link(guess))
 			if _, seen := listed[guess]; !seen && entry[guess] {
 				add(guess, pos)
@@ -843,7 +843,7 @@ func (l *linter) value(f *schema.Field, s string, pos diag.Pos, o *object) {
 	case t.Link:
 		target, ok := linkValue(s)
 		if !ok {
-			l.diags.Errorf(pos, "this field holds %s: link to it, as in [[%s]]", names.Article(t.Schema.Name), names.Slugify(s))
+			l.diags.Errorf(pos, "this field holds %s: link to it, as in [[%s]]", names.Article(t.Schema.Name), names.SlugifyDocID(s))
 			return
 		}
 		l.queueField(target, pos, f, o)

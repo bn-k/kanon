@@ -1,0 +1,18 @@
+// Working material: the jobs of a small builder, each one a file named the way the team speaks of it, what is
+// done and where: roof@harbour-street. A job links to the one it follows and keeps a folder of notes.
+
+schema Builder {
+  name: Text @heading
+  jobs: [Job]
+}
+
+schema Job {
+  title:   Text @heading
+  client:  Text
+  follows: -> Job?
+  notes:   [Note]?
+}
+
+schema Note {
+  text: Text
+}

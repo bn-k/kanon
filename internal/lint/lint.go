@@ -414,10 +414,10 @@ func (l *linter) at(from, path string) string {
 	return filepath.Join(filepath.Dir(from), filepath.FromSlash(path))
 }
 
-// linkPath reports whether every segment of a link path is an id or "..", after the / of the root folder.
+// linkPath reports whether every segment of a link path is a document id or "..", after the / of the root folder.
 func linkPath(path string) bool {
 	for _, seg := range strings.Split(strings.TrimPrefix(path, "/"), "/") {
-		if seg != ".." && !names.IsSlug(seg) {
+		if seg != ".." && !names.IsDocID(seg) {
 			return false
 		}
 	}
@@ -430,7 +430,7 @@ func slugPath(target string) string {
 	segs := strings.Split(path, "/")
 	for i, seg := range segs {
 		if seg != ".." {
-			segs[i] = names.Slugify(seg)
+			segs[i] = names.SlugifyDocID(seg)
 		}
 	}
 	s := strings.Join(segs, "/")

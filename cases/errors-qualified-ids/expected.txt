@@ -1,0 +1,9 @@
+$ kan lint schema.kanonarch builder.kan
+builder/jobs/Porch @ Elm Row.kan: error: the file name is the object's id: write porch@elm-row.kan, not "Porch @ Elm Row.kan"
+builder/jobs/gate@yard@north.kan: error: the file name is the object's id: write gate-yard@north.kan, not "gate@yard@north.kan"
+builder/jobs/roof@harbour-street.kan:4:10: error: a link path is made of ids: write [[gate@yard]], not "[[Gate @ Yard]]"
+builder/jobs/roof@harbour-street.kan:8:19: error: an id is a slug of lowercase ASCII letters, digits and hyphens: write first-site, not "first@site"
+builder/jobs/shed@.kan: error: the file name is the object's id: write shed.kan, not "shed@.kan"
+builder/jobs/shed@.kan:4:10: error: an id is a slug: write #first-site, not "#first@site"
+6 errors
+[exit 1]

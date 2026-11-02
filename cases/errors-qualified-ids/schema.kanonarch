@@ -1,0 +1,18 @@
+// Working material: the jobs of the qualified-ids case, written wrong. An @ joins the two parts of a document's id; a
+// section, a row or an item keeps a plain slug.
+
+schema Builder {
+  name: Text @heading
+  jobs: [Job]
+}
+
+schema Job {
+  title:   Text @heading
+  client:  Text
+  follows: -> Job?
+  visits:  [Visit]?
+}
+
+schema Visit {
+  date: Date
+}

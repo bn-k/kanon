@@ -68,6 +68,12 @@ as it stands is in `docs/language.md`, the design of data and SQL in `docs/data.
   (2026-10-22).
 - **Every object has an `id`**, an ASCII alphanumeric slug. A UUID is valid, but meaningful slugs are encouraged
   (2026-10-22).
+- **A document's id may join two slugs with an `@`** (2026-11-02): `roof@harbour-street`, what is done and where, as
+  a builder names a job and as its title reads (`# Roof @ Harbour Street`). Only the id of a whole file: it is the
+  file name, a segment of a link path and the name of its folder, and the `@` already reads "at" there. Section,
+  row and item ids stay plain slugs, so `#` anchors keep one shape. One `@` at most, with a slug on each side;
+  the id splits back into its two parts at the `@`. `/` stays the folder separator, and `kan import` keeps writing
+  plain slugs. Suggestions cut a title at its last `@`: "Porch @ Elm Row.kan" becomes `porch@elm-row.kan`.
 - **Ids are always written** (file name, `{#id}` on a heading or list item, `id` column), never derived from a title
   (2026-10-22).
 - **Ids are unique per file**: an entry of a folder array is not registered in its parent; the rows of a

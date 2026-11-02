@@ -16,6 +16,7 @@ companies are fictional, and their content is English, except data published by 
 | `inventory/` | nested sections, enums, versions, a link to a rule of the schema |
 | `car/` | an array as a folder: one file per entry |
 | `ordered-folder/` | a folder whose order is given by an order list, and links from the schema's folder (`[[/training#dawson]]`) |
+| `qualified-ids/` | documents named what is done and where (`roof@harbour-street.kan`): an order list, a link and a folder of notes through the `@` |
 | `listing/` | links and lists of links to other documents, inverses, photos as a folder, a PDF, code, a date and time |
 | `meetings/` | dates and times ordered against `today`, a date that stands for the start of its day: a meeting held yesterday fails a rule |
 | `northwind/` | the Northwind database, as `kan import` writes it from `create.sql` |

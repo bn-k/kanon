@@ -8,6 +8,10 @@ schemas, and its entry says how.
 
 ### Added
 
+- A document's id may join two slugs with an `@`, what is done and where: `roof@harbour-street.kan`, linked to as
+  `[[jobs/roof@harbour-street]]`, with its folder `roof@harbour-street/`. Section, row and item ids stay plain
+  slugs. A file name or a link written from a title gets the id to write: "Porch @ Elm Row.kan" is reported with
+  `porch@elm-row.kan`. Cases `qualified-ids`, `errors-qualified-ids`.
 - `kan set schema.kanonarch task.kan status=done #ana.email=…`, for a program that changes a field without
   rewriting the text: each value changes in place (a key line, a table cell, a heading, the part of a list item its
   field is read from), a field not written yet gets its key line where a person would write it, an empty value

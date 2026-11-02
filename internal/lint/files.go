@@ -62,7 +62,7 @@ func fileName(name string) string {
 		switch {
 		case seg == "..":
 		case i < len(segs)-1:
-			segs[i] = names.Slugify(seg)
+			segs[i] = names.SlugifyDocID(seg)
 		default:
 			ext := path.Ext(seg)
 			segs[i] = names.Slugify(strings.TrimSuffix(seg, ext)) + "." + strings.ReplaceAll(names.Slugify(ext), "-", "")
